@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Individual Development Plan — CarSU HRMS</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --navy: #0d1b3e;
+    --navy-mid: #1a2f5e;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --cream: #faf8f4;
+    --white: #ffffff;
+    --text: #1a1a2e;
+    --text-light: #5a6070;
+    --border: #d8d4c8;
+    --error: #c0392b;
+    --success: #1a6b3c;
+    --input-bg: #f8f7f4;
+    --shadow: 0 4px 24px rgba(13,27,62,0.10);
+    --shadow-sm: 0 2px 8px rgba(13,27,62,0.07);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ── Header ── */
+  .site-header {
+    background: var(--navy);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+  }
+  .header-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .header-logo {
+    width: 48px;
+    height: 48px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--navy);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .header-text h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--white);
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .header-text p {
+    font-size: 12px;
+    color: var(--gold-light);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .header-user {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.08);
+    padding: 6px 14px;
+    border-radius: 20px;
+  }
+  .header-user span {
+    font-size: 13px;
+    color: var(--gold-light);
+  }
+  .user-dot {
+    width: 8px; height: 8px;
+    background: #4caf50;
+    border-radius: 50%;
+  }
+
+  /* ── Main container ── */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 32px 80px;
+  }
+
+  /* ── Form title block ── */
+  .form-title-block {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 32px;
+    border-bottom: 2px solid var(--gold);
+  }
+  .form-title-block h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .form-title-block p {
+    color: var(--text-light);
+    font-size: 14px;
+  }
+
+  /* ── Section card ── */
+  .section-card {
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 28px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    animation: fadeUp 0.4s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .section-card:nth-child(2) { animation-delay: 0.05s; }
+  .section-card:nth-child(3) { animation-delay: 0.10s; }
+  .section-card:nth-child(4) { animation-delay: 0.15s; }
+  .section-card:nth-child(5) { animation-delay: 0.20s; }
+
+  .section-header {
+    background: var(--navy);
+    padding: 16px 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-num {
+    background: var(--gold);
+    color: var(--navy);
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  .section-header h3 {
+    color: var(--white);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+  .section-header p {
+    color: rgba(255,255,255,0.6);
+    font-size: 12px;
+    margin-top: 1px;
+  }
+  .section-body {
+    padding: 28px;
+  }
+
+  /* ── Form fields ── */
+  .field-grid {
+    display: grid;
+    gap: 18px;
+  }
+  .field-grid-2 { grid-template-columns: 1fr 1fr; }
+  .field-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  .field-group { display: flex; flex-direction: column; gap: 6px; }
+  .field-group.span-2 { grid-column: span 2; }
+  .field-group.span-3 { grid-column: span 3; }
+
+  label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--navy-mid);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  label .req { color: var(--error); margin-left: 2px; }
+
+  input[type="text"],
+  input[type="date"],
+  input[type="number"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    background: var(--input-bg);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(13,27,62,0.08);
+    background: var(--white);
+  }
+  input.error, select.error { border-color: var(--error); }
+  textarea { resize: vertical; min-height: 80px; }
+  select { cursor: pointer; }
+
+  /* ── Checkbox groups ── */
+  .checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 8px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    background: var(--input-bg);
+    transition: all 0.2s;
+    font-size: 13px;
+  }
+  .checkbox-item:hover { border-color: var(--navy); background: var(--white); }
+  .checkbox-item input[type="checkbox"],
+  .checkbox-item input[type="radio"] {
+    width: auto;
+    padding: 0;
+    border: none;
+    background: none;
+    accent-color: var(--navy);
+    cursor: pointer;
+  }
+  .checkbox-item.checked {
+    border-color: var(--navy);
+    background: rgba(13,27,62,0.05);
+  }
+
+  /* ── Dynamic tables ── */
+  .table-wrapper { overflow-x: auto; margin-top: 16px; }
+  .dynamic-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 13px;
+    min-width: 700px;
+  }
+  .dynamic-table thead tr {
+    background: var(--navy-mid);
+  }
+  .dynamic-table thead th {
+    padding: 10px 12px;
+    color: var(--white);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-align: left;
+    border-right: 1px solid rgba(255,255,255,0.1);
+  }
+  .dynamic-table thead th:last-child { border-right: none; }
+  .dynamic-table tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  .dynamic-table tbody tr:hover { background: #f5f4f0; }
+  .dynamic-table tbody td {
+    padding: 8px 10px;
+    vertical-align: top;
+    border-right: 1px solid var(--border);
+  }
+  .dynamic-table tbody td:last-child { border-right: none; text-align: center; }
+  .dynamic-table td input,
+  .dynamic-table td select,
+  .dynamic-table td textarea {
+    padding: 6px 10px;
+    font-size: 13px;
+    border-radius: 6px;
+  }
+  .priority-num {
+    width: 36px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--navy);
+    background: rgba(201,168,76,0.15);
+    border-color: var(--gold);
+  }
+
+  /* ── Add/Remove row buttons ── */
+  .table-actions { display: flex; gap: 10px; margin-top: 12px; }
+  .btn-add-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-family: 'Source Sans 3', sans-serif;
+  }
+  .btn-add-row:hover { background: var(--navy-mid); }
+  .btn-remove-row {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--error);
+    padding: 4px;
+    border-radius: 4px;
+    font-size: 18px;
+    line-height: 1;
+    transition: background 0.15s;
+  }
+  .btn-remove-row:hover { background: rgba(192,57,43,0.08); }
+
+  /* ── Section description ── */
+  .section-desc {
+    background: rgba(201,168,76,0.1);
+    border-left: 3px solid var(--gold);
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: var(--text-light);
+    line-height: 1.6;
+  }
+  .section-desc a { color: var(--navy); }
+
+  /* ── Divider ── */
+  .field-divider { height: 1px; background: var(--border); margin: 8px 0; }
+
+  /* ── Other specify ── */
+  .other-specify {
+    margin-top: 10px;
+    display: none;
+  }
+  .other-specify.visible { display: block; }
+
+  /* ── Submit area ── */
+  .submit-area {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+  }
+  .submit-area p {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-bottom: 18px;
+  }
+  .btn-submit {
+    padding: 14px 48px;
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    border-radius: 10px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 16px rgba(13,27,62,0.2);
+  }
+  .btn-submit:hover {
+    background: var(--navy-mid);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(13,27,62,0.25);
+  }
+  .btn-submit:active { transform: translateY(0); }
+  .btn-submit:disabled {
+    background: #aaa;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* ── Loading overlay ── */
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(13,27,62,0.6);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .overlay.active { display: flex; }
+  .spinner {
+    width: 48px; height: 48px;
+    border: 4px solid rgba(255,255,255,0.2);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .overlay p { color: var(--white); font-size: 15px; }
+
+  /* ── Success screen ── */
+  .success-screen {
+    display: none;
+    max-width: 520px;
+    margin: 80px auto;
+    text-align: center;
+    background: var(--white);
+    border-radius: 16px;
+    padding: 48px 40px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+  }
+  .success-screen.active { display: block; }
+  .success-icon {
+    width: 72px; height: 72px;
+    background: rgba(26,107,60,0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    margin: 0 auto 24px;
+  }
+  .success-screen h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    color: var(--navy);
+    margin-bottom: 12px;
+  }
+  .success-screen p {
+    color: var(--text-light);
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  .ref-id-box {
+    background: var(--navy);
+    color: var(--gold-light);
+    font-family: monospace;
+    font-size: 22px;
+    font-weight: 700;
+    padding: 16px 24px;
+    border-radius: 10px;
+    letter-spacing: 0.1em;
+    margin: 16px 0 24px;
+  }
+
+  /* ── Error message ── */
+  .field-error { font-size: 12px; color: var(--error); margin-top: 4px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .container { padding: 24px 16px 60px; }
+    .field-grid-2, .field-grid-3 { grid-template-columns: 1fr; }
+    .field-group.span-2, .field-group.span-3 { grid-column: span 1; }
+    .section-body { padding: 20px 16px; }
+    .header-inner { padding: 14px 16px; }
+    .header-user { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Loading overlay -->
+<div class="overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <p>Submitting your IDP, please wait…</p>
+</div>
+
+<!-- Site header -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-logo">C</div>
+    <div class="header-text">
+      <h1>Caraga State University</h1>
+      <p>Human Resource Management Services</p>
+    </div>
+    <div class="header-user">
+      <div class="user-dot"></div>
+      <span id="userEmail">Loading…</span>
+    </div>
+  </div>
+</header>
+
+<!-- Success screen (hidden initially) -->
+<div class="success-screen" id="successScreen">
+  <div class="success-icon">✓</div>
+  <h2>IDP Successfully Submitted</h2>
+  <p>Your Individual Development Plan has been received. Your supervisor has been notified and has <strong>3 days</strong> to complete their assessment.</p>
+  <div class="ref-id-box" id="refIdDisplay">—</div>
+  <p>Please keep your <strong>Reference ID</strong> for your records. You will receive an email confirmation shortly.</p>
+</div>
+
+<!-- Main form -->
+<div class="container" id="mainForm">
+
+  <div class="form-title-block">
+    <h2>Individual Development Plan (IDP)</h2>
+    <p>Complete all sections carefully. Your supervisor will be notified automatically upon submission.</p>
+  </div>
+
+  <!-- ══ HEADER INFO ══ -->
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-num">H</div>
+      <div>
+        <h3>Personnel Information</h3>
+        <p>Basic details and submission purpose</p>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <!-- Campus -->
+      <div class="field-group" style="margin-bottom:20px;">
+        <label>Campus <span class="req">*</span></label>
+        <div class="checkbox-group" id="campusGroup">
+          <label class="checkbox-item">
+            <input type="radio" name="campus" value="CSU Main Campus"/> CSU Main Campus
+          </label>
+          <label class="checkbox-item">
+            <input type="radio" name="campus" value="CSU Cabadbaran City Campus"/> CSU Cabadbaran City Campus
+          </label>
+        </div>
+      </div>
+
+      <!-- Office Affiliation -->
+      <div class="field-group" style="margin-bottom:20px;">
+        <label>Office Affiliation <span class="req">*</span></label>
+        <div class="checkbox-group" id="officeGroup">
+          <label class="checkbox-item"><input type="radio" name="officeAffiliation" value="OVPAF"/> OVPAF</label>
+          <label class="checkbox-item"><input type="radio" name="officeAffiliation" value="OVPAA"/> OVPAA</label>
+          <label class="checkbox-item"><input type="radio" name="officeAffiliation" value="OVPEO"/> OVPEO</label>
+          <label class="checkbox-item"><input type="radio" name="officeAffiliation" value="OVPRDIE"/> OVPRDIE</label>
+          <label class="checkbox-item"><input type="radio" name="officeAffiliation" value="Office of the Campus Director"/> Office of the Campus Director</label>
+        </div>
+      </div>
+
+      <div class="field-grid field-grid-2" style="margin-bottom:18px;">
+        <div class="field-group span-2">
+          <label>College / Office / Unit <span class="req">*</span></label>
+          <input type="text" id="collegeOfficeUnit" placeholder="e.g. College of Engineering"/>
+        </div>
+      </div>
+
+      <div class="field-grid field-grid-2" style="margin-bottom:18px;">
+        <div class="field-group">
+          <label>Name of Personnel <span class="req">*</span></label>
+          <input type="text" id="nameOfPersonnel" placeholder="Full name"/>
+        </div>
+        <div class="field-group">
+          <label>Date Prepared <span class="req">*</span></label>
+          <input type="date" id="datePrepared"/>
+        </div>
+        <div class="field-group">
+          <label>Current Position / Designation <span class="req">*</span></label>
+          <input type="text" id="currentPosition" placeholder="e.g. Instructor I"/>
+        </div>
+        <div class="field-group">
+          <label>Year Covered <span class="req">*</span></label>
+          <input type="text" id="yearCovered" placeholder="e.g. 2025"/>
+        </div>
+        <div class="field-group">
+          <label>Years in Position <span class="req">*</span></label>
+          <input type="number" id="yearsInPosition" min="0" placeholder="0"/>
+        </div>
+        <div class="field-group">
+          <label>Years in CSU <span class="req">*</span></label>
+          <input type="number" id="yearsInCSU" min="0" placeholder="0"/>
+        </div>
+      </div>
+
+      <!-- Supervisor dropdown -->
+      <div class="field-group" style="margin-bottom:20px;">
+        <label>Immediate Supervisor <span class="req">*</span></label>
+        <select id="supervisorSelect">
+          <option value="">— Loading supervisors… —</option>
+        </select>
+        <input type="hidden" id="supervisorEmail"/>
+      </div>
+
+      <!-- Purpose (header) -->
+      <div class="field-group">
+        <label>Purpose <span class="req">*</span></label>
+        <div class="checkbox-group" id="headerPurposeGroup">
+          <label class="checkbox-item"><input type="radio" name="headerPurpose" value="Initial Assessment"/> Initial Assessment</label>
+          <label class="checkbox-item"><input type="radio" name="headerPurpose" value="Mid-Year Review"/> Mid-Year Review</label>
+          <label class="checkbox-item"><input type="radio" name="headerPurpose" value="Annual Review"/> Annual Review</label>
+          <label class="checkbox-item"><input type="radio" name="headerPurpose" value="Other"/> Other</label>
+        </div>
+        <div class="other-specify" id="headerPurposeOther">
+          <input type="text" id="headerPurposeOtherText" placeholder="Please specify…"/>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ SECTION I: COMPETENCY ASSESSMENT ══ -->
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-num">I</div>
+      <div>
+        <h3>Competency Assessment</h3>
+        <p>Identify key competencies to develop</p>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="section-desc">
+        Identify key competencies you need to develop based on your current or target role. For detailed descriptions and behavioral indicators, please refer to the 
+        <a href="https://tinyurl.com/CompetencyManualandModel" target="_blank">Competency Manual and Model</a>.
+      </div>
+
+      <div class="field-group" style="margin-bottom:20px;">
+        <label>Purpose <span class="req">*</span></label>
+        <div class="checkbox-group" id="competencyPurposeGroup">
+          <label class="checkbox-item"><input type="radio" name="compPurpose" value="To meet the competencies of my current position."/> Meet competencies of current position</label>
+          <label class="checkbox-item"><input type="radio" name="compPurpose" value="To increase the level of competencies of the current position."/> Increase level of current competencies</label>
+          <label class="checkbox-item"><input type="radio" name="compPurpose" value="To meet the competencies of the next higher position."/> Meet competencies of next higher position</label>
+          <label class="checkbox-item"><input type="radio" name="compPurpose" value="To acquire new competencies across different functions/positions."/> Acquire new competencies across functions</label>
+          <label class="checkbox-item"><input type="radio" name="compPurpose" value="Others"/> Others</label>
+        </div>
+        <div class="other-specify" id="compPurposeOther">
+          <input type="text" id="compPurposeOtherText" placeholder="Please specify…"/>
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="dynamic-table" id="competencyTable">
+          <thead>
+            <tr>
+              <th style="width:50px;">No.</th>
+              <th>Target Competency</th>
+              <th style="width:130px;">Current Level</th>
+              <th style="width:130px;">Required Level</th>
+              <th>Suggested LeaD Interventions</th>
+              <th>Resource / Support Needed</th>
+              <th style="width:120px;">Target Timeline</th>
+              <th style="width:40px;"></th>
+            </tr>
+          </thead>
+          <tbody id="competencyBody"></tbody>
+        </table>
+      </div>
+      <div class="table-actions">
+        <button class="btn-add-row" onclick="addRow('competency')">+ Add Row</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SECTION II: AGAP ══ -->
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-num">II</div>
+      <div>
+        <h3>Academic Growth and Advancement Program (AGAP)</h3>
+        <p>Plans for academic advancement</p>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="section-desc">
+        Outline your plans for academic advancement, such as enrolling in graduate or certification programs. Ensure alignment with your role and CSU's academic goals.
+      </div>
+      <div class="table-wrapper">
+        <table class="dynamic-table" id="agapTable">
+          <thead>
+            <tr>
+              <th style="width:50px;">No.</th>
+              <th>Degree Program</th>
+              <th>Target HEI</th>
+              <th style="width:120px;">Mode of Study</th>
+              <th>Source of Funding</th>
+              <th>Target Scholarship Grant</th>
+              <th style="width:120px;">Target Timeline</th>
+              <th style="width:40px;"></th>
+            </tr>
+          </thead>
+          <tbody id="agapBody"></tbody>
+        </table>
+      </div>
+      <div class="table-actions">
+        <button class="btn-add-row" onclick="addRow('agap')">+ Add Row</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SECTION III: PRO-ACT ══ -->
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-num">III</div>
+      <div>
+        <h3>Professional Advancement through Capacity-Building and Trainings (Pro-ACT)</h3>
+        <p>Training and workshop interventions</p>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="section-desc">
+        If a training intervention is identified in Part I (Competency Assessment), provide more detailed information here.
+      </div>
+      <div class="table-wrapper">
+        <table class="dynamic-table" id="proactTable">
+          <thead>
+            <tr>
+              <th style="width:50px;">No.</th>
+              <th>Training / Workshop Title</th>
+              <th>Target Competency / Skill</th>
+              <th style="width:130px;">Mode of Activity</th>
+              <th>Source of Funding</th>
+              <th>Trainer / Provider</th>
+              <th style="width:120px;">Target Timeline</th>
+              <th style="width:40px;"></th>
+            </tr>
+          </thead>
+          <tbody id="proactBody"></tbody>
+        </table>
+      </div>
+      <div class="table-actions">
+        <button class="btn-add-row" onclick="addRow('proact')">+ Add Row</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SUBMIT ══ -->
+  <div class="submit-area">
+    <p>By submitting, you confirm that all information provided is accurate. Your supervisor will be notified automatically.</p>
+    <button class="btn-submit" id="submitBtn" onclick="submitForm()">Submit IDP</button>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// ── Configuration ──
+// Replace with your deployed Apps Script Web App URL
+const APPS_SCRIPT_URL = 'https://script.google.com/a/macros/carsu.edu.ph/s/AKfycbykYTSKMuGy5jrSLytn8JpPfwSkpmZlA6jY8l8RzlqHg-iFhSxRvaYNQRz5eHgOIs_xug/exec';
+
+// ── State ──
+let userEmail = '';
+let supervisors = [];
+
+// ── Init ──
+window.addEventListener('DOMContentLoaded', () => {
+  // Set today as default date
+  document.getElementById('datePrepared').valueAsDate = new Date();
+
+  // Load supervisors
+  loadSupervisors();
+
+  // Radio/checkbox visual updates
+  document.querySelectorAll('.checkbox-item input').forEach(input => {
+    input.addEventListener('change', function() {
+      // Update visual state for radio groups
+      const name = this.name;
+      if (name) {
+        document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+          r.closest('.checkbox-item').classList.toggle('checked', r.checked);
+        });
+      }
+      // Show/hide "other" field
+      if (this.value === 'Other' || this.value === 'Others') {
+        const otherId = name === 'headerPurpose' ? 'headerPurposeOther' : 'compPurposeOther';
+        const el = document.getElementById(otherId);
+        if (el) el.classList.toggle('visible', this.checked);
+      } else if (this.type === 'radio') {
+        const otherId = name === 'headerPurpose' ? 'headerPurposeOther' : 'compPurposeOther';
+        const el = document.getElementById(otherId);
+        if (el) el.classList.remove('visible');
+      }
+    });
+  });
+
+  // Supervisor dropdown change
+  document.getElementById('supervisorSelect').addEventListener('change', function() {
+    const sup = supervisors.find(s => s.name === this.value);
+    document.getElementById('supervisorEmail').value = sup ? sup.email : '';
+  });
+
+  // Initialize with one row each
+  addRow('competency');
+  addRow('agap');
+  addRow('proact');
+});
+
+// ── Load supervisors from Apps Script ──
+function loadSupervisors() {
+  fetch(APPS_SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify({ action: 'getSupervisors' })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.success) {
+      supervisors = data.supervisors;
+      const sel = document.getElementById('supervisorSelect');
+      sel.innerHTML = '<option value="">— Select your immediate supervisor —</option>';
+      supervisors.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.name;
+        opt.textContent = s.name;
+        sel.appendChild(opt);
+      });
+    }
+  })
+  .catch(() => {
+    document.getElementById('supervisorSelect').innerHTML = '<option value="">— Could not load supervisors. Please refresh. —</option>';
+  });
+}
+
+// ── Dynamic table rows ──
+let rowCounts = { competency: 0, agap: 0, proact: 0 };
+
+function addRow(type) {
+  rowCounts[type]++;
+  const n = rowCounts[type];
+  const tbody = document.getElementById(type + 'Body');
+  const tr = document.createElement('tr');
+
+  if (type === 'competency') {
+    tr.innerHTML = `
+      <td><input type="text" class="priority-num" value="${n}" readonly/></td>
+      <td><textarea rows="2" placeholder="e.g. Communication Skills"></textarea></td>
+      <td><select>
+        <option value="">Select…</option>
+        <option>Basic</option><option>Intermediate</option><option>Advanced</option><option>Expert</option>
+      </select></td>
+      <td><select>
+        <option value="">Select…</option>
+        <option>Basic</option><option>Intermediate</option><option>Advanced</option><option>Expert</option>
+      </select></td>
+      <td><textarea rows="2" placeholder="e.g. Seminar, Workshop, Online Course"></textarea></td>
+      <td><textarea rows="2" placeholder="e.g. Budget, Mentor"></textarea></td>
+      <td><input type="text" placeholder="e.g. Q3 2025"/></td>
+      <td><button class="btn-remove-row" onclick="removeRow(this)" title="Remove row">×</button></td>`;
+  } else if (type === 'agap') {
+    tr.innerHTML = `
+      <td><input type="text" class="priority-num" value="${n}" readonly/></td>
+      <td><input type="text" placeholder="e.g. Master of Education"/></td>
+      <td><input type="text" placeholder="e.g. CSU Main Campus"/></td>
+      <td><select>
+        <option value="">Select…</option>
+        <option>Full-time</option><option>Part-time</option><option>Online</option><option>Blended</option>
+      </select></td>
+      <td><input type="text" placeholder="e.g. Personal, CHED"/></td>
+      <td><input type="text" placeholder="e.g. CHED Scholarship"/></td>
+      <td><input type="text" placeholder="e.g. 2025–2027"/></td>
+      <td><button class="btn-remove-row" onclick="removeRow(this)" title="Remove row">×</button></td>`;
+  } else if (type === 'proact') {
+    tr.innerHTML = `
+      <td><input type="text" class="priority-num" value="${n}" readonly/></td>
+      <td><input type="text" placeholder="e.g. Research Writing Workshop"/></td>
+      <td><input type="text" placeholder="e.g. Research Skills"/></td>
+      <td><select>
+        <option value="">Select…</option>
+        <option>Face-to-face</option><option>Online</option><option>Blended</option><option>On-the-job</option>
+      </select></td>
+      <td><input type="text" placeholder="e.g. University Fund"/></td>
+      <td><input type="text" placeholder="e.g. CSU HRMS"/></td>
+      <td><input type="text" placeholder="e.g. Q2 2025"/></td>
+      <td><button class="btn-remove-row" onclick="removeRow(this)" title="Remove row">×</button></td>`;
+  }
+
+  tbody.appendChild(tr);
+  tr.style.animation = 'fadeUp 0.25s ease';
+}
+
+function removeRow(btn) {
+  const tr = btn.closest('tr');
+  const tbody = tr.closest('tbody');
+  if (tbody.children.length <= 1) return; // keep at least 1 row
+  tr.remove();
+  // Renumber
+  Array.from(tbody.querySelectorAll('.priority-num')).forEach((el, i) => el.value = i + 1);
+}
+
+// ── Collect table data ──
+function collectTableData(type) {
+  const rows = [];
+  const tbody = document.getElementById(type + 'Body');
+  Array.from(tbody.querySelectorAll('tr')).forEach(tr => {
+    const cells = tr.querySelectorAll('input, select, textarea');
+    const row = {};
+    if (type === 'competency') {
+      row.priority = cells[0]?.value;
+      row.targetCompetency = cells[1]?.value;
+      row.currentLevel = cells[2]?.value;
+      row.requiredLevel = cells[3]?.value;
+      row.leadInterventions = cells[4]?.value;
+      row.resourceSupport = cells[5]?.value;
+      row.targetTimeline = cells[6]?.value;
+    } else if (type === 'agap') {
+      row.priority = cells[0]?.value;
+      row.degreeProgram = cells[1]?.value;
+      row.targetHEI = cells[2]?.value;
+      row.modeOfStudy = cells[3]?.value;
+      row.sourceOfFunding = cells[4]?.value;
+      row.scholarshipGrant = cells[5]?.value;
+      row.targetTimeline = cells[6]?.value;
+    } else if (type === 'proact') {
+      row.priority = cells[0]?.value;
+      row.trainingTitle = cells[1]?.value;
+      row.targetSkill = cells[2]?.value;
+      row.modeOfActivity = cells[3]?.value;
+      row.sourceOfFunding = cells[4]?.value;
+      row.trainerProvider = cells[5]?.value;
+      row.targetTimeline = cells[6]?.value;
+    }
+    rows.push(row);
+  });
+  return rows;
+}
+
+// ── Validation ──
+function validate() {
+  let ok = true;
+  const required = [
+    ['nameOfPersonnel', 'Name of Personnel'],
+    ['datePrepared', 'Date Prepared'],
+    ['currentPosition', 'Current Position'],
+    ['yearCovered', 'Year Covered'],
+    ['yearsInPosition', 'Years in Position'],
+    ['yearsInCSU', 'Years in CSU'],
+    ['collegeOfficeUnit', 'College/Office/Unit'],
+  ];
+
+  required.forEach(([id, label]) => {
+    const el = document.getElementById(id);
+    if (!el.value.trim()) {
+      el.classList.add('error');
+      ok = false;
+    } else el.classList.remove('error');
+  });
+
+  if (!document.querySelector('input[name="campus"]:checked')) {
+    alert('Please select a Campus.');
+    ok = false;
+  }
+  if (!document.querySelector('input[name="officeAffiliation"]:checked')) {
+    alert('Please select an Office Affiliation.');
+    ok = false;
+  }
+  if (!document.querySelector('input[name="headerPurpose"]:checked')) {
+    alert('Please select a Purpose.');
+    ok = false;
+  }
+  if (!document.querySelector('input[name="compPurpose"]:checked')) {
+    alert('Please select a Competency Assessment Purpose.');
+    ok = false;
+  }
+  if (!document.getElementById('supervisorSelect').value) {
+    alert('Please select your Immediate Supervisor.');
+    ok = false;
+  }
+
+  return ok;
+}
+
+// ── Submit ──
+function submitForm() {
+  if (!validate()) return;
+
+  const headerPurposeChecked = document.querySelector('input[name="headerPurpose"]:checked');
+  let headerPurpose = headerPurposeChecked?.value || '';
+  if (headerPurpose === 'Other') {
+    headerPurpose = document.getElementById('headerPurposeOtherText').value || 'Other';
+  }
+
+  const compPurposeChecked = document.querySelector('input[name="compPurpose"]:checked');
+  let compPurpose = compPurposeChecked?.value || '';
+  if (compPurpose === 'Others') {
+    compPurpose = document.getElementById('compPurposeOtherText').value || 'Others';
+  }
+
+  const payload = {
+    action: 'submitStage1',
+    campus: document.querySelector('input[name="campus"]:checked')?.value,
+    officeAffiliation: document.querySelector('input[name="officeAffiliation"]:checked')?.value,
+    collegeOfficeUnit: document.getElementById('collegeOfficeUnit').value.trim(),
+    nameOfPersonnel: document.getElementById('nameOfPersonnel').value.trim(),
+    datePrepared: document.getElementById('datePrepared').value,
+    currentPosition: document.getElementById('currentPosition').value.trim(),
+    yearCovered: document.getElementById('yearCovered').value.trim(),
+    yearsInPosition: document.getElementById('yearsInPosition').value,
+    yearsInCSU: document.getElementById('yearsInCSU').value,
+    supervisorName: document.getElementById('supervisorSelect').value,
+    supervisorEmail: document.getElementById('supervisorEmail').value,
+    headerPurpose,
+    competencyPurpose: compPurpose,
+    competencyRows: collectTableData('competency'),
+    agapRows: collectTableData('agap'),
+    proactRows: collectTableData('proact'),
+  };
+
+  document.getElementById('loadingOverlay').classList.add('active');
+  document.getElementById('submitBtn').disabled = true;
+
+  fetch(APPS_SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  })
+  .then(r => r.json())
+  .then(data => {
+    document.getElementById('loadingOverlay').classList.remove('active');
+    if (data.success) {
+      document.getElementById('mainForm').style.display = 'none';
+      document.getElementById('refIdDisplay').textContent = data.refId;
+      document.getElementById('successScreen').classList.add('active');
+    } else {
+      alert('Submission failed: ' + data.error);
+      document.getElementById('submitBtn').disabled = false;
+    }
+  })
+  .catch(err => {
+    document.getElementById('loadingOverlay').classList.remove('active');
+    alert('Network error. Please try again.');
+    document.getElementById('submitBtn').disabled = false;
+  });
+}
+</script>
+</body>
+</html>
