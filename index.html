@@ -1077,6 +1077,10 @@
 
       // ── Load supervisors from Apps Script ──
       function loadSupervisors() {
+        console.log(
+          "Loading from:",
+          APPS_SCRIPT_URL + "?action=getSupervisors&callback=handleSupervisors",
+        );
         const script = document.createElement("script");
         window.handleSupervisors = function (data) {
           script.remove();
