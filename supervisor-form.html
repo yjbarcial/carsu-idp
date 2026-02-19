@@ -644,6 +644,12 @@
         placeholder="e.g. IDP-2025-001"
         maxlength="20"
       />
+      <input
+        type="email"
+        id="supervisorEmailInput"
+        placeholder="Your CarSU email address"
+        style="margin-bottom: 16px"
+      />
       <div class="token-error" id="tokenError"></div>
       <button class="btn-load" onclick="loadByToken()">Load IDP</button>
     </div>
@@ -1141,6 +1147,8 @@
               }
               return;
             }
+
+            supervisorEmail = res.data.supervisorEmail;
 
             document.getElementById("tokenScreen").style.display = "none";
             populateReadOnly(res.data);
