@@ -1,0 +1,1314 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Supervisor IDP Assessment — CarSU HRMS</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --navy: #0d1b3e;
+        --navy-mid: #1a2f5e;
+        --gold: #c9a84c;
+        --gold-light: #e8c97a;
+        --cream: #faf8f4;
+        --white: #ffffff;
+        --text: #1a1a2e;
+        --text-light: #5a6070;
+        --border: #d8d4c8;
+        --error: #c0392b;
+        --success: #1a6b3c;
+        --input-bg: #f8f7f4;
+        --readonly-bg: #f0ede8;
+        --shadow: 0 4px 24px rgba(13, 27, 62, 0.1);
+        --shadow-sm: 0 2px 8px rgba(13, 27, 62, 0.07);
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Source Sans 3", sans-serif;
+        background: var(--cream);
+        color: var(--text);
+        min-height: 100vh;
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      .site-header {
+        background: var(--navy);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 2px 16px rgba(0, 0, 0, 0.18);
+      }
+      .header-inner {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 16px 32px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+      .header-logo {
+        width: 48px;
+        height: 48px;
+        background: var(--gold);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Playfair Display", serif;
+        font-size: 20px;
+        color: var(--navy);
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .header-text h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 18px;
+        color: var(--white);
+        font-weight: 600;
+      }
+      .header-text p {
+        font-size: 12px;
+        color: var(--gold-light);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .header-user {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.08);
+        padding: 6px 14px;
+        border-radius: 20px;
+      }
+      .header-user span {
+        font-size: 13px;
+        color: var(--gold-light);
+      }
+      .user-dot {
+        width: 8px;
+        height: 8px;
+        background: #4caf50;
+        border-radius: 50%;
+      }
+
+      .container {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 40px 32px 80px;
+      }
+
+      /* ── Token entry screen ── */
+      .token-screen {
+        max-width: 480px;
+        margin: 80px auto;
+        background: var(--white);
+        border-radius: 16px;
+        padding: 48px 40px;
+        text-align: center;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+      }
+      .token-screen h2 {
+        font-family: "Playfair Display", serif;
+        font-size: 24px;
+        color: var(--navy);
+        margin-bottom: 10px;
+      }
+      .token-screen p {
+        color: var(--text-light);
+        font-size: 14px;
+        margin-bottom: 24px;
+      }
+      .token-screen input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1.5px solid var(--border);
+        border-radius: 10px;
+        font-family: monospace;
+        font-size: 15px;
+        text-align: center;
+        outline: none;
+        background: var(--input-bg);
+        transition: border-color 0.2s;
+        margin-bottom: 16px;
+      }
+      .token-screen input:focus {
+        border-color: var(--navy);
+      }
+      .btn-load {
+        width: 100%;
+        padding: 13px;
+        background: var(--navy);
+        color: var(--white);
+        border: none;
+        border-radius: 10px;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .btn-load:hover {
+        background: var(--navy-mid);
+      }
+      .token-error {
+        color: var(--error);
+        font-size: 13px;
+        margin-top: 10px;
+      }
+
+      /* ── Section card ── */
+      .section-card {
+        background: var(--white);
+        border-radius: 12px;
+        box-shadow: var(--shadow-sm);
+        margin-bottom: 28px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        animation: fadeUp 0.4s ease both;
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .section-header {
+        background: var(--navy);
+        padding: 16px 28px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .section-num {
+        background: var(--gold);
+        color: var(--navy);
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 13px;
+        flex-shrink: 0;
+      }
+      .section-header h3 {
+        color: var(--white);
+        font-size: 15px;
+        font-weight: 600;
+      }
+      .section-header p {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 12px;
+        margin-top: 1px;
+      }
+
+      .readonly-badge {
+        margin-left: auto;
+        background: rgba(201, 168, 76, 0.2);
+        color: var(--gold-light);
+        font-size: 11px;
+        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 20px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .section-body {
+        padding: 28px;
+      }
+
+      /* ── Read-only fields ── */
+      .ro-grid {
+        display: grid;
+        gap: 16px;
+      }
+      .ro-grid-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+      .ro-grid-3 {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+      .ro-field {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .ro-field.span-2 {
+        grid-column: span 2;
+      }
+      .ro-label {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text-light);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .ro-value {
+        background: var(--readonly-bg);
+        border: 1.5px solid var(--border);
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-size: 14px;
+        color: var(--text);
+        min-height: 40px;
+      }
+
+      /* ── Read-only table ── */
+      .ro-table-wrapper {
+        overflow-x: auto;
+        margin-top: 16px;
+      }
+      .ro-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        font-size: 13px;
+        min-width: 600px;
+      }
+      .ro-table thead tr {
+        background: var(--navy-mid);
+      }
+      .ro-table thead th {
+        padding: 10px 12px;
+        color: var(--white);
+        font-weight: 600;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        text-align: left;
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .ro-table thead th:last-child {
+        border-right: none;
+      }
+      .ro-table tbody tr {
+        border-bottom: 1px solid var(--border);
+      }
+      .ro-table tbody tr:nth-child(even) {
+        background: #f9f8f5;
+      }
+      .ro-table tbody td {
+        padding: 10px 12px;
+        vertical-align: top;
+        border-right: 1px solid var(--border);
+        font-size: 13px;
+      }
+      .ro-table tbody td:last-child {
+        border-right: none;
+      }
+      .empty-row td {
+        text-align: center;
+        color: var(--text-light);
+        font-style: italic;
+      }
+
+      /* ── Section IV inputs ── */
+      .field-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      label.field-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--navy-mid);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      label.field-label .req {
+        color: var(--error);
+        margin-left: 2px;
+      }
+
+      .assessment-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 8px;
+      }
+      .assessment-table th,
+      .assessment-table td {
+        border: 1.5px solid var(--border);
+        padding: 14px 16px;
+        vertical-align: top;
+      }
+      .assessment-table thead th {
+        background: var(--navy);
+        color: var(--white);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 600;
+      }
+      .assessment-table .area-label {
+        font-weight: 600;
+        color: var(--navy-mid);
+        font-size: 13px;
+        min-width: 160px;
+      }
+      .assessment-table .guide-q {
+        color: var(--text-light);
+        font-size: 13px;
+        min-width: 220px;
+      }
+      .assessment-table .response-cell {
+        min-width: 260px;
+      }
+
+      input[type="text"],
+      input[type="date"],
+      select,
+      textarea {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1.5px solid var(--border);
+        border-radius: 8px;
+        background: var(--input-bg);
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 14px;
+        color: var(--text);
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+        outline: none;
+      }
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: var(--navy);
+        box-shadow: 0 0 0 3px rgba(13, 27, 62, 0.08);
+        background: var(--white);
+      }
+      textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+
+      .checkbox-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 4px;
+      }
+      .checkbox-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        padding: 8px 14px;
+        border: 1.5px solid var(--border);
+        border-radius: 8px;
+        background: var(--input-bg);
+        transition: all 0.2s;
+        font-size: 13px;
+      }
+      .checkbox-item:hover {
+        border-color: var(--navy);
+        background: var(--white);
+      }
+      .checkbox-item input[type="checkbox"],
+      .checkbox-item input[type="radio"] {
+        width: auto;
+        padding: 0;
+        border: none;
+        background: none;
+        accent-color: var(--navy);
+        cursor: pointer;
+      }
+      .checkbox-item.checked {
+        border-color: var(--navy);
+        background: rgba(13, 27, 62, 0.05);
+      }
+
+      /* ── Certification block ── */
+      .cert-block {
+        background: rgba(201, 168, 76, 0.08);
+        border: 1.5px solid var(--gold);
+        border-radius: 10px;
+        padding: 20px 24px;
+        margin-top: 24px;
+      }
+      .cert-block p {
+        font-size: 13px;
+        color: var(--text-light);
+        font-style: italic;
+        margin-bottom: 16px;
+      }
+      .cert-block .sup-name {
+        font-weight: 600;
+        color: var(--navy);
+        font-size: 16px;
+        padding: 12px 0;
+        border-bottom: 2px solid var(--navy);
+        display: inline-block;
+        min-width: 300px;
+        font-family: "Playfair Display", serif;
+      }
+      .cert-block small {
+        font-size: 11px;
+        color: var(--text-light);
+        display: block;
+        margin-top: 4px;
+      }
+
+      /* ── Submit ── */
+      .submit-area {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 28px;
+        text-align: center;
+        box-shadow: var(--shadow-sm);
+      }
+      .submit-area p {
+        font-size: 13px;
+        color: var(--text-light);
+        margin-bottom: 18px;
+      }
+      .btn-submit {
+        padding: 14px 48px;
+        background: var(--navy);
+        color: var(--white);
+        border: none;
+        border-radius: 10px;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        letter-spacing: 0.03em;
+        transition:
+          background 0.2s,
+          transform 0.15s,
+          box-shadow 0.2s;
+        box-shadow: 0 4px 16px rgba(13, 27, 62, 0.2);
+      }
+      .btn-submit:hover {
+        background: var(--navy-mid);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(13, 27, 62, 0.25);
+      }
+      .btn-submit:disabled {
+        background: #aaa;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      /* ── Overlay ── */
+      .overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(13, 27, 62, 0.6);
+        z-index: 999;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .overlay.active {
+        display: flex;
+      }
+      .spinner {
+        width: 48px;
+        height: 48px;
+        border: 4px solid rgba(255, 255, 255, 0.2);
+        border-top-color: var(--gold);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .overlay p {
+        color: var(--white);
+        font-size: 15px;
+      }
+
+      /* ── Success ── */
+      .success-screen {
+        display: none;
+        max-width: 520px;
+        margin: 80px auto;
+        text-align: center;
+        background: var(--white);
+        border-radius: 16px;
+        padding: 48px 40px;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+      }
+      .success-screen.active {
+        display: block;
+      }
+      .success-icon {
+        width: 72px;
+        height: 72px;
+        background: rgba(26, 107, 60, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+        margin: 0 auto 24px;
+      }
+      .success-screen h2 {
+        font-family: "Playfair Display", serif;
+        font-size: 24px;
+        color: var(--navy);
+        margin-bottom: 12px;
+      }
+      .success-screen p {
+        color: var(--text-light);
+        font-size: 14px;
+      }
+
+      /* ── Other specify ── */
+      .other-specify {
+        margin-top: 10px;
+        display: none;
+      }
+      .other-specify.visible {
+        display: block;
+      }
+
+      @media (max-width: 640px) {
+        .container {
+          padding: 24px 16px 60px;
+        }
+        .ro-grid-2,
+        .ro-grid-3 {
+          grid-template-columns: 1fr;
+        }
+        .ro-field.span-2 {
+          grid-column: span 1;
+        }
+        .section-body {
+          padding: 20px 16px;
+        }
+        .token-screen {
+          margin: 40px 16px;
+          padding: 32px 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="overlay" id="loadingOverlay">
+      <div class="spinner"></div>
+      <p id="loadingMsg">Loading IDP submission…</p>
+    </div>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="header-logo">C</div>
+        <div class="header-text">
+          <h1>Caraga State University</h1>
+          <p>Human Resource Management Services — Supervisor Assessment</p>
+        </div>
+        <div class="header-user">
+          <div class="user-dot"></div>
+          <span id="userEmail">Loading…</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Token entry (shown if no token in URL) -->
+    <div id="tokenScreen" class="token-screen" style="display: none">
+      <h2>Access IDP for Review</h2>
+      <p>
+        Enter the Reference ID from the notification email to load the
+        employee's submission.
+      </p>
+      <input
+        type="text"
+        id="tokenInput"
+        placeholder="e.g. IDP-2025-001"
+        maxlength="20"
+      />
+      <div class="token-error" id="tokenError"></div>
+      <button class="btn-load" onclick="loadByToken()">Load IDP</button>
+    </div>
+
+    <!-- Success screen -->
+    <div class="success-screen" id="successScreen">
+      <div class="success-icon">✓</div>
+      <h2>Assessment Submitted</h2>
+      <p>
+        Your assessment for this IDP has been recorded. HRMS has been notified
+        that the IDP is now fully complete. Thank you.
+      </p>
+    </div>
+
+    <!-- Main assessment view (hidden until loaded) -->
+    <div class="container" id="mainContent" style="display: none">
+      <div
+        style="
+          text-align: center;
+          margin-bottom: 40px;
+          padding-bottom: 32px;
+          border-bottom: 2px solid var(--gold);
+        "
+      >
+        <h2
+          style="
+            font-family: &quot;Playfair Display&quot;, serif;
+            font-size: 28px;
+            color: var(--navy);
+            margin-bottom: 6px;
+          "
+        >
+          Individual Development Plan (IDP)
+        </h2>
+        <p style="color: var(--text-light); font-size: 14px">
+          Supervisor's Review — Read-only view of employee submission. Complete
+          Section IV below.
+        </p>
+        <div
+          style="
+            margin-top: 12px;
+            display: inline-block;
+            background: var(--navy);
+            color: var(--gold-light);
+            font-family: monospace;
+            font-size: 16px;
+            font-weight: 700;
+            padding: 8px 20px;
+            border-radius: 8px;
+            letter-spacing: 0.08em;
+          "
+          id="refIdBadge"
+        ></div>
+      </div>
+
+      <!-- ══ HEADER INFO (READ-ONLY) ══ -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-num">H</div>
+          <div>
+            <h3>Personnel Information</h3>
+            <p>Employee-submitted details</p>
+          </div>
+          <div class="readonly-badge">Read-only</div>
+        </div>
+        <div class="section-body">
+          <div class="ro-grid ro-grid-2" style="margin-bottom: 16px">
+            <div class="ro-field">
+              <div class="ro-label">Campus</div>
+              <div class="ro-value" id="ro-campus"></div>
+            </div>
+            <div class="ro-field">
+              <div class="ro-label">Office Affiliation</div>
+              <div class="ro-value" id="ro-office"></div>
+            </div>
+            <div class="ro-field span-2">
+              <div class="ro-label">College / Office / Unit</div>
+              <div class="ro-value" id="ro-unit"></div>
+            </div>
+            <div class="ro-field">
+              <div class="ro-label">Name of Personnel</div>
+              <div class="ro-value" id="ro-name"></div>
+            </div>
+            <div class="ro-field">
+              <div class="ro-label">Date Prepared</div>
+              <div class="ro-value" id="ro-date"></div>
+            </div>
+            <div class="ro-field">
+              <div class="ro-label">Current Position / Designation</div>
+              <div class="ro-value" id="ro-position"></div>
+            </div>
+            <div class="ro-field">
+              <div class="ro-label">Year Covered</div>
+              <div class="ro-value" id="ro-year"></div>
+            </div>
+            <div class="ro-field">
+              <div class="ro-label">Years in Position</div>
+              <div class="ro-value" id="ro-yip"></div>
+            </div>
+            <div class="ro-field">
+              <div class="ro-label">Years in CSU</div>
+              <div class="ro-value" id="ro-yicsu"></div>
+            </div>
+            <div class="ro-field">
+              <div class="ro-label">Purpose</div>
+              <div class="ro-value" id="ro-purpose"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SECTION I (READ-ONLY) ══ -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-num">I</div>
+          <div><h3>Competency Assessment</h3></div>
+          <div class="readonly-badge">Read-only</div>
+        </div>
+        <div class="section-body">
+          <div class="ro-field" style="margin-bottom: 16px">
+            <div class="ro-label">Purpose</div>
+            <div class="ro-value" id="ro-compPurpose"></div>
+          </div>
+          <div class="ro-table-wrapper">
+            <table class="ro-table">
+              <thead>
+                <tr>
+                  <th style="width: 50px">No.</th>
+                  <th>Target Competency</th>
+                  <th>Current Level</th>
+                  <th>Required Level</th>
+                  <th>Suggested LeaD Interventions</th>
+                  <th>Resource / Support Needed</th>
+                  <th>Target Timeline</th>
+                </tr>
+              </thead>
+              <tbody id="ro-competencyBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SECTION II (READ-ONLY) ══ -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-num">II</div>
+          <div><h3>Academic Growth and Advancement Program (AGAP)</h3></div>
+          <div class="readonly-badge">Read-only</div>
+        </div>
+        <div class="section-body">
+          <div class="ro-table-wrapper">
+            <table class="ro-table">
+              <thead>
+                <tr>
+                  <th style="width: 50px">No.</th>
+                  <th>Degree Program</th>
+                  <th>Target HEI</th>
+                  <th>Mode of Study</th>
+                  <th>Source of Funding</th>
+                  <th>Target Scholarship Grant</th>
+                  <th>Target Timeline</th>
+                </tr>
+              </thead>
+              <tbody id="ro-agapBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SECTION III (READ-ONLY) ══ -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-num">III</div>
+          <div>
+            <h3>
+              Professional Advancement through Capacity-Building and Trainings
+              (Pro-ACT)
+            </h3>
+          </div>
+          <div class="readonly-badge">Read-only</div>
+        </div>
+        <div class="section-body">
+          <div class="ro-table-wrapper">
+            <table class="ro-table">
+              <thead>
+                <tr>
+                  <th style="width: 50px">No.</th>
+                  <th>Training / Workshop Title</th>
+                  <th>Target Competency / Skill</th>
+                  <th>Mode of Activity</th>
+                  <th>Source of Funding</th>
+                  <th>Trainer / Provider</th>
+                  <th>Target Timeline</th>
+                </tr>
+              </thead>
+              <tbody id="ro-proactBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SECTION IV: SUPERVISOR ASSESSMENT (FILLABLE) ══ -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-num">IV</div>
+          <div>
+            <h3>Supervisor's Assessment and Endorsement</h3>
+            <p>
+              Complete all fields below — this section is for the supervisor
+              only
+            </p>
+          </div>
+        </div>
+        <div class="section-body">
+          <table class="assessment-table">
+            <thead>
+              <tr>
+                <th style="width: 180px">Assessment Area</th>
+                <th style="width: 240px">Guide Question</th>
+                <th>Supervisor's Response</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 1. Performance Gaps -->
+              <tr>
+                <td class="area-label">1. Observed Performance Gaps</td>
+                <td class="guide-q">
+                  Are there any gaps in the employee's current performance that
+                  may be addressed through training, coaching, or mentoring?
+                </td>
+                <td class="response-cell">
+                  <div class="checkbox-group" style="margin-bottom: 12px">
+                    <label class="checkbox-item"
+                      ><input type="radio" name="perfGapsYN" value="Yes" />
+                      Yes</label
+                    >
+                    <label class="checkbox-item"
+                      ><input type="radio" name="perfGapsYN" value="No" />
+                      No</label
+                    >
+                  </div>
+                  <div id="perfGapsSpecifyWrap" style="display: none">
+                    <label class="field-label">If Yes, specify:</label>
+                    <textarea
+                      id="perfGapsSpecify"
+                      rows="3"
+                      placeholder="Describe the performance gaps…"
+                    ></textarea>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- 2. Readiness -->
+              <tr>
+                <td class="area-label">2. Readiness for Advancement</td>
+                <td class="guide-q">
+                  Based on your observation, is the employee ready for higher
+                  responsibilities or academic growth (e.g., scholarship,
+                  promotion readiness)?
+                </td>
+                <td class="response-cell">
+                  <div class="checkbox-group" style="margin-bottom: 12px">
+                    <label class="checkbox-item"
+                      ><input type="radio" name="readinessYN" value="Yes" />
+                      Yes</label
+                    >
+                    <label class="checkbox-item"
+                      ><input type="radio" name="readinessYN" value="No" />
+                      No</label
+                    >
+                  </div>
+                  <label class="field-label">Remarks:</label>
+                  <textarea
+                    id="readinessRemarks"
+                    rows="3"
+                    placeholder="Your remarks on readiness…"
+                  ></textarea>
+                </td>
+              </tr>
+
+              <!-- 3. Recommended Interventions -->
+              <tr>
+                <td class="area-label">3. Recommended L&D Interventions</td>
+                <td class="guide-q">
+                  What specific learning and development interventions do you
+                  recommend for this employee? <em>(Check all applicable)</em>
+                </td>
+                <td class="response-cell">
+                  <div class="checkbox-group" id="interventionsGroup">
+                    <label class="checkbox-item"
+                      ><input type="checkbox" value="Technical Training" />
+                      Technical Training</label
+                    >
+                    <label class="checkbox-item"
+                      ><input type="checkbox" value="Soft Skills" /> Soft
+                      Skills</label
+                    >
+                    <label class="checkbox-item"
+                      ><input type="checkbox" value="Leadership Development" />
+                      Leadership Development</label
+                    >
+                    <label class="checkbox-item"
+                      ><input type="checkbox" value="Coaching/Mentoring" />
+                      Coaching / Mentoring</label
+                    >
+                    <label class="checkbox-item"
+                      ><input type="checkbox" value="Academic Advancement" />
+                      Academic Advancement</label
+                    >
+                    <label class="checkbox-item"
+                      ><input
+                        type="checkbox"
+                        value="Job Rotation/Cross-training"
+                      />
+                      Job Rotation / Cross-training</label
+                    >
+                    <label class="checkbox-item"
+                      ><input type="checkbox" value="Others" /> Others</label
+                    >
+                  </div>
+                  <div class="other-specify" id="interventionOther">
+                    <input
+                      type="text"
+                      id="interventionOtherText"
+                      placeholder="Specify other intervention…"
+                    />
+                  </div>
+                </td>
+              </tr>
+
+              <!-- 4. Implementation Period -->
+              <tr>
+                <td class="area-label">4. Preferred Implementation Period</td>
+                <td class="guide-q">
+                  When should the recommended interventions ideally be
+                  implemented?
+                </td>
+                <td class="response-cell">
+                  <div class="checkbox-group" id="implGroup">
+                    <label class="checkbox-item"
+                      ><input type="checkbox" value="Q1" /> Q1</label
+                    >
+                    <label class="checkbox-item"
+                      ><input type="checkbox" value="Q2" /> Q2</label
+                    >
+                    <label class="checkbox-item"
+                      ><input type="checkbox" value="Q3" /> Q3</label
+                    >
+                    <label class="checkbox-item"
+                      ><input type="checkbox" value="Q4" /> Q4</label
+                    >
+                    <label class="checkbox-item"
+                      ><input type="checkbox" value="Within this year" /> Within
+                      this year</label
+                    >
+                    <label class="checkbox-item"
+                      ><input type="checkbox" value="Next year" /> Next
+                      year</label
+                    >
+                  </div>
+                </td>
+              </tr>
+
+              <!-- 5. Additional Comments -->
+              <tr>
+                <td class="area-label">
+                  5. Additional Comments or Development Notes
+                </td>
+                <td class="guide-q">
+                  Any other suggestions or remarks to support the employee's
+                  development plan?
+                </td>
+                <td class="response-cell">
+                  <textarea
+                    id="additionalComments"
+                    rows="4"
+                    placeholder="Your additional comments or development notes…"
+                  ></textarea>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Certification -->
+          <div class="cert-block">
+            <p>
+              <em
+                >I hereby certify that I have reviewed and assessed the
+                Individual Development Plan (IDP) of the concerned personnel and
+                confirm that the proposed goals and interventions are aligned
+                with their role, performance needs, and the strategic direction
+                of the office.</em
+              >
+            </p>
+            <div class="sup-name" id="certSupName">—</div>
+            <small>Signature over Printed Name of Immediate Supervisor</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SUBMIT ══ -->
+      <div class="submit-area">
+        <p>
+          By submitting, you confirm that your assessment is complete and
+          accurate. HR will be notified immediately.
+        </p>
+        <button class="btn-submit" id="submitBtn" onclick="submitAssessment()">
+          Submit Assessment
+        </button>
+      </div>
+    </div>
+    <!-- /container -->
+
+    <script>
+      const APPS_SCRIPT_URL =
+        "https://script.google.com/macros/s/AKfycbz9Nn217LxMH5jtUVMMNJX7q3snXL6TbEJd5yAITXt3fwAj0Vq3EJIXyURn6XljypCm/exec";
+
+      let currentToken = "";
+      let supervisorEmail = "";
+
+      window.addEventListener("DOMContentLoaded", () => {
+        // Get token from URL
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get("token");
+
+        if (token) {
+          currentToken = token;
+          loadSubmission(token);
+        } else {
+          document.getElementById("tokenScreen").style.display = "block";
+        }
+
+        // Radio/checkbox visuals
+        document.querySelectorAll(".checkbox-item input").forEach((input) => {
+          input.addEventListener("change", function () {
+            const name = this.name;
+            if (name) {
+              document
+                .querySelectorAll(`input[name="${name}"]`)
+                .forEach((r) => {
+                  r.closest(".checkbox-item").classList.toggle(
+                    "checked",
+                    r.checked,
+                  );
+                });
+            }
+            if (name === "perfGapsYN") {
+              document.getElementById("perfGapsSpecifyWrap").style.display =
+                this.value === "Yes" ? "block" : "none";
+            }
+            if (this.value === "Others" && this.type === "checkbox") {
+              document
+                .getElementById("interventionOther")
+                .classList.toggle("visible", this.checked);
+            }
+          });
+        });
+      });
+
+      function loadByToken() {
+        const val = document.getElementById("tokenInput").value.trim();
+        if (!val) return;
+        currentToken = val;
+        document.getElementById("tokenError").textContent = "";
+        loadSubmission(val);
+      }
+
+      function loadSubmission(token) {
+        document.getElementById("loadingMsg").textContent =
+          "Loading IDP submission…";
+        document.getElementById("loadingOverlay").classList.add("active");
+
+        fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: "getSubmission", token }),
+        })
+          .then((r) => r.json())
+          .then((res) => {
+            document
+              .getElementById("loadingOverlay")
+              .classList.remove("active");
+            if (!res.success) {
+              const msg =
+                res.error === "UNAUTHORIZED"
+                  ? "You are not authorized to review this IDP."
+                  : res.error === "ALREADY_SUBMITTED"
+                    ? "This IDP has already been reviewed."
+                    : "IDP not found. Please check the Reference ID.";
+              document.getElementById("tokenError") &&
+                (document.getElementById("tokenError").textContent = msg);
+              if (
+                !document.getElementById("tokenScreen").style.display ||
+                document.getElementById("tokenScreen").style.display === "none"
+              ) {
+                alert(msg);
+              }
+              return;
+            }
+
+            document.getElementById("tokenScreen").style.display = "none";
+            populateReadOnly(res.data);
+            document.getElementById("mainContent").style.display = "block";
+          })
+          .catch(() => {
+            document
+              .getElementById("loadingOverlay")
+              .classList.remove("active");
+            alert("Network error. Please try again.");
+          });
+      }
+
+      function populateReadOnly(d) {
+        document.getElementById("refIdBadge").textContent = d.refId;
+        document.getElementById("ro-campus").textContent = d.campus || "—";
+        document.getElementById("ro-office").textContent =
+          d.officeAffiliation || "—";
+        document.getElementById("ro-unit").textContent =
+          d.collegeOfficeUnit || "—";
+        document.getElementById("ro-name").textContent =
+          d.nameOfPersonnel || "—";
+        document.getElementById("ro-date").textContent = d.datePrepared || "—";
+        document.getElementById("ro-position").textContent =
+          d.currentPosition || "—";
+        document.getElementById("ro-year").textContent = d.yearCovered || "—";
+        document.getElementById("ro-yip").textContent =
+          d.yearsInPosition || "—";
+        document.getElementById("ro-yicsu").textContent = d.yearsInCSU || "—";
+        document.getElementById("ro-purpose").textContent =
+          d.headerPurpose || "—";
+        document.getElementById("ro-compPurpose").textContent =
+          d.competencyPurpose || "—";
+        document.getElementById("certSupName").textContent =
+          d.supervisorName || "—";
+
+        populateROTable("ro-competencyBody", d.competencyRows || [], [
+          "priority",
+          "targetCompetency",
+          "currentLevel",
+          "requiredLevel",
+          "leadInterventions",
+          "resourceSupport",
+          "targetTimeline",
+        ]);
+        populateROTable("ro-agapBody", d.agapRows || [], [
+          "priority",
+          "degreeProgram",
+          "targetHEI",
+          "modeOfStudy",
+          "sourceOfFunding",
+          "scholarshipGrant",
+          "targetTimeline",
+        ]);
+        populateROTable("ro-proactBody", d.proactRows || [], [
+          "priority",
+          "trainingTitle",
+          "targetSkill",
+          "modeOfActivity",
+          "sourceOfFunding",
+          "trainerProvider",
+          "targetTimeline",
+        ]);
+      }
+
+      function populateROTable(tbodyId, rows, keys) {
+        const tbody = document.getElementById(tbodyId);
+        tbody.innerHTML = "";
+        if (!rows.length) {
+          const tr = document.createElement("tr");
+          tr.className = "empty-row";
+          tr.innerHTML = `<td colspan="7">No entries provided.</td>`;
+          tbody.appendChild(tr);
+          return;
+        }
+        rows.forEach((row) => {
+          const tr = document.createElement("tr");
+          keys.forEach((k) => {
+            const td = document.createElement("td");
+            td.textContent = row[k] || "—";
+            tr.appendChild(td);
+          });
+          tbody.appendChild(tr);
+        });
+      }
+
+      function getCheckedValues(groupId) {
+        return Array.from(
+          document.querySelectorAll(
+            `#${groupId} input[type="checkbox"]:checked`,
+          ),
+        ).map((cb) => cb.value);
+      }
+
+      function submitAssessment() {
+        const perfGapsYN = document.querySelector(
+          'input[name="perfGapsYN"]:checked',
+        )?.value;
+        const readinessYN = document.querySelector(
+          'input[name="readinessYN"]:checked',
+        )?.value;
+
+        if (!perfGapsYN) {
+          alert("Please indicate if there are performance gaps.");
+          return;
+        }
+        if (!readinessYN) {
+          alert("Please indicate readiness for advancement.");
+          return;
+        }
+
+        let interventions = getCheckedValues("interventionsGroup");
+        if (interventions.includes("Others")) {
+          const spec = document
+            .getElementById("interventionOtherText")
+            .value.trim();
+          interventions = interventions.filter((v) => v !== "Others");
+          if (spec) interventions.push("Others: " + spec);
+        }
+        const implementationPeriod = getCheckedValues("implGroup");
+
+        const payload = {
+          action: "submitStage2",
+          token: currentToken,
+          perfGapsYN,
+          perfGapsSpec: document.getElementById("perfGapsSpecify").value.trim(),
+          readinessYN,
+          readinessRemarks: document
+            .getElementById("readinessRemarks")
+            .value.trim(),
+          interventions,
+          implementationPeriod,
+          additionalComments: document
+            .getElementById("additionalComments")
+            .value.trim(),
+        };
+
+        document.getElementById("loadingMsg").textContent =
+          "Submitting your assessment…";
+        document.getElementById("loadingOverlay").classList.add("active");
+        document.getElementById("submitBtn").disabled = true;
+
+        fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify(payload),
+        })
+          .then((r) => r.json())
+          .then((data) => {
+            document
+              .getElementById("loadingOverlay")
+              .classList.remove("active");
+            if (data.success) {
+              document.getElementById("mainContent").style.display = "none";
+              document.getElementById("successScreen").classList.add("active");
+            } else {
+              alert("Submission failed: " + data.error);
+              document.getElementById("submitBtn").disabled = false;
+            }
+          })
+          .catch(() => {
+            document
+              .getElementById("loadingOverlay")
+              .classList.remove("active");
+            alert("Network error. Please try again.");
+            document.getElementById("submitBtn").disabled = false;
+          });
+      }
+    </script>
+  </body>
+</html>
