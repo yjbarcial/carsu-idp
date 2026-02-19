@@ -1273,6 +1273,7 @@
         const payload = {
           action: "submitStage2",
           token: currentToken,
+          supervisorEmail: supervisorEmail,
           perfGapsYN,
           perfGapsSpec: document.getElementById("perfGapsSpecify").value.trim(),
           readinessYN,
@@ -1290,6 +1291,8 @@
           "Submitting your assessment…";
         document.getElementById("loadingOverlay").classList.add("active");
         document.getElementById("submitBtn").disabled = true;
+
+        console.log("Submitting with supervisorEmail:", supervisorEmail);
 
         fetch(APPS_SCRIPT_URL, {
           method: "POST",
