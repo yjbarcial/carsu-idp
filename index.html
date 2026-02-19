@@ -993,6 +993,7 @@ function submitForm() {
 
   const payload = {
     action: 'submitStage1',
+    employeeEmail: document.getElementById('userEmail').textContent,
     campus: document.querySelector('input[name="campus"]:checked')?.value,
     officeAffiliation: document.querySelector('input[name="officeAffiliation"]:checked')?.value,
     collegeOfficeUnit: document.getElementById('collegeOfficeUnit').value.trim(),
