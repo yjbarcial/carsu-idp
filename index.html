@@ -571,6 +571,10 @@
           <label>Name of Personnel <span class="req">*</span></label>
           <input type="text" id="nameOfPersonnel" placeholder="Full name"/>
         </div>
+      <div class="field-group">
+        <label>Your Email Address <span class="req">*</span></label>
+        <input type="email" id="employeeEmail" placeholder="yourname@carsu.edu.ph"/>
+      </div>
         <div class="field-group">
           <label>Date Prepared <span class="req">*</span></label>
           <input type="date" id="datePrepared"/>
@@ -934,6 +938,7 @@ function collectTableData(type) {
 function validate() {
   let ok = true;
   const required = [
+    ['employeeEmail', 'Email Address'],  // ← add this line
     ['nameOfPersonnel', 'Name of Personnel'],
     ['datePrepared', 'Date Prepared'],
     ['currentPosition', 'Current Position'],
@@ -993,7 +998,7 @@ function submitForm() {
 
   const payload = {
     action: 'submitStage1',
-    employeeEmail: document.getElementById('userEmail').textContent,
+    employeeEmail: document.getElementById('employeeEmail').value.trim(),
     campus: document.querySelector('input[name="campus"]:checked')?.value,
     officeAffiliation: document.querySelector('input[name="officeAffiliation"]:checked')?.value,
     collegeOfficeUnit: document.getElementById('collegeOfficeUnit').value.trim(),
