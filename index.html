@@ -805,12 +805,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // ── Load supervisors from Apps Script ──
 function loadSupervisors() {
-  fetch(APPS_SCRIPT_URL, {
-    method: 'POST',
-    body: JSON.stringify({ action: 'getSupervisors' })
-  })
-  .then(r => r.json())
-  .then(data => {
+  const script = document.createElement('script');
+  window.handleSupervisors = function(data) {
+    script.remove();
+    delete window.handleSupervisors;
     if (data.success) {
       supervisors = data.supervisors;
       const sel = document.getElementById('supervisorSelect');
@@ -821,11 +819,12 @@ function loadSupervisors() {
         opt.textContent = s.name;
         sel.appendChild(opt);
       });
+    } else {
+      document.getElementById('supervisorSelect').innerHTML = '<option value="">— Could not load supervisors. Please refresh. —</option>';
     }
-  })
-  .catch(() => {
-    document.getElementById('supervisorSelect').innerHTML = '<option value="">— Could not load supervisors. Please refresh. —</option>';
-  });
+  };
+  script.src = APPS_SCRIPT_URL + '?action=getSupervisors&callback=handleSupervisors';
+  document.body.appendChild(script);
 }
 
 // ── Dynamic table rows ──
