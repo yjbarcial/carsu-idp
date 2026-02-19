@@ -1011,7 +1011,7 @@
       // ── Configuration ──
       // Replace with your deployed Apps Script Web App URL
       const APPS_SCRIPT_URL =
-        "https://script.google.com/macros/s/AKfycby1Z5Ws5pYkLdgx96sFeQi7eLym40UYjx6Hr6N6tlTAx9olOYPCZI5pwr0cyVo5U3Go/exec";
+        "https://script.google.com/macros/s/AKfycbwJW0XKHBr5OXkIGtyFFUwB8SEtAiZgmtI1dnljvolBJj5wwf1HRgCPqCmP8FOWCH4q/exec";
 
       // ── State ──
       let userEmail = "";
@@ -1081,7 +1081,7 @@
         window.handleSupervisors = function (data) {
           script.remove();
           delete window.handleSupervisors;
-          if (data.success) {
+          if (data.success && data.supervisors.length) {
             supervisors = data.supervisors;
             const sel = document.getElementById("supervisorSelect");
             sel.innerHTML =
@@ -1097,6 +1097,7 @@
               '<option value="">— Could not load supervisors. Please refresh. —</option>';
           }
         };
+        // Use your personal Gmail deployment URL (no /a/macros/carsu.edu.ph/)
         script.src =
           APPS_SCRIPT_URL + "?action=getSupervisors&callback=handleSupervisors";
         document.body.appendChild(script);
