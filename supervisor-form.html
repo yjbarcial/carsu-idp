@@ -1078,7 +1078,11 @@
 
         if (token) {
           currentToken = token;
-          loadSubmission(token);
+          // Pre-fill token field and show screen to collect email
+          document.getElementById("tokenInput").value = token;
+          document.getElementById("tokenError").textContent =
+            "Please enter your CarSU email address to continue.";
+          document.getElementById("tokenScreen").style.display = "block";
         } else {
           document.getElementById("tokenScreen").style.display = "block";
         }
@@ -1178,6 +1182,7 @@
             }
 
             supervisorEmail = res.data.supervisorEmail; // always store from response
+            document.getElementById("userEmail").textContent = supervisorEmail;
             document.getElementById("tokenScreen").style.display = "none";
             populateReadOnly(res.data);
             document.getElementById("mainContent").style.display = "block";
