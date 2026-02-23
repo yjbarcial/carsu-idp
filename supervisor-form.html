@@ -635,23 +635,25 @@
     <div id="tokenScreen" class="token-screen" style="display: none">
       <h2>Access IDP for Review</h2>
       <p>
-        Enter the Reference ID from the notification email to load the
+        Enter your CarSU email address to verify your identity and load the
         employee's submission.
       </p>
       <input
         type="text"
         id="tokenInput"
-        placeholder="e.g. IDP-2025-001"
-        maxlength="20"
+        placeholder="Token (auto-filled from email link)"
+        style="margin-bottom: 12px"
       />
       <input
         type="email"
         id="supervisorEmailInput"
-        placeholder="Your CarSU email address"
+        placeholder="Your CarSU email (e.g. name@carsu.edu.ph)"
         style="margin-bottom: 16px"
       />
       <div class="token-error" id="tokenError"></div>
-      <button class="btn-load" onclick="loadByToken()">Load IDP</button>
+      <button class="btn-load" onclick="loadByToken()">
+        Verify & Load IDP
+      </button>
     </div>
 
     <!-- Success screen -->
@@ -1110,20 +1112,51 @@
 
       function loadByToken() {
         const val = document.getElementById("tokenInput").value.trim();
-        if (!val) return;
+        const email = document
+          .getElementById("supervisorEmailInput")
+          .value.trim();
+        if (!val) {
+          alert("Please enter your token.");
+          return;
+        }
+        if (!email) {
+          alert("Please enter your CarSU email address.");
+          return;
+        }
+        supervisorEmail = email;
         currentToken = val;
         document.getElementById("tokenError").textContent = "";
         loadSubmission(val);
       }
 
       function loadSubmission(token) {
+        // Grab email from input if on token screen
+        const emailInput = document.getElementById("supervisorEmailInput");
+        if (emailInput && emailInput.value.trim()) {
+          supervisorEmail = emailInput.value.trim();
+        }
+
+        // If no email yet (came via URL link), show email prompt first
+        if (!supervisorEmail) {
+          document.getElementById("loadingOverlay").classList.remove("active");
+          document.getElementById("tokenScreen").style.display = "block";
+          document.getElementById("tokenInput").value = token;
+          document.getElementById("tokenError").textContent =
+            "Please enter your CarSU email address to continue.";
+          return;
+        }
+
         document.getElementById("loadingMsg").textContent =
           "Loading IDP submission…";
         document.getElementById("loadingOverlay").classList.add("active");
 
         fetch(APPS_SCRIPT_URL, {
           method: "POST",
-          body: JSON.stringify({ action: "getSubmission", token }),
+          body: JSON.stringify({
+            action: "getSubmission",
+            token,
+            supervisorEmail,
+          }),
         })
           .then((r) => r.json())
           .then((res) => {
@@ -1133,23 +1166,18 @@
             if (!res.success) {
               const msg =
                 res.error === "UNAUTHORIZED"
-                  ? "You are not authorized to review this IDP."
+                  ? "You are not authorized to review this IDP. Please check your email address."
                   : res.error === "ALREADY_SUBMITTED"
                     ? "This IDP has already been reviewed."
-                    : "IDP not found. Please check the Reference ID.";
-              document.getElementById("tokenError") &&
-                (document.getElementById("tokenError").textContent = msg);
-              if (
-                !document.getElementById("tokenScreen").style.display ||
-                document.getElementById("tokenScreen").style.display === "none"
-              ) {
-                alert(msg);
-              }
+                    : "IDP not found. Please check your token.";
+              document.getElementById("tokenScreen").style.display = "block";
+              document.getElementById("tokenInput").value = token;
+              document.getElementById("tokenError").textContent = msg;
+              supervisorEmail = ""; // reset so they can try again
               return;
             }
 
-            supervisorEmail = res.data.supervisorEmail;
-
+            supervisorEmail = res.data.supervisorEmail; // always store from response
             document.getElementById("tokenScreen").style.display = "none";
             populateReadOnly(res.data);
             document.getElementById("mainContent").style.display = "block";
