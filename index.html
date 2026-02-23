@@ -141,27 +141,13 @@
         animation: fadeUp 0.4s ease both;
       }
       @keyframes fadeUp {
-        from {
-          opacity: 0;
-          transform: translateY(16px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
+        from { opacity: 0; transform: translateY(16px); }
+        to { opacity: 1; transform: translateY(0); }
       }
-      .section-card:nth-child(2) {
-        animation-delay: 0.05s;
-      }
-      .section-card:nth-child(3) {
-        animation-delay: 0.1s;
-      }
-      .section-card:nth-child(4) {
-        animation-delay: 0.15s;
-      }
-      .section-card:nth-child(5) {
-        animation-delay: 0.2s;
-      }
+      .section-card:nth-child(2) { animation-delay: 0.05s; }
+      .section-card:nth-child(3) { animation-delay: 0.1s; }
+      .section-card:nth-child(4) { animation-delay: 0.15s; }
+      .section-card:nth-child(5) { animation-delay: 0.2s; }
 
       .section-header {
         background: var(--navy);
@@ -194,33 +180,16 @@
         font-size: 12px;
         margin-top: 1px;
       }
-      .section-body {
-        padding: 28px;
-      }
+      .section-body { padding: 28px; }
 
       /* ── Form fields ── */
-      .field-grid {
-        display: grid;
-        gap: 18px;
-      }
-      .field-grid-2 {
-        grid-template-columns: 1fr 1fr;
-      }
-      .field-grid-3 {
-        grid-template-columns: 1fr 1fr 1fr;
-      }
+      .field-grid { display: grid; gap: 18px; }
+      .field-grid-2 { grid-template-columns: 1fr 1fr; }
+      .field-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
 
-      .field-group {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-      }
-      .field-group.span-2 {
-        grid-column: span 2;
-      }
-      .field-group.span-3 {
-        grid-column: span 3;
-      }
+      .field-group { display: flex; flex-direction: column; gap: 6px; }
+      .field-group.span-2 { grid-column: span 2; }
+      .field-group.span-3 { grid-column: span 3; }
 
       label {
         font-size: 12px;
@@ -229,12 +198,10 @@
         text-transform: uppercase;
         letter-spacing: 0.05em;
       }
-      label .req {
-        color: var(--error);
-        margin-left: 2px;
-      }
+      label .req { color: var(--error); margin-left: 2px; }
 
       input[type="text"],
+      input[type="email"],
       input[type="date"],
       input[type="number"],
       select,
@@ -247,29 +214,28 @@
         font-family: "Source Sans 3", sans-serif;
         font-size: 14px;
         color: var(--text);
-        transition:
-          border-color 0.2s,
-          box-shadow 0.2s;
+        transition: border-color 0.2s, box-shadow 0.2s;
         outline: none;
       }
-      input:focus,
-      select:focus,
-      textarea:focus {
+      input:focus, select:focus, textarea:focus {
         border-color: var(--navy);
         box-shadow: 0 0 0 3px rgba(13, 27, 62, 0.08);
         background: var(--white);
       }
-      input.error,
-      select.error {
-        border-color: var(--error);
+      input.error, select.error { border-color: var(--error); }
+      input.valid { border-color: var(--success); }
+      textarea { resize: vertical; min-height: 80px; }
+      select { cursor: pointer; }
+
+      /* ── Email hint ── */
+      .email-hint {
+        font-size: 12px;
+        margin-top: 2px;
+        min-height: 16px;
+        display: block;
       }
-      textarea {
-        resize: vertical;
-        min-height: 80px;
-      }
-      select {
-        cursor: pointer;
-      }
+      .email-hint.error { color: var(--error); }
+      .email-hint.success { color: var(--success); }
 
       /* ── Checkbox groups ── */
       .checkbox-group {
@@ -290,10 +256,7 @@
         transition: all 0.2s;
         font-size: 13px;
       }
-      .checkbox-item:hover {
-        border-color: var(--navy);
-        background: var(--white);
-      }
+      .checkbox-item:hover { border-color: var(--navy); background: var(--white); }
       .checkbox-item input[type="checkbox"],
       .checkbox-item input[type="radio"] {
         width: auto;
@@ -309,10 +272,7 @@
       }
 
       /* ── Dynamic tables ── */
-      .table-wrapper {
-        overflow-x: auto;
-        margin-top: 16px;
-      }
+      .table-wrapper { overflow-x: auto; margin-top: 16px; }
       .dynamic-table {
         width: 100%;
         border-collapse: separate;
@@ -320,9 +280,7 @@
         font-size: 13px;
         min-width: 700px;
       }
-      .dynamic-table thead tr {
-        background: var(--navy-mid);
-      }
+      .dynamic-table thead tr { background: var(--navy-mid); }
       .dynamic-table thead th {
         padding: 10px 12px;
         color: var(--white);
@@ -333,32 +291,18 @@
         text-align: left;
         border-right: 1px solid rgba(255, 255, 255, 0.1);
       }
-      .dynamic-table thead th:last-child {
-        border-right: none;
-      }
-      .dynamic-table tbody tr {
-        border-bottom: 1px solid var(--border);
-        transition: background 0.15s;
-      }
-      .dynamic-table tbody tr:hover {
-        background: #f5f4f0;
-      }
+      .dynamic-table thead th:last-child { border-right: none; }
+      .dynamic-table tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+      .dynamic-table tbody tr:hover { background: #f5f4f0; }
       .dynamic-table tbody td {
         padding: 8px 10px;
         vertical-align: top;
         border-right: 1px solid var(--border);
       }
-      .dynamic-table tbody td:last-child {
-        border-right: none;
-        text-align: center;
-      }
+      .dynamic-table tbody td:last-child { border-right: none; text-align: center; }
       .dynamic-table td input,
       .dynamic-table td select,
-      .dynamic-table td textarea {
-        padding: 6px 10px;
-        font-size: 13px;
-        border-radius: 6px;
-      }
+      .dynamic-table td textarea { padding: 6px 10px; font-size: 13px; border-radius: 6px; }
       .priority-num {
         width: 36px;
         text-align: center;
@@ -369,11 +313,7 @@
       }
 
       /* ── Add/Remove row buttons ── */
-      .table-actions {
-        display: flex;
-        gap: 10px;
-        margin-top: 12px;
-      }
+      .table-actions { display: flex; gap: 10px; margin-top: 12px; }
       .btn-add-row {
         display: inline-flex;
         align-items: center;
@@ -389,9 +329,7 @@
         transition: background 0.2s;
         font-family: "Source Sans 3", sans-serif;
       }
-      .btn-add-row:hover {
-        background: var(--navy-mid);
-      }
+      .btn-add-row:hover { background: var(--navy-mid); }
       .btn-remove-row {
         background: none;
         border: none;
@@ -403,9 +341,7 @@
         line-height: 1;
         transition: background 0.15s;
       }
-      .btn-remove-row:hover {
-        background: rgba(192, 57, 43, 0.08);
-      }
+      .btn-remove-row:hover { background: rgba(192, 57, 43, 0.08); }
 
       /* ── Section description ── */
       .section-desc {
@@ -418,25 +354,11 @@
         color: var(--text-light);
         line-height: 1.6;
       }
-      .section-desc a {
-        color: var(--navy);
-      }
-
-      /* ── Divider ── */
-      .field-divider {
-        height: 1px;
-        background: var(--border);
-        margin: 8px 0;
-      }
+      .section-desc a { color: var(--navy); }
 
       /* ── Other specify ── */
-      .other-specify {
-        margin-top: 10px;
-        display: none;
-      }
-      .other-specify.visible {
-        display: block;
-      }
+      .other-specify { margin-top: 10px; display: none; }
+      .other-specify.visible { display: block; }
 
       /* ── Submit area ── */
       .submit-area {
@@ -447,11 +369,7 @@
         text-align: center;
         box-shadow: var(--shadow-sm);
       }
-      .submit-area p {
-        font-size: 13px;
-        color: var(--text-light);
-        margin-bottom: 18px;
-      }
+      .submit-area p { font-size: 13px; color: var(--text-light); margin-bottom: 18px; }
       .btn-submit {
         padding: 14px 48px;
         background: var(--navy);
@@ -463,10 +381,7 @@
         font-weight: 600;
         cursor: pointer;
         letter-spacing: 0.03em;
-        transition:
-          background 0.2s,
-          transform 0.15s,
-          box-shadow 0.2s;
+        transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
         box-shadow: 0 4px 16px rgba(13, 27, 62, 0.2);
       }
       .btn-submit:hover {
@@ -474,15 +389,8 @@
         transform: translateY(-1px);
         box-shadow: 0 6px 20px rgba(13, 27, 62, 0.25);
       }
-      .btn-submit:active {
-        transform: translateY(0);
-      }
-      .btn-submit:disabled {
-        background: #aaa;
-        cursor: not-allowed;
-        transform: none;
-        box-shadow: none;
-      }
+      .btn-submit:active { transform: translateY(0); }
+      .btn-submit:disabled { background: #aaa; cursor: not-allowed; transform: none; box-shadow: none; }
 
       /* ── Loading overlay ── */
       .overlay {
@@ -496,9 +404,7 @@
         flex-direction: column;
         gap: 16px;
       }
-      .overlay.active {
-        display: flex;
-      }
+      .overlay.active { display: flex; }
       .spinner {
         width: 48px;
         height: 48px;
@@ -507,15 +413,8 @@
         border-radius: 50%;
         animation: spin 0.8s linear infinite;
       }
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
-      }
-      .overlay p {
-        color: var(--white);
-        font-size: 15px;
-      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+      .overlay p { color: var(--white); font-size: 15px; }
 
       /* ── Success screen ── */
       .success-screen {
@@ -529,9 +428,7 @@
         box-shadow: var(--shadow);
         border: 1px solid var(--border);
       }
-      .success-screen.active {
-        display: block;
-      }
+      .success-screen.active { display: block; }
       .success-icon {
         width: 72px;
         height: 72px;
@@ -549,11 +446,7 @@
         color: var(--navy);
         margin-bottom: 12px;
       }
-      .success-screen p {
-        color: var(--text-light);
-        font-size: 14px;
-        margin-bottom: 20px;
-      }
+      .success-screen p { color: var(--text-light); font-size: 14px; margin-bottom: 20px; }
       .ref-id-box {
         background: var(--navy);
         color: var(--gold-light);
@@ -566,35 +459,14 @@
         margin: 16px 0 24px;
       }
 
-      /* ── Error message ── */
-      .field-error {
-        font-size: 12px;
-        color: var(--error);
-        margin-top: 4px;
-      }
-
       /* ── Responsive ── */
       @media (max-width: 640px) {
-        .container {
-          padding: 24px 16px 60px;
-        }
-        .field-grid-2,
-        .field-grid-3 {
-          grid-template-columns: 1fr;
-        }
-        .field-group.span-2,
-        .field-group.span-3 {
-          grid-column: span 1;
-        }
-        .section-body {
-          padding: 20px 16px;
-        }
-        .header-inner {
-          padding: 14px 16px;
-        }
-        .header-user {
-          display: none;
-        }
+        .container { padding: 24px 16px 60px; }
+        .field-grid-2, .field-grid-3 { grid-template-columns: 1fr; }
+        .field-group.span-2, .field-group.span-3 { grid-column: span 1; }
+        .section-body { padding: 20px 16px; }
+        .header-inner { padding: 14px 16px; }
+        .header-user { display: none; }
       }
     </style>
   </head>
@@ -615,19 +487,18 @@
         </div>
         <div class="header-user">
           <div class="user-dot"></div>
-          <span id="userEmail">Loading…</span>
+          <span id="userEmail">—</span>
         </div>
       </div>
     </header>
 
-    <!-- Success screen (hidden initially) -->
+    <!-- Success screen -->
     <div class="success-screen" id="successScreen">
       <div class="success-icon">✓</div>
       <h2>IDP Successfully Submitted</h2>
       <p>
         Your Individual Development Plan has been received. Your supervisor has
-        been notified and has <strong>3 days</strong> to complete their
-        assessment.
+        been notified and has <strong>3 days</strong> to complete their assessment.
       </p>
       <div class="ref-id-box" id="refIdDisplay">—</div>
       <p>
@@ -640,10 +511,7 @@
     <div class="container" id="mainForm">
       <div class="form-title-block">
         <h2>Individual Development Plan (IDP)</h2>
-        <p>
-          Complete all sections carefully. Your supervisor will be notified
-          automatically upon submission.
-        </p>
+        <p>Complete all sections carefully. Your supervisor will be notified automatically upon submission.</p>
       </div>
 
       <!-- ══ HEADER INFO ══ -->
@@ -656,20 +524,16 @@
           </div>
         </div>
         <div class="section-body">
+
           <!-- Campus -->
           <div class="field-group" style="margin-bottom: 20px">
             <label>Campus <span class="req">*</span></label>
             <div class="checkbox-group" id="campusGroup">
               <label class="checkbox-item">
-                <input type="radio" name="campus" value="CSU Main Campus" /> CSU
-                Main Campus
+                <input type="radio" name="campus" value="CSU Main Campus" /> CSU Main Campus
               </label>
               <label class="checkbox-item">
-                <input
-                  type="radio"
-                  name="campus"
-                  value="CSU Cabadbaran City Campus"
-                />
+                <input type="radio" name="campus" value="CSU Cabadbaran City Campus" />
                 CSU Cabadbaran City Campus
               </label>
             </div>
@@ -679,41 +543,21 @@
           <div class="field-group" style="margin-bottom: 20px">
             <label>Office Affiliation <span class="req">*</span></label>
             <div class="checkbox-group" id="officeGroup">
-              <label class="checkbox-item"
-                ><input type="radio" name="officeAffiliation" value="OVPAF" />
-                OVPAF</label
-              >
-              <label class="checkbox-item"
-                ><input type="radio" name="officeAffiliation" value="OVPAA" />
-                OVPAA</label
-              >
-              <label class="checkbox-item"
-                ><input type="radio" name="officeAffiliation" value="OVPEO" />
-                OVPEO</label
-              >
-              <label class="checkbox-item"
-                ><input type="radio" name="officeAffiliation" value="OVPRDIE" />
-                OVPRDIE</label
-              >
-              <label class="checkbox-item"
-                ><input
-                  type="radio"
-                  name="officeAffiliation"
-                  value="Office of the Campus Director"
-                />
-                Office of the Campus Director</label
-              >
+              <label class="checkbox-item"><input type="radio" name="officeAffiliation" value="OVPAF" /> OVPAF</label>
+              <label class="checkbox-item"><input type="radio" name="officeAffiliation" value="OVPAA" /> OVPAA</label>
+              <label class="checkbox-item"><input type="radio" name="officeAffiliation" value="OVPEO" /> OVPEO</label>
+              <label class="checkbox-item"><input type="radio" name="officeAffiliation" value="OVPRDIE" /> OVPRDIE</label>
+              <label class="checkbox-item">
+                <input type="radio" name="officeAffiliation" value="Office of the Campus Director" />
+                Office of the Campus Director
+              </label>
             </div>
           </div>
 
           <div class="field-grid field-grid-2" style="margin-bottom: 18px">
             <div class="field-group span-2">
               <label>College / Office / Unit <span class="req">*</span></label>
-              <input
-                type="text"
-                id="collegeOfficeUnit"
-                placeholder="e.g. College of Engineering"
-              />
+              <input type="text" id="collegeOfficeUnit" placeholder="e.g. College of Engineering" />
             </div>
           </div>
 
@@ -722,28 +566,26 @@
               <label>Name of Personnel <span class="req">*</span></label>
               <input type="text" id="nameOfPersonnel" placeholder="Full name" />
             </div>
+
+            <!-- ── Employee email with CarSU validation ── -->
             <div class="field-group">
-              <label>Your Email Address <span class="req">*</span></label>
+              <label>Your CarSU Email Address <span class="req">*</span></label>
               <input
                 type="email"
                 id="employeeEmail"
                 placeholder="yourname@carsu.edu.ph"
+                autocomplete="email"
               />
+              <small class="email-hint" id="employeeEmailHint"></small>
             </div>
+
             <div class="field-group">
               <label>Date Prepared <span class="req">*</span></label>
               <input type="date" id="datePrepared" />
             </div>
             <div class="field-group">
-              <label
-                >Current Position / Designation
-                <span class="req">*</span></label
-              >
-              <input
-                type="text"
-                id="currentPosition"
-                placeholder="e.g. Instructor I"
-              />
+              <label>Current Position / Designation <span class="req">*</span></label>
+              <input type="text" id="currentPosition" placeholder="e.g. Instructor I" />
             </div>
             <div class="field-group">
               <label>Year Covered <span class="req">*</span></label>
@@ -751,12 +593,7 @@
             </div>
             <div class="field-group">
               <label>Years in Position <span class="req">*</span></label>
-              <input
-                type="number"
-                id="yearsInPosition"
-                min="0"
-                placeholder="0"
-              />
+              <input type="number" id="yearsInPosition" min="0" placeholder="0" />
             </div>
             <div class="field-group">
               <label>Years in CSU <span class="req">*</span></label>
@@ -764,67 +601,35 @@
             </div>
           </div>
 
-          <!-- Supervisor manual input -->
+          <!-- Supervisor fields -->
           <div class="field-grid field-grid-2" style="margin-bottom: 20px">
             <div class="field-group">
-              <label
-                >Immediate Supervisor Name <span class="req">*</span></label
-              >
-              <input
-                type="text"
-                id="supervisorName"
-                placeholder="e.g. Dr. Juan Dela Cruz"
-              />
+              <label>Immediate Supervisor Name <span class="req">*</span></label>
+              <input type="text" id="supervisorName" placeholder="e.g. Dr. Juan Dela Cruz" />
             </div>
+            <!-- ── Supervisor email with CarSU validation ── -->
             <div class="field-group">
-              <label>Supervisor Email <span class="req">*</span></label>
+              <label>Supervisor CarSU Email <span class="req">*</span></label>
               <input
                 type="email"
                 id="supervisorEmail"
                 placeholder="supervisor@carsu.edu.ph"
               />
+              <small class="email-hint" id="supervisorEmailHint"></small>
             </div>
           </div>
 
-          <!-- Purpose (header) -->
+          <!-- Purpose -->
           <div class="field-group">
             <label>Purpose <span class="req">*</span></label>
             <div class="checkbox-group" id="headerPurposeGroup">
-              <label class="checkbox-item"
-                ><input
-                  type="radio"
-                  name="headerPurpose"
-                  value="Initial Assessment"
-                />
-                Initial Assessment</label
-              >
-              <label class="checkbox-item"
-                ><input
-                  type="radio"
-                  name="headerPurpose"
-                  value="Mid-Year Review"
-                />
-                Mid-Year Review</label
-              >
-              <label class="checkbox-item"
-                ><input
-                  type="radio"
-                  name="headerPurpose"
-                  value="Annual Review"
-                />
-                Annual Review</label
-              >
-              <label class="checkbox-item"
-                ><input type="radio" name="headerPurpose" value="Other" />
-                Other</label
-              >
+              <label class="checkbox-item"><input type="radio" name="headerPurpose" value="Initial Assessment" /> Initial Assessment</label>
+              <label class="checkbox-item"><input type="radio" name="headerPurpose" value="Mid-Year Review" /> Mid-Year Review</label>
+              <label class="checkbox-item"><input type="radio" name="headerPurpose" value="Annual Review" /> Annual Review</label>
+              <label class="checkbox-item"><input type="radio" name="headerPurpose" value="Other" /> Other</label>
             </div>
             <div class="other-specify" id="headerPurposeOther">
-              <input
-                type="text"
-                id="headerPurposeOtherText"
-                placeholder="Please specify…"
-              />
+              <input type="text" id="headerPurposeOtherText" placeholder="Please specify…" />
             </div>
           </div>
         </div>
@@ -841,62 +646,22 @@
         </div>
         <div class="section-body">
           <div class="section-desc">
-            Identify key competencies you need to develop based on your current
-            or target role. For detailed descriptions and behavioral indicators,
-            please refer to the
-            <a
-              href="https://tinyurl.com/CompetencyManualandModel"
-              target="_blank"
-              >Competency Manual and Model</a
-            >.
+            Identify key competencies you need to develop based on your current or target role.
+            For detailed descriptions and behavioral indicators, please refer to the
+            <a href="https://tinyurl.com/CompetencyManualandModel" target="_blank">Competency Manual and Model</a>.
           </div>
 
           <div class="field-group" style="margin-bottom: 20px">
             <label>Purpose <span class="req">*</span></label>
             <div class="checkbox-group" id="competencyPurposeGroup">
-              <label class="checkbox-item"
-                ><input
-                  type="radio"
-                  name="compPurpose"
-                  value="To meet the competencies of my current position."
-                />
-                Meet competencies of current position</label
-              >
-              <label class="checkbox-item"
-                ><input
-                  type="radio"
-                  name="compPurpose"
-                  value="To increase the level of competencies of the current position."
-                />
-                Increase level of current competencies</label
-              >
-              <label class="checkbox-item"
-                ><input
-                  type="radio"
-                  name="compPurpose"
-                  value="To meet the competencies of the next higher position."
-                />
-                Meet competencies of next higher position</label
-              >
-              <label class="checkbox-item"
-                ><input
-                  type="radio"
-                  name="compPurpose"
-                  value="To acquire new competencies across different functions/positions."
-                />
-                Acquire new competencies across functions</label
-              >
-              <label class="checkbox-item"
-                ><input type="radio" name="compPurpose" value="Others" />
-                Others</label
-              >
+              <label class="checkbox-item"><input type="radio" name="compPurpose" value="To meet the competencies of my current position." /> Meet competencies of current position</label>
+              <label class="checkbox-item"><input type="radio" name="compPurpose" value="To increase the level of competencies of the current position." /> Increase level of current competencies</label>
+              <label class="checkbox-item"><input type="radio" name="compPurpose" value="To meet the competencies of the next higher position." /> Meet competencies of next higher position</label>
+              <label class="checkbox-item"><input type="radio" name="compPurpose" value="To acquire new competencies across different functions/positions." /> Acquire new competencies across functions</label>
+              <label class="checkbox-item"><input type="radio" name="compPurpose" value="Others" /> Others</label>
             </div>
             <div class="other-specify" id="compPurposeOther">
-              <input
-                type="text"
-                id="compPurposeOtherText"
-                placeholder="Please specify…"
-              />
+              <input type="text" id="compPurposeOtherText" placeholder="Please specify…" />
             </div>
           </div>
 
@@ -918,9 +683,7 @@
             </table>
           </div>
           <div class="table-actions">
-            <button class="btn-add-row" onclick="addRow('competency')">
-              + Add Row
-            </button>
+            <button class="btn-add-row" onclick="addRow('competency')">+ Add Row</button>
           </div>
         </div>
       </div>
@@ -936,9 +699,8 @@
         </div>
         <div class="section-body">
           <div class="section-desc">
-            Outline your plans for academic advancement, such as enrolling in
-            graduate or certification programs. Ensure alignment with your role
-            and CSU's academic goals.
+            Outline your plans for academic advancement, such as enrolling in graduate or
+            certification programs. Ensure alignment with your role and CSU's academic goals.
           </div>
           <div class="table-wrapper">
             <table class="dynamic-table" id="agapTable">
@@ -958,9 +720,7 @@
             </table>
           </div>
           <div class="table-actions">
-            <button class="btn-add-row" onclick="addRow('agap')">
-              + Add Row
-            </button>
+            <button class="btn-add-row" onclick="addRow('agap')">+ Add Row</button>
           </div>
         </div>
       </div>
@@ -970,17 +730,14 @@
         <div class="section-header">
           <div class="section-num">III</div>
           <div>
-            <h3>
-              Professional Advancement through Capacity-Building and Trainings
-              (Pro-ACT)
-            </h3>
+            <h3>Professional Advancement through Capacity-Building and Trainings (Pro-ACT)</h3>
             <p>Training and workshop interventions</p>
           </div>
         </div>
         <div class="section-body">
           <div class="section-desc">
-            If a training intervention is identified in Part I (Competency
-            Assessment), provide more detailed information here.
+            If a training intervention is identified in Part I (Competency Assessment),
+            provide more detailed information here.
           </div>
           <div class="table-wrapper">
             <table class="dynamic-table" id="proactTable">
@@ -1000,72 +757,70 @@
             </table>
           </div>
           <div class="table-actions">
-            <button class="btn-add-row" onclick="addRow('proact')">
-              + Add Row
-            </button>
+            <button class="btn-add-row" onclick="addRow('proact')">+ Add Row</button>
           </div>
         </div>
       </div>
 
       <!-- ══ SUBMIT ══ -->
       <div class="submit-area">
-        <p>
-          By submitting, you confirm that all information provided is accurate.
-          Your supervisor will be notified automatically.
-        </p>
-        <button class="btn-submit" id="submitBtn" onclick="submitForm()">
-          Submit IDP
-        </button>
+        <p>By submitting, you confirm that all information provided is accurate. Your supervisor will be notified automatically.</p>
+        <button class="btn-submit" id="submitBtn" onclick="submitForm()">Submit IDP</button>
       </div>
     </div>
     <!-- /container -->
 
     <script>
-      // ── Configuration ──
-      // Replace with your deployed Apps Script Web App URL
       const APPS_SCRIPT_URL =
         "https://script.google.com/macros/s/AKfycby1Z5Ws5pYkLdgx96sFeQi7eLym40UYjx6Hr6N6tlTAx9olOYPCZI5pwr0cyVo5U3Go/exec";
 
-      // ── State ──
-      let userEmail = "";
+      let rowCounts = { competency: 0, agap: 0, proact: 0 };
 
       // ── Init ──
       window.addEventListener("DOMContentLoaded", () => {
-        // Set today as default date
         document.getElementById("datePrepared").valueAsDate = new Date();
 
         // Radio/checkbox visual updates
         document.querySelectorAll(".checkbox-item input").forEach((input) => {
           input.addEventListener("change", function () {
-            // Update visual state for radio groups
             const name = this.name;
             if (name) {
-              document
-                .querySelectorAll(`input[name="${name}"]`)
-                .forEach((r) => {
-                  r.closest(".checkbox-item").classList.toggle(
-                    "checked",
-                    r.checked,
-                  );
-                });
+              document.querySelectorAll(`input[name="${name}"]`).forEach((r) => {
+                r.closest(".checkbox-item").classList.toggle("checked", r.checked);
+              });
             }
-            // Show/hide "other" field
             if (this.value === "Other" || this.value === "Others") {
-              const otherId =
-                name === "headerPurpose"
-                  ? "headerPurposeOther"
-                  : "compPurposeOther";
+              const otherId = name === "headerPurpose" ? "headerPurposeOther" : "compPurposeOther";
               const el = document.getElementById(otherId);
               if (el) el.classList.toggle("visible", this.checked);
             } else if (this.type === "radio") {
-              const otherId =
-                name === "headerPurpose"
-                  ? "headerPurposeOther"
-                  : "compPurposeOther";
+              const otherId = name === "headerPurpose" ? "headerPurposeOther" : "compPurposeOther";
               const el = document.getElementById(otherId);
               if (el) el.classList.remove("visible");
             }
           });
+        });
+
+        // ── Live validation: employee email ──
+        document.getElementById("employeeEmail").addEventListener("input", function () {
+          clearEmailHint(this, "employeeEmailHint");
+          // Update header display as they type
+          document.getElementById("userEmail").textContent =
+            this.value.trim().endsWith("@carsu.edu.ph") ? this.value.trim() : "—";
+        });
+        document.getElementById("employeeEmail").addEventListener("blur", function () {
+          validateCarsuEmail(this, "employeeEmailHint");
+          if (this.value.trim().endsWith("@carsu.edu.ph")) {
+            document.getElementById("userEmail").textContent = this.value.trim();
+          }
+        });
+
+        // ── Live validation: supervisor email ──
+        document.getElementById("supervisorEmail").addEventListener("input", function () {
+          clearEmailHint(this, "supervisorEmailHint");
+        });
+        document.getElementById("supervisorEmail").addEventListener("blur", function () {
+          validateCarsuEmail(this, "supervisorEmailHint");
         });
 
         // Initialize with one row each
@@ -1074,9 +829,36 @@
         addRow("proact");
       });
 
-      // ── Dynamic table rows ──
-      let rowCounts = { competency: 0, agap: 0, proact: 0 };
+      // ── Email helpers ──
+      function clearEmailHint(inputEl, hintId) {
+        inputEl.classList.remove("error", "valid");
+        const hint = document.getElementById(hintId);
+        hint.textContent = "";
+        hint.className = "email-hint";
+      }
 
+      function validateCarsuEmail(inputEl, hintId) {
+        const val = inputEl.value.trim();
+        const hint = document.getElementById(hintId);
+        if (!val) {
+          clearEmailHint(inputEl, hintId);
+          return false;
+        }
+        if (!val.endsWith("@carsu.edu.ph")) {
+          inputEl.classList.add("error");
+          inputEl.classList.remove("valid");
+          hint.textContent = "Must be a @carsu.edu.ph email address.";
+          hint.className = "email-hint error";
+          return false;
+        }
+        inputEl.classList.add("valid");
+        inputEl.classList.remove("error");
+        hint.textContent = "✓ Valid CarSU email";
+        hint.className = "email-hint success";
+        return true;
+      }
+
+      // ── Dynamic table rows ──
       function addRow(type) {
         rowCounts[type]++;
         const n = rowCounts[type];
@@ -1085,46 +867,46 @@
 
         if (type === "competency") {
           tr.innerHTML = `
-      <td><input type="text" class="priority-num" value="${n}" readonly/></td>
-      <td><textarea rows="2" placeholder=""></textarea></td>
-      <td><select>
-        <option value="">Select…</option>
-        <option>Basic</option><option>Intermediate</option><option>Advanced</option><option>Expert</option>
-      </select></td>
-      <td><select>
-        <option value="">Select…</option>
-        <option>Basic</option><option>Intermediate</option><option>Advanced</option><option>Expert</option>
-      </select></td>
-      <td><textarea rows="2" placeholder=""></textarea></td>
-      <td><textarea rows="2" placeholder=""></textarea></td>
-      <td><input type="text" placeholder=""/></td>
-      <td><button class="btn-remove-row" onclick="removeRow(this)" title="Remove row">×</button></td>`;
+            <td><input type="text" class="priority-num" value="${n}" readonly/></td>
+            <td><textarea rows="2" placeholder=""></textarea></td>
+            <td><select>
+              <option value="">Select…</option>
+              <option>Basic</option><option>Intermediate</option><option>Advanced</option><option>Expert</option>
+            </select></td>
+            <td><select>
+              <option value="">Select…</option>
+              <option>Basic</option><option>Intermediate</option><option>Advanced</option><option>Expert</option>
+            </select></td>
+            <td><textarea rows="2" placeholder=""></textarea></td>
+            <td><textarea rows="2" placeholder=""></textarea></td>
+            <td><input type="text" placeholder=""/></td>
+            <td><button class="btn-remove-row" onclick="removeRow(this)" title="Remove row">×</button></td>`;
         } else if (type === "agap") {
           tr.innerHTML = `
-      <td><input type="text" class="priority-num" value="${n}" readonly/></td>
-      <td><input type="text" placeholder=""/></td>
-      <td><input type="text" placeholder=""/></td>
-      <td><select>
-        <option value="">Select…</option>
-        <option>Full-time</option><option>Part-time</option><option>Online</option><option>Blended</option>
-      </select></td>
-      <td><input type="text" placeholder=""/></td>
-      <td><input type="text" placeholder=""/></td>
-      <td><input type="text" placeholder=""/></td>
-      <td><button class="btn-remove-row" onclick="removeRow(this)" title="Remove row">×</button></td>`;
+            <td><input type="text" class="priority-num" value="${n}" readonly/></td>
+            <td><input type="text" placeholder=""/></td>
+            <td><input type="text" placeholder=""/></td>
+            <td><select>
+              <option value="">Select…</option>
+              <option>Full-time</option><option>Part-time</option><option>Online</option><option>Blended</option>
+            </select></td>
+            <td><input type="text" placeholder=""/></td>
+            <td><input type="text" placeholder=""/></td>
+            <td><input type="text" placeholder=""/></td>
+            <td><button class="btn-remove-row" onclick="removeRow(this)" title="Remove row">×</button></td>`;
         } else if (type === "proact") {
           tr.innerHTML = `
-      <td><input type="text" class="priority-num" value="${n}" readonly/></td>
-      <td><input type="text" placeholder=""/></td>
-      <td><input type="text" placeholder=""/></td>
-      <td><select>
-        <option value="">Select…</option>
-        <option>Face-to-face</option><option>Online</option><option>Blended</option><option>On-the-job</option>
-      </select></td>
-      <td><input type="text" placeholder=""/></td>
-      <td><input type="text" placeholder=""/></td>
-      <td><input type="text" placeholder=""/></td>
-      <td><button class="btn-remove-row" onclick="removeRow(this)" title="Remove row">×</button></td>`;
+            <td><input type="text" class="priority-num" value="${n}" readonly/></td>
+            <td><input type="text" placeholder=""/></td>
+            <td><input type="text" placeholder=""/></td>
+            <td><select>
+              <option value="">Select…</option>
+              <option>Face-to-face</option><option>Online</option><option>Blended</option><option>On-the-job</option>
+            </select></td>
+            <td><input type="text" placeholder=""/></td>
+            <td><input type="text" placeholder=""/></td>
+            <td><input type="text" placeholder=""/></td>
+            <td><button class="btn-remove-row" onclick="removeRow(this)" title="Remove row">×</button></td>`;
         }
 
         tbody.appendChild(tr);
@@ -1134,11 +916,10 @@
       function removeRow(btn) {
         const tr = btn.closest("tr");
         const tbody = tr.closest("tbody");
-        if (tbody.children.length <= 1) return; // keep at least 1 row
+        if (tbody.children.length <= 1) return;
         tr.remove();
-        // Renumber
         Array.from(tbody.querySelectorAll(".priority-num")).forEach(
-          (el, i) => (el.value = i + 1),
+          (el, i) => (el.value = i + 1)
         );
       }
 
@@ -1182,8 +963,9 @@
       // ── Validation ──
       function validate() {
         let ok = true;
+
+        // Required plain text fields
         const required = [
-          ["employeeEmail", "Email Address"], // ← add this line
           ["nameOfPersonnel", "Name of Personnel"],
           ["datePrepared", "Date Prepared"],
           ["currentPosition", "Current Position"],
@@ -1191,43 +973,56 @@
           ["yearsInPosition", "Years in Position"],
           ["yearsInCSU", "Years in CSU"],
           ["collegeOfficeUnit", "College/Office/Unit"],
+          ["supervisorName", "Supervisor Name"],
         ];
-
-        required.forEach(([id, label]) => {
+        required.forEach(([id]) => {
           const el = document.getElementById(id);
-          if (!el.value.trim()) {
-            el.classList.add("error");
-            ok = false;
-          } else el.classList.remove("error");
+          if (!el.value.trim()) { el.classList.add("error"); ok = false; }
+          else el.classList.remove("error");
         });
 
-        if (!document.querySelector('input[name="campus"]:checked')) {
-          alert("Please select a Campus.");
+        // ── Employee email: required + @carsu.edu.ph only ──
+        const empEmail = document.getElementById("employeeEmail").value.trim();
+        if (!empEmail) {
+          document.getElementById("employeeEmail").classList.add("error");
+          document.getElementById("employeeEmailHint").textContent = "Email address is required.";
+          document.getElementById("employeeEmailHint").className = "email-hint error";
+          ok = false;
+        } else if (!empEmail.endsWith("@carsu.edu.ph")) {
+          document.getElementById("employeeEmail").classList.add("error");
+          document.getElementById("employeeEmailHint").textContent = "Only @carsu.edu.ph emails are allowed.";
+          document.getElementById("employeeEmailHint").className = "email-hint error";
+          alert("Only CarSU email addresses (@carsu.edu.ph) are allowed to submit an IDP.");
           ok = false;
         }
-        if (
-          !document.querySelector('input[name="officeAffiliation"]:checked')
-        ) {
-          alert("Please select an Office Affiliation.");
+
+        // ── Supervisor email: required + @carsu.edu.ph only ──
+        const supEmail = document.getElementById("supervisorEmail").value.trim();
+        if (!supEmail) {
+          document.getElementById("supervisorEmail").classList.add("error");
+          document.getElementById("supervisorEmailHint").textContent = "Supervisor email is required.";
+          document.getElementById("supervisorEmailHint").className = "email-hint error";
           ok = false;
+        } else if (!supEmail.endsWith("@carsu.edu.ph")) {
+          document.getElementById("supervisorEmail").classList.add("error");
+          document.getElementById("supervisorEmailHint").textContent = "Supervisor must have a @carsu.edu.ph email.";
+          document.getElementById("supervisorEmailHint").className = "email-hint error";
+          alert("Supervisor email must also be a @carsu.edu.ph address.");
+          ok = false;
+        }
+
+        // Radio groups
+        if (!document.querySelector('input[name="campus"]:checked')) {
+          alert("Please select a Campus."); ok = false;
+        }
+        if (!document.querySelector('input[name="officeAffiliation"]:checked')) {
+          alert("Please select an Office Affiliation."); ok = false;
         }
         if (!document.querySelector('input[name="headerPurpose"]:checked')) {
-          alert("Please select a Purpose.");
-          ok = false;
+          alert("Please select a Purpose."); ok = false;
         }
         if (!document.querySelector('input[name="compPurpose"]:checked')) {
-          alert("Please select a Competency Assessment Purpose.");
-          ok = false;
-        }
-        if (!document.getElementById("supervisorName").value.trim()) {
-          alert("Please enter your Immediate Supervisor Name.");
-          document.getElementById("supervisorName").classList.add("error");
-          ok = false;
-        }
-        if (!document.getElementById("supervisorEmail").value.trim()) {
-          alert("Please enter your Supervisor Email.");
-          document.getElementById("supervisorEmail").classList.add("error");
-          ok = false;
+          alert("Please select a Competency Assessment Purpose."); ok = false;
         }
 
         return ok;
@@ -1237,50 +1032,32 @@
       function submitForm() {
         if (!validate()) return;
 
-        const headerPurposeChecked = document.querySelector(
-          'input[name="headerPurpose"]:checked',
-        );
+        const headerPurposeChecked = document.querySelector('input[name="headerPurpose"]:checked');
         let headerPurpose = headerPurposeChecked?.value || "";
         if (headerPurpose === "Other") {
-          headerPurpose =
-            document.getElementById("headerPurposeOtherText").value || "Other";
+          headerPurpose = document.getElementById("headerPurposeOtherText").value || "Other";
         }
 
-        const compPurposeChecked = document.querySelector(
-          'input[name="compPurpose"]:checked',
-        );
+        const compPurposeChecked = document.querySelector('input[name="compPurpose"]:checked');
         let compPurpose = compPurposeChecked?.value || "";
         if (compPurpose === "Others") {
-          compPurpose =
-            document.getElementById("compPurposeOtherText").value || "Others";
+          compPurpose = document.getElementById("compPurposeOtherText").value || "Others";
         }
 
         const payload = {
           action: "submitStage1",
           employeeEmail: document.getElementById("employeeEmail").value.trim(),
           campus: document.querySelector('input[name="campus"]:checked')?.value,
-          officeAffiliation: document.querySelector(
-            'input[name="officeAffiliation"]:checked',
-          )?.value,
-          collegeOfficeUnit: document
-            .getElementById("collegeOfficeUnit")
-            .value.trim(),
-          nameOfPersonnel: document
-            .getElementById("nameOfPersonnel")
-            .value.trim(),
+          officeAffiliation: document.querySelector('input[name="officeAffiliation"]:checked')?.value,
+          collegeOfficeUnit: document.getElementById("collegeOfficeUnit").value.trim(),
+          nameOfPersonnel: document.getElementById("nameOfPersonnel").value.trim(),
           datePrepared: document.getElementById("datePrepared").value,
-          currentPosition: document
-            .getElementById("currentPosition")
-            .value.trim(),
+          currentPosition: document.getElementById("currentPosition").value.trim(),
           yearCovered: document.getElementById("yearCovered").value.trim(),
           yearsInPosition: document.getElementById("yearsInPosition").value,
           yearsInCSU: document.getElementById("yearsInCSU").value,
-          supervisorName: document
-            .getElementById("supervisorName")
-            .value.trim(),
-          supervisorEmail: document
-            .getElementById("supervisorEmail")
-            .value.trim(),
+          supervisorName: document.getElementById("supervisorName").value.trim(),
+          supervisorEmail: document.getElementById("supervisorEmail").value.trim(),
           headerPurpose,
           competencyPurpose: compPurpose,
           competencyRows: collectTableData("competency"),
@@ -1297,9 +1074,7 @@
         })
           .then((r) => r.json())
           .then((data) => {
-            document
-              .getElementById("loadingOverlay")
-              .classList.remove("active");
+            document.getElementById("loadingOverlay").classList.remove("active");
             if (data.success) {
               document.getElementById("mainForm").style.display = "none";
               document.getElementById("refIdDisplay").textContent = data.refId;
@@ -1309,10 +1084,8 @@
               document.getElementById("submitBtn").disabled = false;
             }
           })
-          .catch((err) => {
-            document
-              .getElementById("loadingOverlay")
-              .classList.remove("active");
+          .catch(() => {
+            document.getElementById("loadingOverlay").classList.remove("active");
             alert("Network error. Please try again.");
             document.getElementById("submitBtn").disabled = false;
           });
