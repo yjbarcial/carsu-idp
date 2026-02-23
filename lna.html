@@ -46,6 +46,9 @@
         top: 0;
         z-index: 100;
         box-shadow: 0 2px 16px rgba(0, 0, 0, 0.18);
+        display: flex;
+        align-items: center;
+        padding-left: 16px;
       }
       .header-inner {
         max-width: 960px;
@@ -54,6 +57,7 @@
         display: flex;
         align-items: center;
         gap: 18px;
+        flex: 1;
       }
       .header-logo {
         width: 48px;
@@ -82,8 +86,31 @@
         letter-spacing: 0.06em;
         text-transform: uppercase;
       }
+      .btn-back {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        color: var(--gold);
+        background: rgba(201, 168, 76, 0.15);
+        border: 1.5px solid rgba(201, 168, 76, 0.4);
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.2s;
+        cursor: pointer;
+        font-size: 24px;
+        font-weight: bold;
+        margin-right: 8px;
+        flex-shrink: 0;
+      }
+      .btn-back:hover {
+        background: var(--gold);
+        color: var(--navy);
+        border-color: var(--gold);
+        transform: translateX(-2px);
+      }
       .header-user {
-        margin-left: auto;
         display: flex;
         align-items: center;
         gap: 8px;
@@ -665,11 +692,19 @@
         .section-body {
           padding: 20px 16px;
         }
+        .site-header {
+          padding-left: 8px;
+        }
         .header-inner {
           padding: 14px 16px;
         }
         .header-user {
           display: none;
+        }
+        .btn-back {
+          width: 36px;
+          height: 36px;
+          font-size: 20px;
         }
         .source-checklist {
           grid-template-columns: 1fr 1fr;
@@ -684,13 +719,14 @@
     </div>
 
     <header class="site-header">
+      <a href="index.html" class="btn-back">←</a>
       <div class="header-inner">
         <div class="header-logo">C</div>
         <div class="header-text">
           <h1>Caraga State University</h1>
           <p>Human Resource Management Services</p>
         </div>
-        <div class="header-user">
+        <div class="header-user" style="margin-left: auto">
           <div class="user-dot"></div>
           <span id="userEmail">—</span>
         </div>
