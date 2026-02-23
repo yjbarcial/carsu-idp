@@ -1,0 +1,1107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>USWAG PLAN — LNA Tool | CarSU HRMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --navy: #0d1b3e;
+        --navy-mid: #1a2f5e;
+        --gold: #c9a84c;
+        --gold-light: #e8c97a;
+        --cream: #faf8f4;
+        --white: #ffffff;
+        --text: #1a1a2e;
+        --text-light: #5a6070;
+        --border: #d8d4c8;
+        --error: #c0392b;
+        --success: #1a6b3c;
+        --input-bg: #f8f7f4;
+        --shadow: 0 4px 24px rgba(13,27,62,0.10);
+        --shadow-sm: 0 2px 8px rgba(13,27,62,0.07);
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        font-family: "Source Sans 3", sans-serif;
+        background: var(--cream);
+        color: var(--text);
+        min-height: 100vh;
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      /* ── Header ── */
+      .site-header { background: var(--navy); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 16px rgba(0,0,0,0.18); }
+      .header-inner { max-width: 960px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; gap: 18px; }
+      .header-logo { width: 48px; height: 48px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: "Playfair Display", serif; font-size: 20px; color: var(--navy); font-weight: 700; flex-shrink: 0; }
+      .header-text h1 { font-family: "Playfair Display", serif; font-size: 18px; color: var(--white); font-weight: 600; line-height: 1.2; }
+      .header-text p { font-size: 12px; color: var(--gold-light); letter-spacing: 0.06em; text-transform: uppercase; }
+      .header-user { margin-left: auto; display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.08); padding: 6px 14px; border-radius: 20px; }
+      .header-user span { font-size: 13px; color: var(--gold-light); }
+      .user-dot { width: 8px; height: 8px; background: #4caf50; border-radius: 50%; }
+
+      /* ── Container ── */
+      .container { max-width: 960px; margin: 0 auto; padding: 40px 32px 80px; }
+
+      /* ── Form title ── */
+      .form-title-block { text-align: center; margin-bottom: 40px; padding-bottom: 32px; border-bottom: 2px solid var(--gold); }
+      .form-title-block .eyebrow { font-size: 11px; font-weight: 600; color: var(--gold); letter-spacing: 0.14em; text-transform: uppercase; display: block; margin-bottom: 10px; }
+      .form-title-block h2 { font-family: "Playfair Display", serif; font-size: 28px; color: var(--navy); margin-bottom: 4px; }
+      .form-title-block h3 { font-family: "Playfair Display", serif; font-size: 16px; color: var(--text-light); font-weight: 600; font-style: italic; margin-bottom: 8px; }
+      .form-title-block p { color: var(--text-light); font-size: 14px; }
+
+      /* ── Section card ── */
+      .section-card { background: var(--white); border-radius: 12px; box-shadow: var(--shadow-sm); margin-bottom: 28px; overflow: hidden; border: 1px solid var(--border); animation: fadeUp 0.4s ease both; }
+      .section-card:nth-child(2) { animation-delay: 0.05s; }
+      .section-card:nth-child(3) { animation-delay: 0.10s; }
+      .section-card:nth-child(4) { animation-delay: 0.15s; }
+      .section-card:nth-child(5) { animation-delay: 0.20s; }
+      .section-card:nth-child(6) { animation-delay: 0.25s; }
+      @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+
+      .section-header { background: var(--navy); padding: 16px 28px; display: flex; align-items: center; gap: 12px; }
+      .section-num { background: var(--gold); color: var(--navy); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+      .section-header h3 { color: var(--white); font-size: 15px; font-weight: 600; letter-spacing: 0.03em; }
+      .section-header p { color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 1px; }
+      .section-body { padding: 28px; }
+
+      /* ── Field primitives ── */
+      .field-grid { display: grid; gap: 18px; }
+      .field-grid-2 { grid-template-columns: 1fr 1fr; }
+      .field-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+      .field-grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+      .field-group { display: flex; flex-direction: column; gap: 6px; }
+      .field-group.span-2 { grid-column: span 2; }
+      .field-group.span-3 { grid-column: span 3; }
+      .field-group.span-4 { grid-column: span 4; }
+      label { font-size: 12px; font-weight: 600; color: var(--navy-mid); text-transform: uppercase; letter-spacing: 0.05em; }
+      label .req { color: var(--error); margin-left: 2px; }
+      input[type="text"], input[type="email"], input[type="date"], input[type="number"], select, textarea {
+        width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px;
+        background: var(--input-bg); font-family: "Source Sans 3", sans-serif; font-size: 14px;
+        color: var(--text); transition: border-color 0.2s, box-shadow 0.2s; outline: none;
+      }
+      input:focus, select:focus, textarea:focus { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(13,27,62,0.08); background: var(--white); }
+      input.error, select.error { border-color: var(--error); }
+      textarea { resize: vertical; min-height: 72px; }
+
+      /* ── Checkbox groups ── */
+      .checkbox-group { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+      .checkbox-item { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 14px; border: 1.5px solid var(--border); border-radius: 8px; background: var(--input-bg); transition: all 0.2s; font-size: 13px; }
+      .checkbox-item:hover { border-color: var(--navy); background: var(--white); }
+      .checkbox-item input[type="checkbox"], .checkbox-item input[type="radio"] { width: auto; padding: 0; border: none; background: none; accent-color: var(--navy); cursor: pointer; }
+      .checkbox-item.checked { border-color: var(--navy); background: rgba(13,27,62,0.05); }
+      .other-specify { margin-top: 10px; display: none; }
+      .other-specify.visible { display: block; }
+
+      /* ── Section description ── */
+      .section-desc { background: rgba(201,168,76,0.1); border-left: 3px solid var(--gold); padding: 12px 16px; border-radius: 0 8px 8px 0; margin-bottom: 20px; font-size: 13px; color: var(--text-light); line-height: 1.6; }
+      .section-desc a { color: var(--navy); }
+
+      /* ── Generic data table ── */
+      .table-wrapper { overflow-x: auto; margin-top: 8px; }
+      .data-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
+      .data-table thead tr { background: var(--navy-mid); }
+      .data-table thead th { padding: 10px 12px; color: var(--white); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; text-align: left; border-right: 1px solid rgba(255,255,255,0.1); white-space: nowrap; }
+      .data-table thead th:last-child { border-right: none; }
+      .data-table tbody tr { border-bottom: 1px solid var(--border); }
+      .data-table tbody tr:nth-child(even) { background: #faf9f6; }
+      .data-table tbody td { padding: 8px 10px; vertical-align: middle; border-right: 1px solid var(--border); font-size: 13px; }
+      .data-table tbody td:last-child { border-right: none; }
+      .data-table td input, .data-table td select, .data-table td textarea { padding: 6px 10px; font-size: 13px; border-radius: 6px; }
+      .data-table td textarea { min-height: 56px; }
+      .row-label { font-weight: 600; color: var(--navy-mid); background: rgba(13,27,62,0.03) !important; font-size: 13px; white-space: nowrap; }
+
+      /* ── Workforce table specific ── */
+      .workforce-table th, .workforce-table td { text-align: center; }
+      .workforce-table td:first-child { text-align: left; }
+      .workforce-table td input { text-align: center; width: 60px; }
+
+      /* ── Competency tables ── */
+      .comp-table-wrap { margin-bottom: 32px; }
+      .comp-cluster-label { background: var(--navy); color: var(--white); font-family: "Playfair Display", serif; font-size: 14px; font-weight: 600; padding: 10px 16px; border-radius: 8px 8px 0 0; display: flex; align-items: center; gap: 10px; }
+      .comp-cluster-label .cluster-badge { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; background: rgba(201,168,76,0.2); border: 1px solid rgba(201,168,76,0.4); color: var(--gold-light); padding: 3px 10px; border-radius: 20px; }
+      .comp-note { font-size: 12px; color: var(--text-light); font-style: italic; margin-bottom: 8px; }
+
+      /* ── Cluster summary table ── */
+      .cluster-summary-table thead th:first-child { width: 140px; }
+
+      /* ── Data source checklist ── */
+      .source-checklist { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 8px; }
+      .source-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 8px; background: var(--input-bg); font-size: 13px; cursor: pointer; transition: all 0.2s; }
+      .source-item:hover { border-color: var(--navy); background: var(--white); }
+      .source-item input { accent-color: var(--navy); cursor: pointer; flex-shrink: 0; }
+      .source-item.checked { border-color: var(--navy); background: rgba(13,27,62,0.04); }
+
+      /* ── Interventions table ── */
+      .pos-level-header { background: rgba(201,168,76,0.12); font-weight: 700; color: var(--navy); font-size: 13px; }
+      .priority-badge { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; background: var(--navy); color: var(--white); border-radius: 50%; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+
+      /* ── Submit area ── */
+      .submit-area { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 28px; text-align: center; box-shadow: var(--shadow-sm); }
+      .submit-area p { font-size: 13px; color: var(--text-light); margin-bottom: 18px; }
+      .btn-submit { padding: 14px 48px; background: var(--navy); color: var(--white); border: none; border-radius: 10px; font-family: "Source Sans 3", sans-serif; font-size: 16px; font-weight: 600; cursor: pointer; letter-spacing: 0.03em; transition: background 0.2s, transform 0.15s, box-shadow 0.2s; box-shadow: 0 4px 16px rgba(13,27,62,0.2); }
+      .btn-submit:hover { background: var(--navy-mid); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(13,27,62,0.25); }
+      .btn-submit:disabled { background: #aaa; cursor: not-allowed; transform: none; box-shadow: none; }
+
+      /* ── Overlay ── */
+      .overlay { display: none; position: fixed; inset: 0; background: rgba(13,27,62,0.6); z-index: 999; align-items: center; justify-content: center; flex-direction: column; gap: 16px; }
+      .overlay.active { display: flex; }
+      .spinner { width: 48px; height: 48px; border: 4px solid rgba(255,255,255,0.2); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
+      @keyframes spin { to { transform: rotate(360deg); } }
+      .overlay p { color: var(--white); font-size: 15px; }
+
+      /* ── Success screen ── */
+      .success-screen { display: none; max-width: 520px; margin: 80px auto; text-align: center; background: var(--white); border-radius: 16px; padding: 48px 40px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+      .success-screen.active { display: block; }
+      .success-icon { width: 72px; height: 72px; background: rgba(26,107,60,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 36px; margin: 0 auto 24px; }
+      .success-screen h2 { font-family: "Playfair Display", serif; font-size: 24px; color: var(--navy); margin-bottom: 12px; }
+      .success-screen p { color: var(--text-light); font-size: 14px; margin-bottom: 20px; }
+      .ref-id-box { background: var(--navy); color: var(--gold-light); font-family: monospace; font-size: 22px; font-weight: 700; padding: 16px 24px; border-radius: 10px; letter-spacing: 0.1em; margin: 16px 0 24px; }
+
+      /* ── Divider between subsections ── */
+      .subsection-divider { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+
+      /* ── Responsive ── */
+      @media (max-width: 640px) {
+        .container { padding: 24px 16px 60px; }
+        .field-grid-2, .field-grid-3, .field-grid-4 { grid-template-columns: 1fr; }
+        .field-group.span-2, .field-group.span-3, .field-group.span-4 { grid-column: span 1; }
+        .section-body { padding: 20px 16px; }
+        .header-inner { padding: 14px 16px; }
+        .header-user { display: none; }
+        .source-checklist { grid-template-columns: 1fr 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="overlay" id="loadingOverlay">
+      <div class="spinner"></div>
+      <p>Submitting your LNA, please wait…</p>
+    </div>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="header-logo">C</div>
+        <div class="header-text">
+          <h1>Caraga State University</h1>
+          <p>Human Resource Management Services</p>
+        </div>
+        <div class="header-user">
+          <div class="user-dot"></div>
+          <span id="userEmail">—</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Success screen -->
+    <div class="success-screen" id="successScreen">
+      <div class="success-icon">✓</div>
+      <h2>LNA Successfully Submitted</h2>
+      <p>The USWAG PLAN for your office has been received. HRMS has been notified and will process your submission accordingly.</p>
+      <div class="ref-id-box" id="refIdDisplay">—</div>
+      <p>Please keep your <strong>Reference ID</strong> for your records. A confirmation email has been sent to your address.</p>
+    </div>
+
+    <!-- Main form -->
+    <div class="container" id="mainForm">
+      <div class="form-title-block">
+        <span class="eyebrow">HRMS — Learning &amp; Development</span>
+        <h2>USWAG PLAN</h2>
+        <h3>Unified System for Workforce Assessment and Growth Plan</h3>
+        <p>CSU's Learning Needs Assessment (LNA) Tool &nbsp;·&nbsp; Complete all sections carefully.</p>
+      </div>
+
+      <!-- ══ HEADER INFO ══ -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-num">H</div>
+          <div>
+            <h3>Office Information</h3>
+            <p>Basic details about your office and the submitter</p>
+          </div>
+        </div>
+        <div class="section-body">
+
+          <!-- Submitter email -->
+          <div class="field-grid field-grid-2" style="margin-bottom:18px">
+            <div class="field-group span-2">
+              <label>Your CarSU Email Address <span class="req">*</span></label>
+              <input type="email" id="submitterEmail" placeholder="yourname@carsu.edu.ph" autocomplete="email" />
+              <small class="email-hint" id="submitterEmailHint"></small>
+            </div>
+          </div>
+
+          <!-- Campus -->
+          <div class="field-group" style="margin-bottom:20px">
+            <label>Campus <span class="req">*</span></label>
+            <div class="checkbox-group" id="campusGroup">
+              <label class="checkbox-item"><input type="radio" name="campus" value="CSU Main Campus" /> CSU Main Campus</label>
+              <label class="checkbox-item"><input type="radio" name="campus" value="CSU Cabadbaran City Campus" /> CSU Cabadbaran City Campus</label>
+            </div>
+          </div>
+
+          <!-- Office Affiliation -->
+          <div class="field-group" style="margin-bottom:20px">
+            <label>Office Affiliation <span class="req">*</span></label>
+            <div class="checkbox-group" id="officeGroup">
+              <label class="checkbox-item"><input type="radio" name="officeAffiliation" value="OVPAF" /> OVPAF</label>
+              <label class="checkbox-item"><input type="radio" name="officeAffiliation" value="OVPAA" /> OVPAA</label>
+              <label class="checkbox-item"><input type="radio" name="officeAffiliation" value="OVPEO" /> OVPEO</label>
+              <label class="checkbox-item"><input type="radio" name="officeAffiliation" value="OVPRDIE" /> OVPRDIE</label>
+              <label class="checkbox-item"><input type="radio" name="officeAffiliation" value="Office of the Campus Director" /> Office of the Campus Director</label>
+            </div>
+          </div>
+
+          <div class="field-grid field-grid-2" style="margin-bottom:18px">
+            <div class="field-group span-2">
+              <label>Name of Unit/Office/College <span class="req">*</span></label>
+              <input type="text" id="unitOfficeCollege" placeholder="e.g. College of Engineering" />
+            </div>
+            <div class="field-group">
+              <label>Head of Unit/Office/College <span class="req">*</span></label>
+              <input type="text" id="headOfUnit" placeholder="Full name" />
+            </div>
+            <div class="field-group">
+              <label>Position / Designation <span class="req">*</span></label>
+              <input type="text" id="position" placeholder="e.g. Dean, Director" />
+            </div>
+            <div class="field-group">
+              <label>Date Prepared <span class="req">*</span></label>
+              <input type="date" id="datePrepared" />
+            </div>
+            <div class="field-group">
+              <label>Year Covered <span class="req">*</span></label>
+              <input type="text" id="yearCovered" placeholder="e.g. 2025" />
+            </div>
+            <div class="field-group">
+              <label>Total Personnel <span class="req">*</span></label>
+              <input type="number" id="totalPersonnel" min="0" placeholder="0" />
+            </div>
+          </div>
+
+          <!-- Purpose -->
+          <div class="field-group">
+            <label>Purpose <span class="req">*</span></label>
+            <div class="checkbox-group" id="purposeGroup">
+              <label class="checkbox-item"><input type="radio" name="purpose" value="Initial Assessment" /> Initial Assessment</label>
+              <label class="checkbox-item"><input type="radio" name="purpose" value="Mid-Year Review" /> Mid-Year Review</label>
+              <label class="checkbox-item"><input type="radio" name="purpose" value="Annual Review" /> Annual Review</label>
+              <label class="checkbox-item"><input type="radio" name="purpose" value="Other" /> Other</label>
+            </div>
+            <div class="other-specify" id="purposeOtherWrap">
+              <input type="text" id="purposeOtherText" placeholder="Please specify…" />
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ══ SECTION I: WORKFORCE PROFILE ══ -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-num">I</div>
+          <div>
+            <h3>Workforce Profile by Employment Classification and Position Level</h3>
+            <p>Indicate number of personnel per classification per position level</p>
+          </div>
+        </div>
+        <div class="section-body">
+          <p class="section-desc">Indicate the number of personnel per employment classification under each position level within your office. Refer to <strong>Annex A</strong> for descriptions and sample positions.</p>
+          <div class="table-wrapper">
+            <table class="data-table workforce-table" id="workforceTable">
+              <thead>
+                <tr>
+                  <th style="min-width:180px;text-align:left">Position Level</th>
+                  <th>Permanent</th>
+                  <th>Temporary</th>
+                  <th>Contractual</th>
+                  <th>Casual</th>
+                  <th>Coterminus</th>
+                  <th>COS</th>
+                  <th>Job Order</th>
+                  <th>Others</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="row-label">First Level Positions</td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="first" data-type="permanent" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="first" data-type="temporary" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="first" data-type="contractual" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="first" data-type="casual" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="first" data-type="coterminus" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="first" data-type="cos" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="first" data-type="jobOrder" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="first" data-type="others" /></td>
+                </tr>
+                <tr>
+                  <td class="row-label">Second Level (Non-Supervisory)</td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="secondNonSup" data-type="permanent" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="secondNonSup" data-type="temporary" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="secondNonSup" data-type="contractual" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="secondNonSup" data-type="casual" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="secondNonSup" data-type="coterminus" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="secondNonSup" data-type="cos" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="secondNonSup" data-type="jobOrder" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="secondNonSup" data-type="others" /></td>
+                </tr>
+                <tr>
+                  <td class="row-label">Second Level (Supervisory)</td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="secondSup" data-type="permanent" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="secondSup" data-type="temporary" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="secondSup" data-type="contractual" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="secondSup" data-type="casual" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="secondSup" data-type="coterminus" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="secondSup" data-type="cos" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="secondSup" data-type="jobOrder" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="secondSup" data-type="others" /></td>
+                </tr>
+                <tr>
+                  <td class="row-label">Third Level Positions</td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="third" data-type="permanent" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="third" data-type="temporary" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="third" data-type="contractual" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="third" data-type="casual" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="third" data-type="coterminus" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="third" data-type="cos" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="third" data-type="jobOrder" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="third" data-type="others" /></td>
+                </tr>
+                <tr>
+                  <td class="row-label">Faculty Positions</td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="faculty" data-type="permanent" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="faculty" data-type="temporary" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="faculty" data-type="contractual" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="faculty" data-type="casual" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="faculty" data-type="coterminus" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="faculty" data-type="cos" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="faculty" data-type="jobOrder" /></td>
+                  <td><input type="number" min="0" placeholder="0" class="wf-input" data-level="faculty" data-type="others" /></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SECTION II: COMPETENCY MAPPING ══ -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-num">II</div>
+          <div>
+            <h3>Competency Mapping and Assessment</h3>
+            <p>Assess current competency levels across all position levels</p>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="section-desc">
+            Using the rating scale below, identify the highest competency level (CL: 1–4) and percentage (%) of personnel demonstrating it. Write <strong>N/A</strong> if the competency does not apply. For detailed descriptions, refer to the <a href="https://tinyurl.com/CompetencyManualandModel" target="_blank">Competency Manual and Model</a>.
+            <br/><br/>
+            <strong>CL:</strong> 1 = Basic &nbsp;|&nbsp; 2 = Intermediate &nbsp;|&nbsp; 3 = Advanced &nbsp;|&nbsp; 4 = Expert &nbsp;&nbsp;&nbsp;
+            <strong>%:</strong> A = 76–100% &nbsp;|&nbsp; B = 51–75% &nbsp;|&nbsp; C = 26–50% &nbsp;|&nbsp; D = 25% &amp; below
+          </div>
+
+          <!-- CORE COMPETENCIES -->
+          <div class="comp-table-wrap">
+            <div class="comp-cluster-label">
+              Core Competencies
+              <span class="cluster-badge">Core</span>
+            </div>
+            <p class="comp-note" style="padding:8px 0 4px">Foundational attributes expected of all personnel regardless of position.</p>
+            <div class="table-wrapper">
+              <table class="data-table" id="coreTable">
+                <thead>
+                  <tr>
+                    <th style="min-width:180px">Competency</th>
+                    <th colspan="2" style="text-align:center">1st Level</th>
+                    <th colspan="2" style="text-align:center">2nd (Non-Sup)</th>
+                    <th colspan="2" style="text-align:center">2nd (Sup)</th>
+                    <th colspan="2" style="text-align:center">3rd Level</th>
+                    <th colspan="2" style="text-align:center">Faculty</th>
+                    <th style="min-width:200px">Basis / Key Observations</th>
+                  </tr>
+                  <tr>
+                    <th></th>
+                    <th>CL</th><th>%</th>
+                    <th>CL</th><th>%</th>
+                    <th>CL</th><th>%</th>
+                    <th>CL</th><th>%</th>
+                    <th>CL</th><th>%</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="coreBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- LEADERSHIP COMPETENCIES -->
+          <div class="comp-table-wrap">
+            <div class="comp-cluster-label">
+              Leadership Competencies
+              <span class="cluster-badge">Leadership</span>
+            </div>
+            <p class="comp-note" style="padding:8px 0 4px">Skills and behaviors required to effectively lead individuals, teams, and units.</p>
+            <div class="table-wrapper">
+              <table class="data-table" id="leadershipTable">
+                <thead>
+                  <tr>
+                    <th style="min-width:180px">Competency</th>
+                    <th colspan="2" style="text-align:center">1st Level</th>
+                    <th colspan="2" style="text-align:center">2nd (Non-Sup)</th>
+                    <th colspan="2" style="text-align:center">2nd (Sup)</th>
+                    <th colspan="2" style="text-align:center">3rd Level</th>
+                    <th colspan="2" style="text-align:center">Faculty</th>
+                    <th style="min-width:200px">Basis / Key Observations</th>
+                  </tr>
+                  <tr>
+                    <th></th>
+                    <th>CL</th><th>%</th>
+                    <th>CL</th><th>%</th>
+                    <th>CL</th><th>%</th>
+                    <th>CL</th><th>%</th>
+                    <th>CL</th><th>%</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="leadershipBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ORGANIZATIONAL COMPETENCIES -->
+          <div class="comp-table-wrap">
+            <div class="comp-cluster-label">
+              Organizational Competencies
+              <span class="cluster-badge">Organizational</span>
+            </div>
+            <p class="comp-note" style="padding:8px 0 4px">Collective attributes that define the institution's way of working.</p>
+            <div class="table-wrapper">
+              <table class="data-table" id="orgTable">
+                <thead>
+                  <tr>
+                    <th style="min-width:180px">Competency</th>
+                    <th colspan="2" style="text-align:center">1st Level</th>
+                    <th colspan="2" style="text-align:center">2nd (Non-Sup)</th>
+                    <th colspan="2" style="text-align:center">2nd (Sup)</th>
+                    <th colspan="2" style="text-align:center">3rd Level</th>
+                    <th colspan="2" style="text-align:center">Faculty</th>
+                    <th style="min-width:200px">Basis / Key Observations</th>
+                  </tr>
+                  <tr>
+                    <th></th>
+                    <th>CL</th><th>%</th>
+                    <th>CL</th><th>%</th>
+                    <th>CL</th><th>%</th>
+                    <th>CL</th><th>%</th>
+                    <th>CL</th><th>%</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="orgBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- TECHNICAL COMPETENCIES -->
+          <div class="comp-table-wrap">
+            <div class="comp-cluster-label">
+              Technical Competencies
+              <span class="cluster-badge">Technical</span>
+            </div>
+            <p class="comp-note" style="padding:8px 0 4px">Job-specific knowledge, skills, and abilities for effective role performance.</p>
+            <div class="table-wrapper">
+              <table class="data-table" id="technicalTable">
+                <thead>
+                  <tr>
+                    <th style="min-width:180px">Competency</th>
+                    <th colspan="2" style="text-align:center">1st Level</th>
+                    <th colspan="2" style="text-align:center">2nd (Non-Sup)</th>
+                    <th colspan="2" style="text-align:center">2nd (Sup)</th>
+                    <th colspan="2" style="text-align:center">3rd Level</th>
+                    <th colspan="2" style="text-align:center">Faculty</th>
+                    <th style="min-width:200px">Basis / Key Observations</th>
+                  </tr>
+                  <tr>
+                    <th></th>
+                    <th>CL</th><th>%</th>
+                    <th>CL</th><th>%</th>
+                    <th>CL</th><th>%</th>
+                    <th>CL</th><th>%</th>
+                    <th>CL</th><th>%</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="technicalBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- CLUSTER SUMMARY -->
+          <hr class="subsection-divider" />
+          <h4 style="font-family:'Playfair Display',serif;color:var(--navy);margin-bottom:12px;font-size:16px">Competency Cluster Summary</h4>
+          <div class="table-wrapper">
+            <table class="data-table cluster-summary-table">
+              <thead>
+                <tr>
+                  <th>Competency Cluster</th>
+                  <th>Strongest Competency</th>
+                  <th>Weakest Competency</th>
+                  <th style="width:140px">Intervention Needed? (Y/N)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="row-label">Core</td>
+                  <td><input type="text" id="coreStrongest" placeholder="e.g. Integrity" /></td>
+                  <td><input type="text" id="coreWeakest" placeholder="e.g. Building Partnership" /></td>
+                  <td>
+                    <select id="coreIntervention">
+                      <option value="">—</option>
+                      <option value="Y">Y</option>
+                      <option value="N">N</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="row-label">Leadership</td>
+                  <td><input type="text" id="leadershipStrongest" placeholder="" /></td>
+                  <td><input type="text" id="leadershipWeakest" placeholder="" /></td>
+                  <td>
+                    <select id="leadershipIntervention">
+                      <option value="">—</option>
+                      <option value="Y">Y</option>
+                      <option value="N">N</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="row-label">Organizational</td>
+                  <td><input type="text" id="orgStrongest" placeholder="" /></td>
+                  <td><input type="text" id="orgWeakest" placeholder="" /></td>
+                  <td>
+                    <select id="orgIntervention">
+                      <option value="">—</option>
+                      <option value="Y">Y</option>
+                      <option value="N">N</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="row-label">Technical</td>
+                  <td><input type="text" id="techStrongest" placeholder="" /></td>
+                  <td><input type="text" id="techWeakest" placeholder="" /></td>
+                  <td>
+                    <select id="techIntervention">
+                      <option value="">—</option>
+                      <option value="Y">Y</option>
+                      <option value="N">N</option>
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SECTION III: OTHER LeaD DATA SOURCES ══ -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-num">III</div>
+          <div>
+            <h3>Other LeaD Data Sources</h3>
+            <p>Data sources used to identify additional learning needs</p>
+          </div>
+        </div>
+        <div class="section-body">
+          <p class="section-desc">In addition to the competency assessment, indicate the data sources your office used to identify additional learning needs. You may also summarize insights or gaps surfaced from these sources.</p>
+
+          <h4 style="font-size:13px;font-weight:600;color:var(--navy-mid);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px">A. Data Source Checklist</h4>
+          <div class="source-checklist" id="dataSourceChecklist">
+            <label class="source-item"><input type="checkbox" value="Individual Development Plan (IDP)" /> Individual Development Plan (IDP)</label>
+            <label class="source-item"><input type="checkbox" value="Training Evaluation Results" /> Training Evaluation Results</label>
+            <label class="source-item"><input type="checkbox" value="HR Records (Coaching logs, leave patterns, discipline)" /> HR Records</label>
+            <label class="source-item"><input type="checkbox" value="IPCR/OPCR/DPCR Reviews" /> IPCR/OPCR/DPCR Reviews</label>
+            <label class="source-item"><input type="checkbox" value="Audit or Accreditation Results (ISO, AACCUP, etc.)" /> Audit / Accreditation Results</label>
+            <label class="source-item"><input type="checkbox" value="Strategic Plan or SPMS Review" /> Strategic Plan / SPMS Review</label>
+            <label class="source-item"><input type="checkbox" value="Focus Group Discussion (FGD)" /> Focus Group Discussion (FGD)</label>
+            <label class="source-item"><input type="checkbox" value="Client/Stakeholder Feedback" /> Client/Stakeholder Feedback</label>
+            <label class="source-item"><input type="checkbox" value="Risk Assessment" /> Risk Assessment</label>
+            <label class="source-item"><input type="checkbox" value="Interview" /> Interview</label>
+            <label class="source-item"><input type="checkbox" value="Questionnaire" /> Questionnaire</label>
+            <label class="source-item"><input type="checkbox" value="Test" /> Test</label>
+            <label class="source-item" id="othersSourceItem"><input type="checkbox" value="Others" id="othersSourceCheck" /> Others</label>
+          </div>
+          <div class="other-specify" id="othersSourceWrap" style="margin-top:10px">
+            <input type="text" id="othersSourceText" placeholder="Please specify other data sources…" />
+          </div>
+
+          <hr class="subsection-divider" />
+
+          <h4 style="font-size:13px;font-weight:600;color:var(--navy-mid);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px">B. Summary of Key Insights or Gaps Identified</h4>
+          <div class="table-wrapper">
+            <table class="data-table" id="insightsTable">
+              <thead>
+                <tr>
+                  <th style="width:40px">No.</th>
+                  <th>Data Source</th>
+                  <th>Identified Gap / Issue</th>
+                  <th>Relevant Personnel / Function</th>
+                  <th>Recommended Intervention (if any)</th>
+                  <th style="width:40px"></th>
+                </tr>
+              </thead>
+              <tbody id="insightsBody"></tbody>
+            </table>
+          </div>
+          <div style="margin-top:12px">
+            <button class="btn-add-row" onclick="addInsightRow()">+ Add Row</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SECTION IV: LeaD INTERVENTIONS ══ -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-num">IV</div>
+          <div>
+            <h3>LeaD Interventions for Priority LeaD Needs</h3>
+            <p>Top 3 priority learning needs per position level</p>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="section-desc">
+            Based on competency mapping and other data sources, identify the top <strong>3 priority learning needs</strong> for each applicable position level. For each, indicate the most appropriate LeaD interventions.
+            <br/><br/>
+            <strong>On-the-Job:</strong> Observation, Delegation, Coaching, Mentoring, Job Rotation, Detail &amp; Secondment, Reading, Flexible Learning, Brainstorming, Experiential Learning
+            <br/>
+            <strong>Off-the-Job:</strong> Short Courses, Conferences, Training Programs, Seminars, Cum Paper Presentations, Pursue Higher Education
+          </div>
+
+          <div class="table-wrapper">
+            <table class="data-table" id="interventionsTable">
+              <thead>
+                <tr>
+                  <th style="width:160px">Position Level</th>
+                  <th style="width:40px">No.</th>
+                  <th>Priority Competency / LeaD Need</th>
+                  <th>Suggested LeaD Interventions</th>
+                  <th style="width:120px">Timeline</th>
+                  <th>Resource / Support Needed</th>
+                </tr>
+              </thead>
+              <tbody id="interventionsBody"></tbody>
+            </table>
+          </div>
+
+          <hr class="subsection-divider" />
+
+          <!-- Signature block -->
+          <div style="background:rgba(201,168,76,0.08);border:1.5px solid var(--gold);border-radius:10px;padding:24px 28px;margin-top:8px">
+            <p style="font-size:13px;color:var(--text-light);font-style:italic;margin-bottom:16px">I hereby certify that the information provided in this Learning Needs Assessment is accurate and based on actual observation, data, and evidence gathered from the office.</p>
+            <div class="field-group">
+              <label>Full Name of Rater / Head of Office <span class="req">*</span></label>
+              <input type="text" id="raterFullName" placeholder="Enter full name" style="max-width:400px" />
+            </div>
+            <small style="font-size:11px;color:var(--text-light);display:block;margin-top:8px">Signature over Printed Name of Rater/Head of Office</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SUBMIT ══ -->
+      <div class="submit-area">
+        <p>By submitting, you confirm that all information is accurate and based on actual office data. HRMS will be notified immediately upon submission.</p>
+        <button class="btn-submit" id="submitBtn" onclick="submitForm()">Submit LNA</button>
+      </div>
+    </div>
+
+    <script>
+      const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby1Z5Ws5pYkLdgx96sFeQi7eLym40UYjx6Hr6N6tlTAx9olOYPCZI5pwr0cyVo5U3Go/exec";
+
+      // ── Competency data ──
+      const COMPETENCIES = {
+        core: [
+          'Integrity', 'Accountability', 'Scientific & Technological Excellence',
+          'Delivering Service Excellence', 'Environmental Consciousness', 'Building Partnership'
+        ],
+        leadership: [
+          'Developing People', 'Facilitating Change', 'Conflict Management',
+          'Leading Innovation', 'Strategic Planning', 'Leading Others', 'Decisiveness'
+        ],
+        org: [
+          'Teamwork', 'Commitment to Learning', 'Customer Focus',
+          'Adaptability and Flexibility', 'Critical Thinking', 'Effective Communication',
+          'Valuing Diversity', 'Self-Awareness and Confidence', 'Stress Tolerance',
+          'Resource Management', 'Knowledge Management', 'Initiative', 'Result Orientation',
+          'Community Engagement', 'Organizational Commitment', 'Planning and Organizing',
+          'Emotional and Psychological Maturity', 'Safety and Risk Management', 'Interpersonal Effectiveness'
+        ],
+        technical: [
+          'Research Engagement', 'Diagnostic Information Gathering', 'Attention to Details',
+          'Written Communication', 'Oral Communication', 'Conceptual and Analytical Thinking',
+          'Computer Literacy', 'Planning and Project Management', 'Logical Reasoning'
+        ]
+      };
+
+      const CL_OPTIONS    = ['', 'N/A', '1', '2', '3', '4'];
+      const PCT_OPTIONS   = ['', 'N/A', 'A', 'B', 'C', 'D'];
+      const POSITION_LEVELS = [
+        { key: 'first',        label: 'First Level Positions' },
+        { key: 'secondNonSup', label: 'Second Level Positions (Non-Supervisory)' },
+        { key: 'secondSup',    label: 'Second Level Positions (Supervisory)' },
+        { key: 'third',        label: 'Third Level Positions' },
+        { key: 'faculty',      label: 'Faculty Positions' }
+      ];
+
+      let insightRowCount = 0;
+
+      // ── Build a select element ──
+      function makeSelect(options, cls) {
+        const s = document.createElement('select');
+        if (cls) s.className = cls;
+        options.forEach(o => {
+          const opt = document.createElement('option');
+          opt.value = o; opt.textContent = o || '—';
+          s.appendChild(opt);
+        });
+        return s;
+      }
+
+      // ── Build competency table rows ──
+      function buildCompTable(tbodyId, competencies) {
+        const tbody = document.getElementById(tbodyId);
+        competencies.forEach(name => {
+          const tr = document.createElement('tr');
+          let html = `<td class="row-label">${name}</td>`;
+          for (let i = 0; i < 5; i++) {
+            html += `<td>${makeSelect(CL_OPTIONS).outerHTML}</td>`;
+            html += `<td>${makeSelect(PCT_OPTIONS).outerHTML}</td>`;
+          }
+          html += `<td><textarea rows="2" placeholder="Observations…"></textarea></td>`;
+          tr.innerHTML = html;
+          tbody.appendChild(tr);
+        });
+      }
+
+      // ── Build interventions table ──
+      function buildInterventionsTable() {
+        const tbody = document.getElementById('interventionsBody');
+        POSITION_LEVELS.forEach(level => {
+          // Header row for this level
+          const headerTr = document.createElement('tr');
+          headerTr.innerHTML = `<td colspan="6" class="pos-level-header" style="padding:10px 12px;font-size:13px;font-weight:700;color:var(--navy-mid);background:rgba(13,27,62,0.04)">${level.label}</td>`;
+          tbody.appendChild(headerTr);
+
+          // 3 priority rows
+          for (let p = 1; p <= 3; p++) {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td style="text-align:center;vertical-align:middle"></td>
+              <td style="text-align:center;vertical-align:middle"><span class="priority-badge">${p}</span></td>
+              <td><input type="text" placeholder="Describe competency/learning need…" data-level="${level.key}" data-priority="${p}" data-field="need" /></td>
+              <td>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <label style="display:flex;align-items:center;gap:6px;font-size:12px;text-transform:none;letter-spacing:0;color:var(--text-light);font-weight:400;cursor:pointer">
+                    <input type="checkbox" data-level="${level.key}" data-priority="${p}" data-field="onJob" style="accent-color:var(--navy);width:auto;padding:0;border:none;background:none" />
+                    On-the-Job Learning: <input type="text" placeholder="specify…" data-level="${level.key}" data-priority="${p}" data-field="onJobText" style="flex:1;padding:4px 8px;font-size:12px" />
+                  </label>
+                  <label style="display:flex;align-items:center;gap:6px;font-size:12px;text-transform:none;letter-spacing:0;color:var(--text-light);font-weight:400;cursor:pointer">
+                    <input type="checkbox" data-level="${level.key}" data-priority="${p}" data-field="offJob" style="accent-color:var(--navy);width:auto;padding:0;border:none;background:none" />
+                    Off-the-Job Learning: <input type="text" placeholder="specify…" data-level="${level.key}" data-priority="${p}" data-field="offJobText" style="flex:1;padding:4px 8px;font-size:12px" />
+                  </label>
+                  <label style="display:flex;align-items:center;gap:6px;font-size:12px;text-transform:none;letter-spacing:0;color:var(--text-light);font-weight:400;cursor:pointer">
+                    <input type="checkbox" data-level="${level.key}" data-priority="${p}" data-field="others" style="accent-color:var(--navy);width:auto;padding:0;border:none;background:none" />
+                    Others: <input type="text" placeholder="specify…" data-level="${level.key}" data-priority="${p}" data-field="othersText" style="flex:1;padding:4px 8px;font-size:12px" />
+                  </label>
+                </div>
+              </td>
+              <td><input type="text" placeholder="e.g. Q2 2025" data-level="${level.key}" data-priority="${p}" data-field="timeline" /></td>
+              <td><textarea rows="2" placeholder="Budget, facilitator, equipment…" data-level="${level.key}" data-priority="${p}" data-field="resource"></textarea></td>
+            `;
+            tbody.appendChild(tr);
+          }
+        });
+      }
+
+      function addInsightRow() {
+        insightRowCount++;
+        const tbody = document.getElementById('insightsBody');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="text-align:center;color:var(--text-light);font-weight:600">${insightRowCount}</td>
+          <td><input type="text" placeholder="Data source…" /></td>
+          <td><textarea rows="2" placeholder="Identified gap or issue…"></textarea></td>
+          <td><input type="text" placeholder="Relevant personnel or function…" /></td>
+          <td><input type="text" placeholder="Recommended intervention…" /></td>
+          <td style="text-align:center"><button class="btn-remove-row" onclick="removeRow(this)" title="Remove">×</button></td>
+        `;
+        tbody.appendChild(tr);
+        tr.style.animation = 'fadeUp 0.25s ease';
+      }
+
+      function removeRow(btn) {
+        const tr   = btn.closest('tr');
+        const tbody = tr.closest('tbody');
+        if (tbody.children.length <= 1) return;
+        tr.remove();
+        Array.from(tbody.querySelectorAll('tr')).forEach((r, i) => {
+          const numCell = r.querySelector('td:first-child');
+          if (numCell && !numCell.querySelector('input')) numCell.textContent = i + 1;
+        });
+      }
+
+      // ── Collect competency table data ──
+      function collectCompTable(tbodyId, competencies) {
+        const tbody  = document.getElementById(tbodyId);
+        const rows   = tbody.querySelectorAll('tr');
+        const levels = ['first', 'secondNonSup', 'secondSup', 'third', 'faculty'];
+        const result = [];
+        rows.forEach((tr, idx) => {
+          const selects = tr.querySelectorAll('select');
+          const obs     = tr.querySelector('textarea')?.value || '';
+          const entry   = { competency: competencies[idx], observations: obs };
+          levels.forEach((lv, li) => {
+            entry[lv + '_cl']  = selects[li * 2]?.value     || '';
+            entry[lv + '_pct'] = selects[li * 2 + 1]?.value || '';
+          });
+          result.push(entry);
+        });
+        return result;
+      }
+
+      // ── Collect workforce profile ──
+      function collectWorkforce() {
+        const profile = {};
+        document.querySelectorAll('.wf-input').forEach(inp => {
+          const level = inp.dataset.level;
+          const type  = inp.dataset.type;
+          if (!profile[level]) profile[level] = {};
+          profile[level][type] = parseInt(inp.value) || 0;
+        });
+        return profile;
+      }
+
+      // ── Collect interventions ──
+      function collectInterventions() {
+        const result = [];
+        POSITION_LEVELS.forEach(level => {
+          for (let p = 1; p <= 3; p++) {
+            const get  = (field) => document.querySelector(`[data-level="${level.key}"][data-priority="${p}"][data-field="${field}"]`);
+            const getVal = (field) => get(field)?.value || '';
+            const getChk = (field) => get(field)?.checked || false;
+            result.push({
+              positionLevel: level.label,
+              priority:      p,
+              need:          getVal('need'),
+              onJob:         getChk('onJob'),  onJobText:   getVal('onJobText'),
+              offJob:        getChk('offJob'), offJobText:  getVal('offJobText'),
+              others:        getChk('others'), othersText:  getVal('othersText'),
+              timeline:      getVal('timeline'),
+              resource:      getVal('resource'),
+            });
+          }
+        });
+        return result;
+      }
+
+      // ── Collect insights ──
+      function collectInsights() {
+        const rows   = document.querySelectorAll('#insightsBody tr');
+        const result = [];
+        rows.forEach(tr => {
+          const cells = tr.querySelectorAll('input, textarea');
+          result.push({
+            dataSource:    cells[0]?.value || '',
+            gap:           cells[1]?.value || '',
+            personnel:     cells[2]?.value || '',
+            intervention:  cells[3]?.value || '',
+          });
+        });
+        return result;
+      }
+
+      // ── Email validation ──
+      function validateCarsuEmail(inputEl, hintId) {
+        const val  = inputEl.value.trim();
+        const hint = document.getElementById(hintId);
+        if (!val) { hint.textContent = ''; hint.className = 'email-hint'; return false; }
+        if (!val.endsWith('@carsu.edu.ph')) {
+          inputEl.classList.add('error');
+          hint.textContent = 'Must be a @carsu.edu.ph email address.';
+          hint.className   = 'email-hint error';
+          return false;
+        }
+        inputEl.classList.remove('error');
+        inputEl.classList.add('valid');
+        hint.textContent = '✓ Valid CarSU email';
+        hint.className   = 'email-hint success';
+        return true;
+      }
+
+      // ── Validation ──
+      function validate() {
+        let ok = true;
+        const required = ['submitterEmail', 'unitOfficeCollege', 'headOfUnit', 'position', 'datePrepared', 'yearCovered', 'totalPersonnel', 'raterFullName'];
+        required.forEach(id => {
+          const el = document.getElementById(id);
+          if (!el.value.trim()) { el.classList.add('error'); ok = false; }
+          else el.classList.remove('error');
+        });
+
+        const email = document.getElementById('submitterEmail').value.trim();
+        if (email && !email.endsWith('@carsu.edu.ph')) {
+          document.getElementById('submitterEmail').classList.add('error');
+          alert('Only @carsu.edu.ph email addresses are allowed to submit.');
+          ok = false;
+        }
+
+        if (!document.querySelector('input[name="campus"]:checked'))          { alert('Please select a Campus.'); ok = false; }
+        if (!document.querySelector('input[name="officeAffiliation"]:checked')){ alert('Please select an Office Affiliation.'); ok = false; }
+        if (!document.querySelector('input[name="purpose"]:checked'))          { alert('Please select a Purpose.'); ok = false; }
+
+        return ok;
+      }
+
+      // ── Submit ──
+      function submitForm() {
+        if (!validate()) return;
+
+        let purpose = document.querySelector('input[name="purpose"]:checked')?.value || '';
+        if (purpose === 'Other') purpose = document.getElementById('purposeOtherText').value || 'Other';
+
+        let dataSources = Array.from(document.querySelectorAll('#dataSourceChecklist input[type="checkbox"]:checked')).map(c => c.value);
+        if (dataSources.includes('Others')) {
+          dataSources = dataSources.filter(v => v !== 'Others');
+          const spec = document.getElementById('othersSourceText').value.trim();
+          if (spec) dataSources.push('Others: ' + spec);
+        }
+
+        const payload = {
+          action:            'submitLNA',
+          submitterEmail:    document.getElementById('submitterEmail').value.trim(),
+          campus:            document.querySelector('input[name="campus"]:checked')?.value,
+          officeAffiliation: document.querySelector('input[name="officeAffiliation"]:checked')?.value,
+          unitOfficCollege:  document.getElementById('unitOfficeCollege').value.trim(),
+          headOfUnit:        document.getElementById('headOfUnit').value.trim(),
+          position:          document.getElementById('position').value.trim(),
+          datePrepared:      document.getElementById('datePrepared').value,
+          yearCovered:       document.getElementById('yearCovered').value.trim(),
+          totalPersonnel:    document.getElementById('totalPersonnel').value,
+          purpose,
+          workforceProfile:  collectWorkforce(),
+          coreCompetencies:  collectCompTable('coreBody',       COMPETENCIES.core),
+          leadershipComps:   collectCompTable('leadershipBody', COMPETENCIES.leadership),
+          orgComps:          collectCompTable('orgBody',        COMPETENCIES.org),
+          technicalComps:    collectCompTable('technicalBody',  COMPETENCIES.technical),
+          clusterSummary: [
+            { cluster:'Core',           strongest: document.getElementById('coreStrongest').value,       weakest: document.getElementById('coreWeakest').value,       interventionNeeded: document.getElementById('coreIntervention').value },
+            { cluster:'Leadership',     strongest: document.getElementById('leadershipStrongest').value, weakest: document.getElementById('leadershipWeakest').value, interventionNeeded: document.getElementById('leadershipIntervention').value },
+            { cluster:'Organizational', strongest: document.getElementById('orgStrongest').value,        weakest: document.getElementById('orgWeakest').value,        interventionNeeded: document.getElementById('orgIntervention').value },
+            { cluster:'Technical',      strongest: document.getElementById('techStrongest').value,       weakest: document.getElementById('techWeakest').value,       interventionNeeded: document.getElementById('techIntervention').value },
+          ],
+          dataSources,
+          dataSourceInsights: collectInsights(),
+          leadInterventions:  collectInterventions(),
+          raterFullName:      document.getElementById('raterFullName').value.trim(),
+        };
+
+        document.getElementById('loadingOverlay').classList.add('active');
+        document.getElementById('submitBtn').disabled = true;
+
+        fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          body:   JSON.stringify(payload),
+        })
+        .then(r => r.json())
+        .then(data => {
+          document.getElementById('loadingOverlay').classList.remove('active');
+          if (data.success) {
+            document.getElementById('mainForm').style.display = 'none';
+            document.getElementById('refIdDisplay').textContent = data.refId;
+            document.getElementById('successScreen').classList.add('active');
+          } else {
+            alert('Submission failed: ' + data.error);
+            document.getElementById('submitBtn').disabled = false;
+          }
+        })
+        .catch(() => {
+          document.getElementById('loadingOverlay').classList.remove('active');
+          alert('Network error. Please try again.');
+          document.getElementById('submitBtn').disabled = false;
+        });
+      }
+
+      // ── Init ──
+      window.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('datePrepared').valueAsDate = new Date();
+
+        // Build competency tables
+        buildCompTable('coreBody',       COMPETENCIES.core);
+        buildCompTable('leadershipBody', COMPETENCIES.leadership);
+        buildCompTable('orgBody',        COMPETENCIES.org);
+        buildCompTable('technicalBody',  COMPETENCIES.technical);
+
+        // Build interventions table
+        buildInterventionsTable();
+
+        // Add one insight row by default
+        addInsightRow();
+
+        // Radio/checkbox visual updates
+        document.querySelectorAll('.checkbox-item input, .checkbox-group input').forEach(input => {
+          input.addEventListener('change', function () {
+            const name = this.name;
+            if (name) {
+              document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+                r.closest('.checkbox-item')?.classList.toggle('checked', r.checked);
+              });
+            }
+            if (name === 'purpose' && this.value === 'Other') {
+              document.getElementById('purposeOtherWrap').classList.toggle('visible', this.checked);
+            } else if (name === 'purpose') {
+              document.getElementById('purposeOtherWrap').classList.remove('visible');
+            }
+          });
+        });
+
+        // Data source checklist visual + others reveal
+        document.querySelectorAll('.source-item input').forEach(cb => {
+          cb.addEventListener('change', function () {
+            this.closest('.source-item').classList.toggle('checked', this.checked);
+            if (this.id === 'othersSourceCheck') {
+              document.getElementById('othersSourceWrap').classList.toggle('visible', this.checked);
+            }
+          });
+        });
+
+        // Email live validation
+        const emailEl = document.getElementById('submitterEmail');
+        emailEl.addEventListener('blur', () => validateCarsuEmail(emailEl, 'submitterEmailHint'));
+        emailEl.addEventListener('input', () => {
+          document.getElementById('userEmail').textContent =
+            emailEl.value.trim().endsWith('@carsu.edu.ph') ? emailEl.value.trim() : '—';
+        });
+      });
+
+      // exposed for inline html use
+      function addInsightRowBtn() { addInsightRow(); }
+    </script>
+
+    <!-- btn-add-row and btn-remove-row styles (shared with IDP) -->
+    <style>
+      .btn-add-row { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; background:var(--navy); color:var(--white); border:none; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; transition:background 0.2s; font-family:"Source Sans 3",sans-serif; }
+      .btn-add-row:hover { background:var(--navy-mid); }
+      .btn-remove-row { background:none; border:none; cursor:pointer; color:var(--error); padding:4px; border-radius:4px; font-size:18px; line-height:1; transition:background 0.15s; }
+      .btn-remove-row:hover { background:rgba(192,57,43,0.08); }
+      .email-hint { font-size:12px; margin-top:2px; min-height:16px; display:block; }
+      .email-hint.error { color:var(--error); }
+      .email-hint.success { color:var(--success); }
+      input.valid { border-color:var(--success); }
+    </style>
+  </body>
+</html>
