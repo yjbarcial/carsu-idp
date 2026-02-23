@@ -764,13 +764,26 @@
             </div>
           </div>
 
-          <!-- Supervisor dropdown -->
-          <div class="field-group" style="margin-bottom: 20px">
-            <label>Immediate Supervisor <span class="req">*</span></label>
-            <select id="supervisorSelect">
-              <option value="">— Loading supervisors… —</option>
-            </select>
-            <input type="hidden" id="supervisorEmail" />
+          <!-- Supervisor manual input -->
+          <div class="field-grid field-grid-2" style="margin-bottom: 20px">
+            <div class="field-group">
+              <label
+                >Immediate Supervisor Name <span class="req">*</span></label
+              >
+              <input
+                type="text"
+                id="supervisorName"
+                placeholder="e.g. Dr. Juan Dela Cruz"
+              />
+            </div>
+            <div class="field-group">
+              <label>Supervisor Email <span class="req">*</span></label>
+              <input
+                type="email"
+                id="supervisorEmail"
+                placeholder="supervisor@carsu.edu.ph"
+              />
+            </div>
           </div>
 
           <!-- Purpose (header) -->
@@ -1015,15 +1028,11 @@
 
       // ── State ──
       let userEmail = "";
-      let supervisors = [];
 
       // ── Init ──
       window.addEventListener("DOMContentLoaded", () => {
         // Set today as default date
         document.getElementById("datePrepared").valueAsDate = new Date();
-
-        // Load supervisors
-        loadSupervisors();
 
         // Radio/checkbox visual updates
         document.querySelectorAll(".checkbox-item input").forEach((input) => {
@@ -1059,53 +1068,11 @@
           });
         });
 
-        // Supervisor dropdown change
-        document
-          .getElementById("supervisorSelect")
-          .addEventListener("change", function () {
-            const sup = supervisors.find((s) => s.name === this.value);
-            document.getElementById("supervisorEmail").value = sup
-              ? sup.email
-              : "";
-          });
-
         // Initialize with one row each
         addRow("competency");
         addRow("agap");
         addRow("proact");
       });
-
-      // ── Load supervisors from Apps Script ──
-      function loadSupervisors() {
-        console.log(
-          "Loading from:",
-          APPS_SCRIPT_URL + "?action=getSupervisors&callback=handleSupervisors",
-        );
-        const script = document.createElement("script");
-        window.handleSupervisors = function (data) {
-          script.remove();
-          delete window.handleSupervisors;
-          if (data.success && data.supervisors.length) {
-            supervisors = data.supervisors;
-            const sel = document.getElementById("supervisorSelect");
-            sel.innerHTML =
-              '<option value="">— Select your immediate supervisor —</option>';
-            supervisors.forEach((s) => {
-              const opt = document.createElement("option");
-              opt.value = s.name;
-              opt.textContent = s.name;
-              sel.appendChild(opt);
-            });
-          } else {
-            document.getElementById("supervisorSelect").innerHTML =
-              '<option value="">— Could not load supervisors. Please refresh. —</option>';
-          }
-        };
-        // Use your personal Gmail deployment URL (no /a/macros/carsu.edu.ph/)
-        script.src =
-          APPS_SCRIPT_URL + "?action=getSupervisors&callback=handleSupervisors";
-        document.body.appendChild(script);
-      }
 
       // ── Dynamic table rows ──
       let rowCounts = { competency: 0, agap: 0, proact: 0 };
@@ -1119,7 +1086,7 @@
         if (type === "competency") {
           tr.innerHTML = `
       <td><input type="text" class="priority-num" value="${n}" readonly/></td>
-      <td><textarea rows="2" placeholder="e.g. Communication Skills"></textarea></td>
+      <td><textarea rows="2" placeholder=""></textarea></td>
       <td><select>
         <option value="">Select…</option>
         <option>Basic</option><option>Intermediate</option><option>Advanced</option><option>Expert</option>
@@ -1128,35 +1095,35 @@
         <option value="">Select…</option>
         <option>Basic</option><option>Intermediate</option><option>Advanced</option><option>Expert</option>
       </select></td>
-      <td><textarea rows="2" placeholder="e.g. Seminar, Workshop, Online Course"></textarea></td>
-      <td><textarea rows="2" placeholder="e.g. Budget, Mentor"></textarea></td>
-      <td><input type="text" placeholder="e.g. Q3 2025"/></td>
+      <td><textarea rows="2" placeholder=""></textarea></td>
+      <td><textarea rows="2" placeholder=""></textarea></td>
+      <td><input type="text" placeholder=""/></td>
       <td><button class="btn-remove-row" onclick="removeRow(this)" title="Remove row">×</button></td>`;
         } else if (type === "agap") {
           tr.innerHTML = `
       <td><input type="text" class="priority-num" value="${n}" readonly/></td>
-      <td><input type="text" placeholder="e.g. Master of Education"/></td>
-      <td><input type="text" placeholder="e.g. CSU Main Campus"/></td>
+      <td><input type="text" placeholder=""/></td>
+      <td><input type="text" placeholder=""/></td>
       <td><select>
         <option value="">Select…</option>
         <option>Full-time</option><option>Part-time</option><option>Online</option><option>Blended</option>
       </select></td>
-      <td><input type="text" placeholder="e.g. Personal, CHED"/></td>
-      <td><input type="text" placeholder="e.g. CHED Scholarship"/></td>
-      <td><input type="text" placeholder="e.g. 2025–2027"/></td>
+      <td><input type="text" placeholder=""/></td>
+      <td><input type="text" placeholder=""/></td>
+      <td><input type="text" placeholder=""/></td>
       <td><button class="btn-remove-row" onclick="removeRow(this)" title="Remove row">×</button></td>`;
         } else if (type === "proact") {
           tr.innerHTML = `
       <td><input type="text" class="priority-num" value="${n}" readonly/></td>
-      <td><input type="text" placeholder="e.g. Research Writing Workshop"/></td>
-      <td><input type="text" placeholder="e.g. Research Skills"/></td>
+      <td><input type="text" placeholder=""/></td>
+      <td><input type="text" placeholder=""/></td>
       <td><select>
         <option value="">Select…</option>
         <option>Face-to-face</option><option>Online</option><option>Blended</option><option>On-the-job</option>
       </select></td>
-      <td><input type="text" placeholder="e.g. University Fund"/></td>
-      <td><input type="text" placeholder="e.g. CSU HRMS"/></td>
-      <td><input type="text" placeholder="e.g. Q2 2025"/></td>
+      <td><input type="text" placeholder=""/></td>
+      <td><input type="text" placeholder=""/></td>
+      <td><input type="text" placeholder=""/></td>
       <td><button class="btn-remove-row" onclick="removeRow(this)" title="Remove row">×</button></td>`;
         }
 
@@ -1252,8 +1219,14 @@
           alert("Please select a Competency Assessment Purpose.");
           ok = false;
         }
-        if (!document.getElementById("supervisorSelect").value) {
-          alert("Please select your Immediate Supervisor.");
+        if (!document.getElementById("supervisorName").value.trim()) {
+          alert("Please enter your Immediate Supervisor Name.");
+          document.getElementById("supervisorName").classList.add("error");
+          ok = false;
+        }
+        if (!document.getElementById("supervisorEmail").value.trim()) {
+          alert("Please enter your Supervisor Email.");
+          document.getElementById("supervisorEmail").classList.add("error");
           ok = false;
         }
 
@@ -1302,8 +1275,12 @@
           yearCovered: document.getElementById("yearCovered").value.trim(),
           yearsInPosition: document.getElementById("yearsInPosition").value,
           yearsInCSU: document.getElementById("yearsInCSU").value,
-          supervisorName: document.getElementById("supervisorSelect").value,
-          supervisorEmail: document.getElementById("supervisorEmail").value,
+          supervisorName: document
+            .getElementById("supervisorName")
+            .value.trim(),
+          supervisorEmail: document
+            .getElementById("supervisorEmail")
+            .value.trim(),
           headerPurpose,
           competencyPurpose: compPurpose,
           competencyRows: collectTableData("competency"),
