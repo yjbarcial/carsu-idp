@@ -1181,7 +1181,8 @@
               return;
             }
 
-            supervisorEmail = res.data.supervisorEmail; // always store from response
+            supervisorEmail = res.data.supervisorEmail;
+            console.log("Setting userEmail to:", supervisorEmail);
             document.getElementById("userEmail").textContent = supervisorEmail;
             document.getElementById("tokenScreen").style.display = "none";
             populateReadOnly(res.data);
