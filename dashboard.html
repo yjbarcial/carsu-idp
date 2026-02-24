@@ -1,0 +1,2634 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HR LeaD Dashboard — CarSU HRMS</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Source+Sans+3:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"
+    >
+          const APPS_SCRIPT_URL =
+      "https://script.google.com/macros/s/AKfycbwSolqgg5fcH_J_4CSgividBBkqbtG5a5qo77cW8p1LoAKtVvVf4bSeE8d7Qzuty715/exec";
+      let currentUser = null; let allIDPs = []; let allLNAs = []; let allHRUsers =
+      []; let sortState = { idp: {col:-1,asc:true}, lna: {col:-1,asc:true} };
+    </script>
+
+    <style>
+      :root {
+        --navy: #1a4d2e;
+        --navy-mid: #2d6a3f;
+        --navy-light: #3d8b50;
+        --gold: #f5c300;
+        --gold-light: #ffd740;
+        --gold-dim: rgba(245, 195, 0, 0.12);
+        --cream: #faf8f4;
+        --white: #fff;
+        --text: #1a1a2e;
+        --text-light: #5a6070;
+        --border: #d8d4c8;
+        --error: #c0392b;
+        --success: #1a6b3c;
+        --shadow: 0 4px 24px rgba(26, 77, 46, 0.1);
+        --shadow-sm: 0 2px 8px rgba(26, 77, 46, 0.07);
+        --shadow-lg: 0 12px 48px rgba(26, 77, 46, 0.18);
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Source Sans 3", sans-serif;
+        background: var(--cream);
+        color: var(--text);
+        min-height: 100vh;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      /* HEADER */
+      .site-header {
+        background: #fff;
+        position: sticky;
+        top: 0;
+        z-index: 200;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+        border-bottom: 3px solid var(--navy);
+      }
+      .header-inner {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 8px 28px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .header-img {
+        height: 48px;
+        width: auto;
+        display: block;
+        object-fit: contain;
+      }
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .user-badge {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(26, 77, 46, 0.06);
+        border: 1px solid rgba(26, 77, 46, 0.15);
+        border-radius: 20px;
+        padding: 5px 14px 5px 6px;
+        font-size: 13px;
+        color: var(--navy);
+        font-weight: 500;
+      }
+      .user-avatar {
+        width: 26px;
+        height: 26px;
+        background: var(--navy);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--gold);
+        font-weight: 700;
+        font-size: 11px;
+        flex-shrink: 0;
+      }
+      .btn-logout {
+        padding: 6px 14px;
+        background: transparent;
+        color: var(--navy);
+        border: 1.5px solid var(--border);
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .btn-logout:hover {
+        background: var(--navy);
+        color: #fff;
+        border-color: var(--navy);
+      }
+
+      /* LOGIN */
+      #loginScreen {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: calc(100vh - 67px);
+        padding: 40px 20px;
+      }
+      .login-card {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 48px 44px;
+        max-width: 420px;
+        width: 100%;
+        box-shadow: var(--shadow-lg);
+        text-align: center;
+        animation: fadeUp 0.5s ease;
+      }
+      .login-icon {
+        width: 68px;
+        height: 68px;
+        background: var(--navy);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        box-shadow: 0 8px 24px rgba(26, 77, 46, 0.25);
+      }
+      .login-icon svg {
+        width: 32px;
+        height: 32px;
+        stroke: var(--gold);
+        fill: none;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .login-eyebrow {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--gold);
+        background: var(--gold-dim);
+        border: 1px solid rgba(245, 195, 0, 0.3);
+        border-radius: 20px;
+        display: inline-block;
+        padding: 4px 14px;
+        margin-bottom: 12px;
+      }
+      .login-card h2 {
+        font-family: "Playfair Display", serif;
+        font-size: 24px;
+        color: var(--navy);
+        margin-bottom: 8px;
+      }
+      .login-card > p {
+        font-size: 13px;
+        color: var(--text-light);
+        margin-bottom: 28px;
+      }
+      .login-field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        text-align: left;
+        margin-bottom: 16px;
+      }
+      .login-field label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--navy-mid);
+      }
+      .login-field input {
+        width: 100%;
+        padding: 11px 14px;
+        border: 1.5px solid var(--border);
+        border-radius: 9px;
+        font-family: inherit;
+        font-size: 14px;
+        color: var(--text);
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+        background: #f8f7f4;
+      }
+      .login-field input:focus {
+        border-color: var(--navy);
+        box-shadow: 0 0 0 3px rgba(26, 77, 46, 0.08);
+        background: #fff;
+      }
+      .login-field input.err {
+        border-color: var(--error);
+      }
+      .login-hint {
+        font-size: 12px;
+        min-height: 16px;
+        display: block;
+        margin-top: -2px;
+      }
+      .login-hint.err {
+        color: var(--error);
+      }
+      .btn-login {
+        width: 100%;
+        padding: 13px;
+        background: var(--navy);
+        color: #fff;
+        border: none;
+        border-radius: 9px;
+        font-family: inherit;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition:
+          background 0.2s,
+          transform 0.15s;
+        box-shadow: 0 4px 16px rgba(26, 77, 46, 0.2);
+      }
+      .btn-login:hover {
+        background: var(--navy-mid);
+        transform: translateY(-1px);
+      }
+      .btn-login:disabled {
+        background: #aaa;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      /* DENIED */
+      #accessDenied {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        min-height: calc(100vh - 67px);
+        padding: 40px 20px;
+      }
+      .denied-card {
+        background: var(--white);
+        border: 1px solid #f5c6c2;
+        border-radius: 20px;
+        padding: 48px 40px;
+        max-width: 420px;
+        width: 100%;
+        text-align: center;
+        box-shadow: var(--shadow);
+      }
+      .denied-icon {
+        width: 68px;
+        height: 68px;
+        background: rgba(192, 57, 43, 0.08);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 34px;
+        margin: 0 auto 18px;
+      }
+      .denied-card h2 {
+        font-family: "Playfair Display", serif;
+        font-size: 22px;
+        color: var(--error);
+        margin-bottom: 8px;
+      }
+      .denied-card p {
+        font-size: 13px;
+        color: var(--text-light);
+        margin-bottom: 18px;
+      }
+      .btn-try {
+        padding: 9px 24px;
+        background: var(--navy);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .btn-try:hover {
+        background: var(--navy-mid);
+      }
+
+      /* DASHBOARD */
+      #dashScreen {
+        display: none;
+      }
+      .dash-wrap {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 32px 28px 80px;
+      }
+      .dash-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 28px;
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+      .dash-head-left h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 28px;
+        color: var(--navy);
+        margin-bottom: 2px;
+      }
+      .dash-head-left p {
+        font-size: 13px;
+        color: var(--text-light);
+      }
+      .btn-refresh {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        padding: 9px 18px;
+        background: var(--navy);
+        color: #fff;
+        border: none;
+        border-radius: 9px;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .btn-refresh:hover {
+        background: var(--navy-mid);
+      }
+      .btn-refresh svg {
+        width: 15px;
+        height: 15px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .btn-refresh.spinning svg {
+        animation: spin 0.8s linear infinite;
+      }
+
+      /* STATS */
+      .stats-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(178px, 1fr));
+        gap: 14px;
+        margin-bottom: 28px;
+      }
+      .stat-card {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 20px 20px 16px;
+        box-shadow: var(--shadow-sm);
+        position: relative;
+        overflow: hidden;
+        animation: fadeUp 0.4s ease both;
+      }
+      .stat-card::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: var(--gold);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.3s;
+      }
+      .stat-card:hover::before {
+        transform: scaleX(1);
+      }
+      .stat-icon {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 32px;
+        height: 32px;
+        background: rgba(26, 77, 46, 0.07);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .stat-icon svg {
+        width: 16px;
+        height: 16px;
+        stroke: var(--navy-mid);
+        fill: none;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+      }
+      .stat-label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--text-light);
+        margin-bottom: 6px;
+      }
+      .stat-value {
+        font-family: "Playfair Display", serif;
+        font-size: 34px;
+        color: var(--navy);
+        line-height: 1;
+        margin-bottom: 2px;
+      }
+      .stat-sub {
+        font-size: 11px;
+        color: var(--text-light);
+      }
+
+      /* TABS */
+      .tab-bar {
+        display: flex;
+        gap: 3px;
+        background: rgba(26, 77, 46, 0.07);
+        border-radius: 11px;
+        padding: 4px;
+        margin-bottom: 22px;
+        width: fit-content;
+        flex-wrap: wrap;
+      }
+      .tab-btn {
+        padding: 8px 20px;
+        border: none;
+        background: transparent;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-light);
+        cursor: pointer;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .tab-btn.active {
+        background: var(--navy);
+        color: #fff;
+        box-shadow: 0 2px 8px rgba(26, 77, 46, 0.2);
+      }
+      .tab-btn:not(.active):hover {
+        background: rgba(26, 77, 46, 0.1);
+        color: var(--navy);
+      }
+      .tab-panel {
+        display: none;
+      }
+      .tab-panel.active {
+        display: block;
+        animation: fadeUp 0.3s ease;
+      }
+
+      /* CHARTS */
+      .charts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 18px;
+        margin-bottom: 22px;
+      }
+      .chart-card {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 20px 20px 16px;
+        box-shadow: var(--shadow-sm);
+      }
+      .chart-card h4 {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--navy);
+        margin-bottom: 2px;
+      }
+      .chart-card .chart-sub {
+        font-size: 11px;
+        color: var(--text-light);
+        margin-bottom: 14px;
+      }
+      .chart-wrap {
+        position: relative;
+        height: 210px;
+      }
+
+      /* INSIGHTS */
+      .insight-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 6px;
+      }
+      .insight-item {
+        background: rgba(26, 77, 46, 0.04);
+        border-left: 3px solid var(--gold);
+        border-radius: 0 8px 8px 0;
+        padding: 10px 13px;
+      }
+      .insight-item .i-label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: var(--text-light);
+        margin-bottom: 3px;
+      }
+      .insight-item .i-val {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--navy);
+      }
+
+      /* TABLE */
+      .filter-bar {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .filter-bar input,
+      .filter-bar select {
+        padding: 8px 12px;
+        border: 1.5px solid var(--border);
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 13px;
+        color: var(--text);
+        background: var(--white);
+        outline: none;
+        transition: border-color 0.2s;
+      }
+      .filter-bar input {
+        min-width: 200px;
+      }
+      .filter-bar input:focus,
+      .filter-bar select:focus {
+        border-color: var(--navy);
+      }
+      .filter-bar select {
+        min-width: 145px;
+      }
+      .result-count {
+        font-size: 12px;
+        color: var(--text-light);
+        margin-left: auto;
+      }
+      .tbl-wrap {
+        overflow-x: auto;
+        border-radius: 11px;
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow-sm);
+      }
+      .dtbl {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+        background: var(--white);
+      }
+      .dtbl thead tr {
+        background: var(--navy);
+      }
+      .dtbl thead th {
+        padding: 11px 13px;
+        color: #fff;
+        font-weight: 600;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        text-align: left;
+        white-space: nowrap;
+        border-right: 1px solid rgba(255, 255, 255, 0.07);
+        cursor: pointer;
+        user-select: none;
+      }
+      .dtbl thead th:last-child {
+        border-right: none;
+        cursor: default;
+      }
+      .dtbl thead th:hover:not(:last-child) {
+        background: var(--navy-mid);
+      }
+      .sort-ind {
+        font-size: 9px;
+        margin-left: 3px;
+        opacity: 0.55;
+      }
+      .dtbl tbody tr {
+        border-bottom: 1px solid var(--border);
+        transition: background 0.15s;
+      }
+      .dtbl tbody tr:last-child {
+        border-bottom: none;
+      }
+      .dtbl tbody tr:hover {
+        background: rgba(26, 77, 46, 0.03);
+      }
+      .dtbl tbody td {
+        padding: 10px 13px;
+        vertical-align: middle;
+      }
+      .empty-row td {
+        text-align: center;
+        padding: 44px;
+        color: var(--text-light);
+        font-style: italic;
+      }
+      .btn-view {
+        background: none;
+        border: 1px solid var(--border);
+        padding: 5px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 12px;
+        color: var(--navy);
+        font-family: inherit;
+        font-weight: 600;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .btn-view:hover {
+        background: var(--navy);
+        color: #fff;
+        border-color: var(--navy);
+      }
+
+      /* BADGES */
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 3px 9px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .badge-green {
+        background: rgba(26, 107, 60, 0.1);
+        color: #1a6b3c;
+      }
+      .badge-gold {
+        background: rgba(245, 195, 0, 0.15);
+        color: #8a6c00;
+      }
+      .badge-red {
+        background: rgba(192, 57, 43, 0.1);
+        color: var(--error);
+      }
+      .badge-grey {
+        background: rgba(90, 96, 112, 0.1);
+        color: var(--text-light);
+      }
+      .badge-blue {
+        background: rgba(30, 100, 180, 0.1);
+        color: #1e64b4;
+      }
+
+      /* MODAL */
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(10, 20, 30, 0.6);
+        z-index: 500;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 20px;
+        overflow-y: auto;
+      }
+      .modal-overlay.active {
+        display: flex;
+      }
+      .modal {
+        background: var(--white);
+        border-radius: 16px;
+        max-width: 880px;
+        width: 100%;
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
+        animation: fadeUp 0.3s ease;
+        margin: auto;
+      }
+      .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 24px 16px;
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        background: var(--white);
+        z-index: 1;
+        border-radius: 16px 16px 0 0;
+      }
+      .modal-header-left h3 {
+        font-family: "Playfair Display", serif;
+        font-size: 18px;
+        color: var(--navy);
+      }
+      .modal-header-left p {
+        font-size: 12px;
+        color: var(--text-light);
+        margin-top: 1px;
+      }
+      .modal-header-right {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .btn-pdf {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        background: var(--navy);
+        color: #fff;
+        border: none;
+        border-radius: 7px;
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .btn-pdf:hover {
+        background: var(--navy-mid);
+      }
+      .btn-pdf svg {
+        width: 13px;
+        height: 13px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+      }
+      .btn-close {
+        width: 30px;
+        height: 30px;
+        background: rgba(26, 77, 46, 0.07);
+        border: none;
+        border-radius: 7px;
+        cursor: pointer;
+        font-size: 17px;
+        color: var(--text-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+      }
+      .btn-close:hover {
+        background: rgba(192, 57, 43, 0.1);
+        color: var(--error);
+      }
+      .modal-body {
+        padding: 20px 24px 26px;
+      }
+
+      /* MODAL CONTENT */
+      .m-section {
+        margin-bottom: 22px;
+      }
+      .m-section-title {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--navy-mid);
+        padding-bottom: 7px;
+        border-bottom: 1.5px solid var(--border);
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .m-section-title .m-badge {
+        font-size: 9px;
+        padding: 2px 8px;
+        background: var(--gold-dim);
+        color: var(--navy);
+        border-radius: 10px;
+        border: 1px solid rgba(245, 195, 0, 0.3);
+        font-weight: 700;
+      }
+      .dgrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .dgrid.g3 {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+      .df {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .df.s2 {
+        grid-column: span 2;
+      }
+      .df.s3 {
+        grid-column: span 3;
+      }
+      .df label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--text-light);
+      }
+      .df span,
+      .df code {
+        font-size: 13px;
+        color: var(--text);
+      }
+      .df code {
+        background: rgba(26, 77, 46, 0.07);
+        padding: 1px 6px;
+        border-radius: 4px;
+        font-size: 11px;
+      }
+      .m-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+      }
+      .m-table thead tr {
+        background: var(--navy-mid);
+      }
+      .m-table thead th {
+        padding: 7px 10px;
+        color: #fff;
+        font-weight: 600;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        text-align: left;
+      }
+      .m-table tbody tr {
+        border-bottom: 1px solid var(--border);
+      }
+      .m-table tbody tr:last-child {
+        border-bottom: none;
+      }
+      .m-table tbody tr:nth-child(even) {
+        background: #faf9f6;
+      }
+      .m-table tbody td {
+        padding: 7px 10px;
+        vertical-align: top;
+      }
+      .m-empty {
+        text-align: center;
+        padding: 18px;
+        color: var(--text-light);
+        font-style: italic;
+        font-size: 13px;
+      }
+      .cluster-block {
+        margin-bottom: 14px;
+      }
+      .cluster-lbl {
+        background: var(--navy);
+        color: #fff;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 7px 12px;
+        border-radius: 6px 6px 0 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .cluster-badge {
+        font-size: 9px;
+        background: rgba(245, 195, 0, 0.2);
+        border: 1px solid rgba(245, 195, 0, 0.4);
+        color: var(--gold-light);
+        padding: 2px 8px;
+        border-radius: 10px;
+      }
+
+      /* HR REGISTRY */
+      .reg-actions {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 14px;
+      }
+      .btn-add {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        background: var(--navy);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .btn-add:hover {
+        background: var(--navy-mid);
+      }
+      .btn-remove {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--error);
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-size: 13px;
+        transition: background 0.15s;
+      }
+      .btn-remove:hover {
+        background: rgba(192, 57, 43, 0.08);
+      }
+      .add-field {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        margin-bottom: 13px;
+      }
+      .add-field label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: var(--navy-mid);
+      }
+      .add-field input {
+        padding: 10px 13px;
+        border: 1.5px solid var(--border);
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 13px;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+      .add-field input:focus {
+        border-color: var(--navy);
+      }
+      .btn-save {
+        width: 100%;
+        padding: 11px;
+        background: var(--navy);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .btn-save:hover {
+        background: var(--navy-mid);
+      }
+
+      /* SPINNER + TOAST */
+      .spin-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        padding: 50px 0;
+      }
+      .spinner {
+        width: 36px;
+        height: 36px;
+        border: 3px solid rgba(26, 77, 46, 0.15);
+        border-top-color: var(--navy);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+      .spin-wrap p {
+        font-size: 13px;
+        color: var(--text-light);
+      }
+      .toast-wrap {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 600;
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+      }
+      .toast {
+        background: var(--navy);
+        color: #fff;
+        padding: 11px 16px;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 500;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        animation: fadeUp 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        max-width: 300px;
+      }
+      .toast.success {
+        background: var(--success);
+      }
+      .toast.error {
+        background: var(--error);
+      }
+
+      /* PRINT */
+      @media print {
+        body * {
+          visibility: hidden !important;
+        }
+        #printArea,
+        #printArea * {
+          visibility: visible !important;
+        }
+        #printArea {
+          position: fixed !important;
+          inset: 0 !important;
+          background: #fff !important;
+          padding: 20px 28px !important;
+          overflow: auto !important;
+          z-index: 9999 !important;
+          font-size: 11px !important;
+        }
+        .no-print {
+          display: none !important;
+        }
+        .m-table {
+          page-break-inside: avoid;
+        }
+      }
+      #printArea {
+        display: none;
+      }
+
+      @media (max-width: 640px) {
+        .dash-wrap {
+          padding: 20px 14px 60px;
+        }
+        .stats-row {
+          grid-template-columns: 1fr 1fr;
+        }
+        .charts-grid {
+          grid-template-columns: 1fr;
+        }
+        .dgrid,
+        .dgrid.g3 {
+          grid-template-columns: 1fr;
+        }
+        .df.s2,
+        .df.s3 {
+          grid-column: span 1;
+        }
+        .insight-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <img src="img/header-logo.png" alt="CarSU HRMS" class="header-img" />
+        <div class="header-right" id="headerRight" style="display: none">
+          <div class="user-badge">
+            <div class="user-avatar" id="userAvatar">?</div>
+            <span id="userEmailDisplay">—</span>
+          </div>
+          <button class="btn-logout" onclick="logout()">Sign Out</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- LOGIN -->
+    <div id="loginScreen">
+      <div class="login-card">
+        <div class="login-icon">
+          <svg viewBox="0 0 24 24">
+            <rect x="3" y="11" width="18" height="11" rx="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+        </div>
+        <div class="login-eyebrow">HR Access Only</div>
+        <h2>LeaD Dashboard</h2>
+        <p>
+          Enter your CarSU email to access the HRMS Learning &amp; Development
+          Dashboard.
+        </p>
+        <div class="login-field">
+          <label>CarSU Email Address</label>
+          <input
+            type="email"
+            id="loginEmail"
+            placeholder="yourname@carsu.edu.ph"
+            autocomplete="email"
+          />
+          <span class="login-hint" id="loginHint"></span>
+        </div>
+        <button class="btn-login" id="loginBtn" onclick="doLogin()">
+          Access Dashboard
+        </button>
+      </div>
+    </div>
+
+    <!-- DENIED -->
+    <div
+      id="accessDenied"
+      style="
+        display: none;
+        align-items: center;
+        justify-content: center;
+        min-height: calc(100vh - 67px);
+        padding: 40px 20px;
+      "
+    >
+      <div class="denied-card">
+        <div class="denied-icon">🔒</div>
+        <h2>Access Denied</h2>
+        <p id="deniedMsg">
+          Your email is not authorized to access this dashboard.
+        </p>
+        <button class="btn-try" onclick="showLogin()">
+          ← Try Another Email
+        </button>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashScreen">
+      <div class="dash-wrap">
+        <div class="dash-head">
+          <div class="dash-head-left">
+            <h1>LeaD Dashboard</h1>
+            <p id="lastUpdated">Loading data…</p>
+          </div>
+          <button class="btn-refresh" id="refreshBtn" onclick="loadDashboard()">
+            <svg viewBox="0 0 24 24">
+              <path d="M23 4v6h-6" />
+              <path d="M1 20v-6h6" />
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10" />
+              <path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14" />
+            </svg>
+            Refresh
+          </button>
+        </div>
+
+        <!-- STATS -->
+        <div class="stats-row">
+          <div class="stat-card" style="animation-delay: 0.04s">
+            <div class="stat-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+            </div>
+            <div class="stat-label">Total IDPs</div>
+            <div class="stat-value" id="sIDPs">—</div>
+            <div class="stat-sub">Submitted plans</div>
+          </div>
+          <div class="stat-card" style="animation-delay: 0.08s">
+            <div class="stat-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+            </div>
+            <div class="stat-label">Completed</div>
+            <div class="stat-value" id="sComplete">—</div>
+            <div class="stat-sub">Supervisor reviewed</div>
+          </div>
+          <div class="stat-card" style="animation-delay: 0.12s">
+            <div class="stat-icon">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+            </div>
+            <div class="stat-label">Pending IDPs</div>
+            <div class="stat-value" id="sPending">—</div>
+            <div class="stat-sub">Awaiting supervisor</div>
+          </div>
+          <div class="stat-card" style="animation-delay: 0.16s">
+            <div class="stat-icon">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+                />
+                <line x1="12" y1="9" x2="12" y2="13" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
+            </div>
+            <div class="stat-label">Overdue IDPs</div>
+            <div class="stat-value" id="sOverdue">—</div>
+            <div class="stat-sub">Past deadline</div>
+          </div>
+          <div class="stat-card" style="animation-delay: 0.2s">
+            <div class="stat-icon">
+              <svg viewBox="0 0 24 24">
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <path d="M3 9h18M9 21V9" />
+              </svg>
+            </div>
+            <div class="stat-label">Total LNAs</div>
+            <div class="stat-value" id="sLNAs">—</div>
+            <div class="stat-sub">Office assessments</div>
+          </div>
+          <div class="stat-card" style="animation-delay: 0.24s">
+            <div class="stat-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+            </div>
+            <div class="stat-label">Offices Covered</div>
+            <div class="stat-value" id="sOffices">—</div>
+            <div class="stat-sub">Unique units submitted</div>
+          </div>
+        </div>
+
+        <!-- TABS -->
+        <div class="tab-bar">
+          <button class="tab-btn active" onclick="switchTab('overview')">
+            📊 Overview
+          </button>
+          <button class="tab-btn" onclick="switchTab('idp')">
+            📋 IDP Submissions
+          </button>
+          <button class="tab-btn" onclick="switchTab('lna')">
+            📝 LNA Submissions
+          </button>
+          <button class="tab-btn" onclick="switchTab('registry')">
+            👥 HR Registry
+          </button>
+        </div>
+
+        <!-- OVERVIEW -->
+        <div class="tab-panel active" id="tab-overview">
+          <div class="charts-grid">
+            <div class="chart-card">
+              <h4>IDP Status Breakdown</h4>
+              <p class="chart-sub">Distribution of submission statuses</p>
+              <div class="chart-wrap"><canvas id="chartStatus"></canvas></div>
+            </div>
+            <div class="chart-card">
+              <h4>Submissions by Campus</h4>
+              <p class="chart-sub">IDP and LNA counts per campus</p>
+              <div class="chart-wrap"><canvas id="chartCampus"></canvas></div>
+            </div>
+            <div class="chart-card">
+              <h4>Monthly Submissions</h4>
+              <p class="chart-sub">IDP and LNA submissions over time</p>
+              <div class="chart-wrap"><canvas id="chartMonthly"></canvas></div>
+            </div>
+            <div class="chart-card">
+              <h4>Top Competency Gaps</h4>
+              <p class="chart-sub">
+                Most frequently cited in IDP Section I (Required &gt; Current)
+              </p>
+              <div class="chart-wrap"><canvas id="chartGaps"></canvas></div>
+            </div>
+          </div>
+          <div
+            class="charts-grid"
+            style="grid-template-columns: 1fr 1fr; margin-bottom: 0"
+          >
+            <div class="chart-card">
+              <h4>IDP Purpose Distribution</h4>
+              <p class="chart-sub">Why employees are submitting IDPs</p>
+              <div class="chart-wrap"><canvas id="chartPurpose"></canvas></div>
+            </div>
+            <div class="chart-card">
+              <h4>Key Insights</h4>
+              <p class="chart-sub">
+                Aggregated highlights from all submissions
+              </p>
+              <div class="insight-grid">
+                <div class="insight-item">
+                  <div class="i-label">Avg Years in Position</div>
+                  <div class="i-val" id="iYears">—</div>
+                </div>
+                <div class="insight-item">
+                  <div class="i-label">IDP Completion Rate</div>
+                  <div class="i-val" id="iRate">—</div>
+                </div>
+                <div class="insight-item">
+                  <div class="i-label">Supervisors w/ Pending</div>
+                  <div class="i-val" id="iSup">—</div>
+                </div>
+                <div class="insight-item">
+                  <div class="i-label">LNA Offices Flagging Intervention</div>
+                  <div class="i-val" id="iFlag">—</div>
+                </div>
+                <div class="insight-item">
+                  <div class="i-label">Most Common AGAP Mode</div>
+                  <div class="i-val" id="iAGAP">—</div>
+                </div>
+                <div class="insight-item">
+                  <div class="i-label">Top Supervisor Recommendation</div>
+                  <div class="i-val" id="iRec">—</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- IDP -->
+        <div class="tab-panel" id="tab-idp">
+          <div class="filter-bar">
+            <input
+              type="text"
+              id="idpSearch"
+              placeholder="🔍  Search name, office, email…"
+              oninput="renderIDP()"
+            />
+            <select id="idpStatus" onchange="renderIDP()">
+              <option value="">All Statuses</option>
+              <option value="PENDING">Pending</option>
+              <option value="COMPLETE">Completed</option>
+              <option value="OVERDUE">Overdue</option>
+            </select>
+            <select id="idpCampus" onchange="renderIDP()">
+              <option value="">All Campuses</option>
+            </select>
+            <select id="idpYear" onchange="renderIDP()">
+              <option value="">All Years</option>
+            </select>
+            <span class="result-count" id="idpCount">0 records</span>
+          </div>
+          <div class="tbl-wrap">
+            <table class="dtbl">
+              <thead>
+                <tr>
+                  <th onclick="sortT('idp', 0)">
+                    Ref ID <span class="sort-ind">↕</span>
+                  </th>
+                  <th onclick="sortT('idp', 1)">
+                    Name <span class="sort-ind">↕</span>
+                  </th>
+                  <th onclick="sortT('idp', 2)">
+                    Position <span class="sort-ind">↕</span>
+                  </th>
+                  <th onclick="sortT('idp', 3)">
+                    Office <span class="sort-ind">↕</span>
+                  </th>
+                  <th onclick="sortT('idp', 4)">
+                    Campus <span class="sort-ind">↕</span>
+                  </th>
+                  <th onclick="sortT('idp', 5)">
+                    Year <span class="sort-ind">↕</span>
+                  </th>
+                  <th onclick="sortT('idp', 6)">
+                    Submitted <span class="sort-ind">↕</span>
+                  </th>
+                  <th onclick="sortT('idp', 7)">
+                    Status <span class="sort-ind">↕</span>
+                  </th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="idpBody">
+                <tr class="empty-row">
+                  <td colspan="9">Loading…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- LNA -->
+        <div class="tab-panel" id="tab-lna">
+          <div class="filter-bar">
+            <input
+              type="text"
+              id="lnaSearch"
+              placeholder="🔍  Search office, head, email…"
+              oninput="renderLNA()"
+            />
+            <select id="lnaCampus" onchange="renderLNA()">
+              <option value="">All Campuses</option>
+              <option>CSU Main Campus</option>
+              <option>CSU Cabadbaran City Campus</option>
+            </select>
+            <select id="lnaYear" onchange="renderLNA()">
+              <option value="">All Years</option>
+            </select>
+            <span class="result-count" id="lnaCount">0 records</span>
+          </div>
+          <div class="tbl-wrap">
+            <table class="dtbl">
+              <thead>
+                <tr>
+                  <th onclick="sortT('lna', 0)">
+                    Ref ID <span class="sort-ind">↕</span>
+                  </th>
+                  <th onclick="sortT('lna', 1)">
+                    Office / Unit <span class="sort-ind">↕</span>
+                  </th>
+                  <th onclick="sortT('lna', 2)">
+                    Head of Office <span class="sort-ind">↕</span>
+                  </th>
+                  <th onclick="sortT('lna', 3)">
+                    Campus <span class="sort-ind">↕</span>
+                  </th>
+                  <th onclick="sortT('lna', 4)">
+                    Year <span class="sort-ind">↕</span>
+                  </th>
+                  <th onclick="sortT('lna', 5)">
+                    Purpose <span class="sort-ind">↕</span>
+                  </th>
+                  <th onclick="sortT('lna', 6)">
+                    Personnel <span class="sort-ind">↕</span>
+                  </th>
+                  <th onclick="sortT('lna', 7)">
+                    Submitted <span class="sort-ind">↕</span>
+                  </th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="lnaBody">
+                <tr class="empty-row">
+                  <td colspan="9">Loading…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- REGISTRY -->
+        <div class="tab-panel" id="tab-registry">
+          <div class="reg-actions">
+            <button class="btn-add" onclick="openAddHR()">
+              <svg
+                viewBox="0 0 24 24"
+                style="
+                  width: 13px;
+                  height: 13px;
+                  stroke: currentColor;
+                  fill: none;
+                  stroke-width: 2.5;
+                  stroke-linecap: round;
+                "
+              >
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              Add HR User
+            </button>
+            <span
+              style="
+                font-size: 13px;
+                color: var(--text-light);
+                align-self: center;
+              "
+              >Manage who can access this dashboard. Changes apply
+              immediately.</span
+            >
+          </div>
+          <div class="tbl-wrap">
+            <table class="dtbl">
+              <thead>
+                <tr>
+                  <th>Email</th>
+                  <th>Name</th>
+                  <th>Role</th>
+                  <th>Date Added</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="regBody">
+                <tr class="empty-row">
+                  <td colspan="5">Loading…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IDP MODAL -->
+    <div class="modal-overlay" id="idpModal">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-header-left">
+            <h3 id="idpMTitle">IDP Submission</h3>
+            <p id="idpMSub">—</p>
+          </div>
+          <div class="modal-header-right no-print">
+            <button class="btn-pdf" onclick="doPrint('idp')">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="12" y1="18" x2="12" y2="12" />
+                <line x1="9" y1="15" x2="15" y2="15" /></svg
+              >Download PDF
+            </button>
+            <button class="btn-close" onclick="closeM('idpModal')">×</button>
+          </div>
+        </div>
+        <div class="modal-body" id="idpMBody"></div>
+      </div>
+    </div>
+
+    <!-- LNA MODAL -->
+    <div class="modal-overlay" id="lnaModal">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-header-left">
+            <h3 id="lnaMTitle">LNA Submission</h3>
+            <p id="lnaMSub">—</p>
+          </div>
+          <div class="modal-header-right no-print">
+            <button class="btn-pdf" onclick="doPrint('lna')">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="12" y1="18" x2="12" y2="12" />
+                <line x1="9" y1="15" x2="15" y2="15" /></svg
+              >Download PDF
+            </button>
+            <button class="btn-close" onclick="closeM('lnaModal')">×</button>
+          </div>
+        </div>
+        <div class="modal-body" id="lnaMBody"></div>
+      </div>
+    </div>
+
+    <!-- ADD HR MODAL -->
+    <div class="modal-overlay" id="addHRModal">
+      <div class="modal" style="max-width: 400px">
+        <div class="modal-header">
+          <div class="modal-header-left"><h3>Add HR User</h3></div>
+          <div class="modal-header-right">
+            <button class="btn-close" onclick="closeM('addHRModal')">×</button>
+          </div>
+        </div>
+        <div class="modal-body">
+          <p
+            style="
+              font-size: 13px;
+              color: var(--text-light);
+              margin-bottom: 16px;
+            "
+          >
+            The new user can log in once added to the HR Registry.
+          </p>
+          <div class="add-field">
+            <label>CarSU Email *</label
+            ><input
+              type="email"
+              id="newEmail"
+              placeholder="name@carsu.edu.ph"
+            />
+          </div>
+          <div class="add-field">
+            <label>Full Name *</label
+            ><input
+              type="text"
+              id="newName"
+              placeholder="e.g. Juan Dela Cruz"
+            />
+          </div>
+          <div class="add-field">
+            <label>Role / Designation</label
+            ><input type="text" id="newRole" placeholder="e.g. HRMO II" />
+          </div>
+          <button class="btn-save" onclick="saveHR()">Save to Registry</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="printArea"></div>
+    <div class="toast-wrap" id="toastWrap"></div>
+
+    <script>
+      const API =
+        "https://script.google.com/macros/s/AKfycbzISVUiTVdESC9iOIeqSKHw3L1gwotLFTlIuaXqfSQnEpMuNHF72RGp8Ajdced5YyM_/exec";
+      let CU = null,
+        IDPs = [],
+        LNAs = [],
+        HRs = [],
+        charts = {},
+        SS = { idp: { col: -1, asc: true }, lna: { col: -1, asc: true } };
+
+      // ── AUTH ──
+      function doLogin() {
+        const em = document
+            .getElementById("loginEmail")
+            .value.trim()
+            .toLowerCase(),
+          hint = document.getElementById("loginHint"),
+          btn = document.getElementById("loginBtn");
+        if (!em) {
+          hint.textContent = "Please enter your email.";
+          hint.className = "login-hint err";
+          return;
+        }
+        if (!em.endsWith("@carsu.edu.ph")) {
+          hint.textContent = "Must be a @carsu.edu.ph address.";
+          hint.className = "login-hint err";
+          document.getElementById("loginEmail").classList.add("err");
+          return;
+        }
+        hint.textContent = "Verifying…";
+        hint.className = "login-hint";
+        btn.disabled = true;
+        btn.textContent = "Checking…";
+        fetch(`${API}?action=checkHRAccess&email=${encodeURIComponent(em)}`)
+          .then((r) => r.json())
+          .then((d) => {
+            if (d.authorized) {
+              CU = { email: em, name: d.name || em.split("@")[0] };
+              showDash();
+            } else {
+              showDenied(d.message || "");
+            }
+          })
+          .catch(() => {
+            hint.textContent = "Network error. Try again.";
+            hint.className = "login-hint err";
+            btn.disabled = false;
+            btn.textContent = "Access Dashboard";
+          });
+      }
+      function showLogin() {
+        document.getElementById("loginScreen").style.display = "flex";
+        document.getElementById("accessDenied").style.display = "none";
+        document.getElementById("dashScreen").style.display = "none";
+        document.getElementById("headerRight").style.display = "none";
+        const btn = document.getElementById("loginBtn");
+        btn.disabled = false;
+        btn.textContent = "Access Dashboard";
+        document.getElementById("loginHint").textContent = "";
+        document.getElementById("loginEmail").classList.remove("err");
+      }
+      function showDenied(msg) {
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("accessDenied").style.display = "flex";
+        document.getElementById("dashScreen").style.display = "none";
+        document.getElementById("headerRight").style.display = "none";
+        if (msg) document.getElementById("deniedMsg").textContent = msg;
+      }
+      function showDash() {
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("accessDenied").style.display = "none";
+        document.getElementById("dashScreen").style.display = "block";
+        document.getElementById("headerRight").style.display = "flex";
+        document.getElementById("userEmailDisplay").textContent = CU.email;
+        document.getElementById("userAvatar").textContent = (
+          CU.name || CU.email
+        )
+          .charAt(0)
+          .toUpperCase();
+        loadDashboard();
+      }
+      function logout() {
+        CU = null;
+        IDPs = [];
+        LNAs = [];
+        HRs = [];
+        showLogin();
+      }
+
+      // ── LOAD ──
+      function loadDashboard() {
+        const btn = document.getElementById("refreshBtn");
+        btn.classList.add("spinning");
+        document.getElementById("lastUpdated").textContent = "Loading…";
+        fetch(
+          `${API}?action=getDashboardData&email=${encodeURIComponent(CU.email)}`,
+        )
+          .then((r) => r.json())
+          .then((d) => {
+            if (!d.authorized) {
+              logout();
+              return;
+            }
+            IDPs = d.idps || [];
+            LNAs = d.lnas || [];
+            HRs = d.hrUsers || [];
+            renderStats();
+            renderCharts();
+            renderIDP();
+            renderLNA();
+            renderRegistry();
+            populateFilters();
+            const now = new Date();
+            document.getElementById("lastUpdated").textContent =
+              `Last updated: ${now.toLocaleDateString("en-PH", { month: "short", day: "numeric", year: "numeric" })} at ${now.toLocaleTimeString("en-PH", { hour: "2-digit", minute: "2-digit" })}`;
+            btn.classList.remove("spinning");
+          })
+          .catch(() => {
+            toast("Failed to load data.", "error");
+            btn.classList.remove("spinning");
+            document.getElementById("lastUpdated").textContent =
+              "Failed to load.";
+          });
+      }
+
+      // ── STATS ──
+      function renderStats() {
+        const total = IDPs.length,
+          done = IDPs.filter((r) => r.status === "COMPLETE").length,
+          pend = IDPs.filter((r) => r.status === "PENDING").length,
+          over = IDPs.filter((r) => r.status === "OVERDUE").length,
+          lnas = LNAs.length,
+          offices = new Set(
+            [...IDPs.map((r) => r.office), ...LNAs.map((r) => r.office)].filter(
+              Boolean,
+            ),
+          ).size;
+        cnt("sIDPs", total);
+        cnt("sComplete", done);
+        cnt("sPending", pend);
+        cnt("sOverdue", over);
+        cnt("sLNAs", lnas);
+        cnt("sOffices", offices);
+      }
+      function cnt(id, n) {
+        const el = document.getElementById(id);
+        let c = 0;
+        const t = setInterval(() => {
+          c = Math.min(c + Math.max(1, Math.floor(n / 20)), n);
+          el.textContent = c;
+          if (c >= n) clearInterval(t);
+        }, 40);
+      }
+
+      // ── CHARTS ──
+      const GRN = [
+        "#1a4d2e",
+        "#2d6a3f",
+        "#3d8b50",
+        "#5aab6a",
+        "#7dcc8e",
+        "#a5e3b5",
+      ];
+      const GLD = ["#f5c300", "#ffd740", "#ffe680", "#c9a200", "#a07d00"];
+      function dc(k) {
+        if (charts[k]) {
+          charts[k].destroy();
+          delete charts[k];
+        }
+      }
+      const baseOpts = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { labels: { font: { size: 11 }, padding: 10 } } },
+      };
+
+      function renderCharts() {
+        // Status donut
+        dc("s");
+        const done = IDPs.filter((r) => r.status === "COMPLETE").length,
+          pend = IDPs.filter((r) => r.status === "PENDING").length,
+          over = IDPs.filter((r) => r.status === "OVERDUE").length;
+        charts.s = new Chart(document.getElementById("chartStatus"), {
+          type: "doughnut",
+          data: {
+            labels: ["Completed", "Pending", "Overdue"],
+            datasets: [
+              {
+                data: [done, pend, over],
+                backgroundColor: ["#1a4d2e", "#f5c300", "#c0392b"],
+                borderWidth: 2,
+                borderColor: "#fff",
+              },
+            ],
+          },
+          options: {
+            ...baseOpts,
+            plugins: {
+              legend: {
+                position: "bottom",
+                labels: { font: { size: 11 }, padding: 12 },
+              },
+            },
+            cutout: "60%",
+          },
+        });
+
+        // Campus bar
+        dc("c");
+        const camps = [
+          ...new Set(
+            [...IDPs.map((r) => r.campus), ...LNAs.map((r) => r.campus)].filter(
+              Boolean,
+            ),
+          ),
+        ];
+        charts.c = new Chart(document.getElementById("chartCampus"), {
+          type: "bar",
+          data: {
+            labels: camps.map((c) =>
+              c.replace("CSU ", "").replace(" Campus", ""),
+            ),
+            datasets: [
+              {
+                label: "IDPs",
+                data: camps.map(
+                  (c) => IDPs.filter((r) => r.campus === c).length,
+                ),
+                backgroundColor: GRN[0],
+                borderRadius: 4,
+              },
+              {
+                label: "LNAs",
+                data: camps.map(
+                  (c) => LNAs.filter((r) => r.campus === c).length,
+                ),
+                backgroundColor: GLD[0],
+                borderRadius: 4,
+              },
+            ],
+          },
+          options: {
+            ...baseOpts,
+            plugins: {
+              legend: { position: "bottom", labels: { font: { size: 11 } } },
+            },
+            scales: {
+              x: { grid: { display: false } },
+              y: { beginAtZero: true, ticks: { stepSize: 1 } },
+            },
+          },
+        });
+
+        // Monthly line
+        dc("m");
+        const mm = {};
+        [
+          ...IDPs.map((r) => ({ d: r.submittedAt, t: "i" })),
+          ...LNAs.map((r) => ({ d: r.submittedAt, t: "l" })),
+        ].forEach(({ d, t }) => {
+          if (!d) return;
+          const dt = new Date(d);
+          if (isNaN(dt)) return;
+          const k = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, "0")}`;
+          if (!mm[k]) mm[k] = { i: 0, l: 0 };
+          mm[k][t]++;
+        });
+        const lbls = Object.keys(mm).sort(),
+          fmt = (l) => {
+            const [y, mo] = l.split("-");
+            return new Date(y, mo - 1).toLocaleDateString("en-PH", {
+              month: "short",
+              year: "2-digit",
+            });
+          };
+        charts.m = new Chart(document.getElementById("chartMonthly"), {
+          type: "line",
+          data: {
+            labels: lbls.map(fmt),
+            datasets: [
+              {
+                label: "IDPs",
+                data: lbls.map((l) => mm[l].i),
+                borderColor: GRN[0],
+                backgroundColor: "rgba(26,77,46,.08)",
+                tension: 0.3,
+                fill: true,
+                pointRadius: 4,
+              },
+              {
+                label: "LNAs",
+                data: lbls.map((l) => mm[l].l),
+                borderColor: GLD[0],
+                backgroundColor: "rgba(245,195,0,.08)",
+                tension: 0.3,
+                fill: true,
+                pointRadius: 4,
+              },
+            ],
+          },
+          options: {
+            ...baseOpts,
+            plugins: {
+              legend: { position: "bottom", labels: { font: { size: 11 } } },
+            },
+            scales: {
+              x: { grid: { display: false } },
+              y: { beginAtZero: true, ticks: { stepSize: 1 } },
+            },
+          },
+        });
+
+        // Competency gaps horizontal bar
+        dc("g");
+        const freq = {};
+        IDPs.forEach((r) => {
+          (r.competencyRows || []).forEach((row) => {
+            const comp = (row[1] || "").trim(),
+              cur = parseInt(row[2]) || 0,
+              req = parseInt(row[3]) || 0;
+            if (comp && req > cur) freq[comp] = (freq[comp] || 0) + 1;
+          });
+        });
+        const sorted = Object.entries(freq)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 8);
+        charts.g = new Chart(document.getElementById("chartGaps"), {
+          type: "bar",
+          data: {
+            labels: sorted.map(([k]) =>
+              k.length > 24 ? k.slice(0, 24) + "…" : k,
+            ),
+            datasets: [
+              {
+                label: "# with gap",
+                data: sorted.map(([, v]) => v),
+                backgroundColor: GRN[0],
+                borderRadius: 4,
+              },
+            ],
+          },
+          options: {
+            indexAxis: "y",
+            ...baseOpts,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { beginAtZero: true, ticks: { stepSize: 1 } },
+              y: { grid: { display: false }, ticks: { font: { size: 11 } } },
+            },
+          },
+        });
+
+        // Purpose pie
+        dc("p");
+        const pf = {};
+        IDPs.forEach((r) => {
+          const p = (r.headerPurpose || "Not specified").trim();
+          pf[p] = (pf[p] || 0) + 1;
+        });
+        const pLbls = Object.keys(pf);
+        charts.p = new Chart(document.getElementById("chartPurpose"), {
+          type: "pie",
+          data: {
+            labels: pLbls,
+            datasets: [
+              {
+                data: Object.values(pf),
+                backgroundColor: [...GRN, ...GLD].slice(0, pLbls.length),
+                borderWidth: 2,
+                borderColor: "#fff",
+              },
+            ],
+          },
+          options: {
+            ...baseOpts,
+            plugins: {
+              legend: {
+                position: "bottom",
+                labels: { font: { size: 11 }, padding: 10 },
+              },
+            },
+          },
+        });
+
+        // Insights
+        const yrs = IDPs.map((r) => parseFloat(r.yearsInPosition)).filter(
+          (n) => !isNaN(n),
+        );
+        document.getElementById("iYears").textContent = yrs.length
+          ? (yrs.reduce((a, b) => a + b, 0) / yrs.length).toFixed(1) + " yrs"
+          : "—";
+        document.getElementById("iRate").textContent = IDPs.length
+          ? Math.round(
+              (IDPs.filter((r) => r.status === "COMPLETE").length /
+                IDPs.length) *
+                100,
+            ) + "%"
+          : "—";
+        document.getElementById("iSup").textContent = new Set(
+          IDPs.filter((r) => r.status === "PENDING")
+            .map((r) => r.supervisorEmail)
+            .filter(Boolean),
+        ).size;
+        let flagCount = 0;
+        LNAs.forEach((r) => {
+          try {
+            if (
+              safeJ(r.clusterSummaryRaw, []).some(
+                (c) => c.interventionNeeded === "Y",
+              )
+            )
+              flagCount++;
+          } catch (e) {}
+        });
+        document.getElementById("iFlag").textContent =
+          flagCount + (flagCount === 1 ? " office" : " offices");
+        const modes = {};
+        IDPs.forEach((r) => {
+          (r.agapRows || []).forEach((row) => {
+            const m = (row[3] || "").trim();
+            if (m) modes[m] = (modes[m] || 0) + 1;
+          });
+        });
+        const tm = Object.entries(modes).sort((a, b) => b[1] - a[1])[0];
+        document.getElementById("iAGAP").textContent = tm ? tm[0] : "—";
+        const rf = {};
+        IDPs.forEach((r) => {
+          (r.supervisorInterventions || []).forEach((i) => {
+            rf[i] = (rf[i] || 0) + 1;
+          });
+        });
+        const tr = Object.entries(rf).sort((a, b) => b[1] - a[1])[0];
+        document.getElementById("iRec").textContent = tr ? tr[0] : "—";
+      }
+
+      // ── IDP TABLE ──
+      function renderIDP() {
+        const q = (
+            document.getElementById("idpSearch")?.value || ""
+          ).toLowerCase(),
+          st = document.getElementById("idpStatus")?.value || "",
+          ca = document.getElementById("idpCampus")?.value || "",
+          yr = document.getElementById("idpYear")?.value || "";
+        let rows = IDPs.filter((r) => {
+          const ms =
+            !q ||
+            [
+              r.refId,
+              r.employeeName,
+              r.email,
+              r.office,
+              r.campus,
+              r.position,
+            ].some((v) => (v || "").toLowerCase().includes(q));
+          return (
+            ms &&
+            (!st || r.status === st) &&
+            (!ca || r.campus === ca) &&
+            (!yr || r.yearCovered === yr)
+          );
+        });
+        const { col, asc } = SS.idp;
+        if (col >= 0) {
+          const ks = [
+            "refId",
+            "employeeName",
+            "position",
+            "office",
+            "campus",
+            "yearCovered",
+            "submittedAt",
+            "status",
+          ];
+          rows.sort((a, b) => {
+            const av = (a[ks[col]] || "").toLowerCase(),
+              bv = (b[ks[col]] || "").toLowerCase();
+            return asc ? av.localeCompare(bv) : bv.localeCompare(av);
+          });
+        }
+        document.getElementById("idpCount").textContent =
+          `${rows.length} record${rows.length !== 1 ? "s" : ""}`;
+        const tb = document.getElementById("idpBody");
+        if (!rows.length) {
+          tb.innerHTML =
+            '<tr class="empty-row"><td colspan="9">No records found.</td></tr>';
+          return;
+        }
+        tb.innerHTML = rows
+          .map(
+            (r) => `<tr>
+    <td><code style="font-size:11px;background:rgba(26,77,46,.07);padding:2px 6px;border-radius:4px">${e(r.refId || "—")}</code></td>
+    <td><strong>${e(r.employeeName || "—")}</strong><br><span style="font-size:11px;color:var(--text-light)">${e(r.email || "")}</span></td>
+    <td>${e(r.position || "—")}</td><td>${e(r.office || "—")}</td><td>${e(r.campus || "—")}</td>
+    <td>${e(r.yearCovered || "—")}</td>
+    <td style="font-size:12px;white-space:nowrap">${fd(r.submittedAt)}</td>
+    <td>${sb(r.status)}</td>
+    <td><button class="btn-view" onclick="vIDP('${e(r.refId || "")}')">View</button></td>
+  </tr>`,
+          )
+          .join("");
+      }
+
+      // ── LNA TABLE ──
+      function renderLNA() {
+        const q = (
+            document.getElementById("lnaSearch")?.value || ""
+          ).toLowerCase(),
+          ca = document.getElementById("lnaCampus")?.value || "",
+          yr = document.getElementById("lnaYear")?.value || "";
+        let rows = LNAs.filter((r) => {
+          const ms =
+            !q ||
+            [r.refId, r.office, r.headOfUnit, r.email, r.campus].some((v) =>
+              (v || "").toLowerCase().includes(q),
+            );
+          return (
+            ms && (!ca || r.campus === ca) && (!yr || r.yearCovered === yr)
+          );
+        });
+        const { col, asc } = SS.lna;
+        if (col >= 0) {
+          const ks = [
+            "refId",
+            "office",
+            "headOfUnit",
+            "campus",
+            "yearCovered",
+            "purpose",
+            "totalPersonnel",
+            "submittedAt",
+          ];
+          rows.sort((a, b) => {
+            const av = (a[ks[col]] || "").toLowerCase(),
+              bv = (b[ks[col]] || "").toLowerCase();
+            return asc ? av.localeCompare(bv) : bv.localeCompare(av);
+          });
+        }
+        document.getElementById("lnaCount").textContent =
+          `${rows.length} record${rows.length !== 1 ? "s" : ""}`;
+        const tb = document.getElementById("lnaBody");
+        if (!rows.length) {
+          tb.innerHTML =
+            '<tr class="empty-row"><td colspan="9">No records found.</td></tr>';
+          return;
+        }
+        tb.innerHTML = rows
+          .map(
+            (r) => `<tr>
+    <td><code style="font-size:11px;background:rgba(26,77,46,.07);padding:2px 6px;border-radius:4px">${e(r.refId || "—")}</code></td>
+    <td><strong>${e(r.office || "—")}</strong></td>
+    <td>${e(r.headOfUnit || "—")}<br><span style="font-size:11px;color:var(--text-light)">${e(r.email || "")}</span></td>
+    <td>${e(r.campus || "—")}</td><td>${e(r.yearCovered || "—")}</td>
+    <td><span class="badge badge-grey">${e(r.purpose || "—")}</span></td>
+    <td style="text-align:center">${e(r.totalPersonnel || "—")}</td>
+    <td style="font-size:12px;white-space:nowrap">${fd(r.submittedAt)}</td>
+    <td><button class="btn-view" onclick="vLNA('${e(r.refId || "")}')">View</button></td>
+  </tr>`,
+          )
+          .join("");
+      }
+
+      // ── REGISTRY ──
+      function renderRegistry() {
+        const tb = document.getElementById("regBody");
+        if (!HRs.length) {
+          tb.innerHTML =
+            '<tr class="empty-row"><td colspan="5">No HR users registered.</td></tr>';
+          return;
+        }
+        tb.innerHTML = HRs.map(
+          (u) => `<tr>
+    <td>${e(u.email || "—")}</td><td>${e(u.name || "—")}</td>
+    <td><span class="badge badge-green">${e(u.role || "HR Staff")}</span></td>
+    <td style="font-size:12px;color:var(--text-light)">${fd(u.dateAdded)}</td>
+    <td>${u.email === CU?.email ? '<span style="font-size:12px;color:var(--text-light);font-style:italic">You</span>' : `<button class="btn-remove" onclick="removeHR('${e(u.email || "")}','${e(u.name || "")}')">Remove</button>`}</td>
+  </tr>`,
+        ).join("");
+      }
+
+      // ── VIEW IDP ──
+      function vIDP(refId) {
+        const r = IDPs.find((x) => x.refId === refId);
+        if (!r) return;
+        document.getElementById("idpMTitle").textContent =
+          `IDP — ${r.employeeName || "Unknown"}`;
+        document.getElementById("idpMSub").innerHTML =
+          `${e(r.refId)} &nbsp;·&nbsp; ${e(r.yearCovered || "—")} &nbsp;·&nbsp; ${sb(r.status)}`;
+
+        let h = `<div class="m-section"><div class="m-section-title">Employee Information <span class="m-badge">Header</span></div>
+  <div class="dgrid g3">
+    ${dfc("Reference ID", "<code>" + e(r.refId || "—") + "</code>")}${dfc("Year Covered", r.yearCovered)}${dfc("Purpose", r.headerPurpose)}
+    ${dfc("Name of Personnel", r.employeeName, "s3")}
+    ${dfc("Email", r.email)}${dfc("Current Position", r.position)}${dfc("Office / Unit", r.office)}
+    ${dfc("Campus", r.campus)}${dfc("Office Affiliation", r.officeAffiliation)}${dfc("Competency Purpose", r.competencyPurpose, "s3")}
+    ${dfc("Years in Position", r.yearsInPosition)}${dfc("Years in CSU", r.yearsInCSU)}${dfc("Date Prepared", r.datePrepared)}
+    ${dfc("Supervisor", r.supervisorName)}${dfc("Supervisor Email", r.supervisorEmail)}${dfc("Submitted", fd(r.submittedAt))}
+    ${dfc("Deadline", fd(r.deadline), "s3")}
+  </div></div>`;
+
+        // Section I
+        const cr = r.competencyRows || [];
+        h += `<div class="m-section"><div class="m-section-title">Section I — Competency Assessment <span class="m-badge">Employee</span></div>`;
+        if (cr.length) {
+          h += `<table class="m-table"><thead><tr><th>#</th><th>Target Competency</th><th>Current Level</th><th>Required Level</th><th>Suggested Interventions</th><th>Resource / Support</th><th>Timeline</th></tr></thead><tbody>`;
+          cr.forEach((row, i) => {
+            h += `<tr><td>${i + 1}</td><td>${e(row[1] || "—")}</td><td style="text-align:center">${e(row[2] || "—")}</td><td style="text-align:center">${e(row[3] || "—")}</td><td>${e(row[4] || "—")}</td><td>${e(row[5] || "—")}</td><td>${e(row[6] || "—")}</td></tr>`;
+          });
+          h += `</tbody></table>`;
+        } else h += `<p class="m-empty">No competency entries recorded.</p>`;
+        h += `</div>`;
+
+        // Section II
+        const ar = r.agapRows || [];
+        h += `<div class="m-section"><div class="m-section-title">Section II — Academic Growth and Advancement Program (AGAP) <span class="m-badge">Employee</span></div>`;
+        if (ar.length) {
+          h += `<table class="m-table"><thead><tr><th>#</th><th>Degree Program</th><th>Target HEI</th><th>Mode of Study</th><th>Source of Funding</th><th>Target Scholarship</th><th>Timeline</th></tr></thead><tbody>`;
+          ar.forEach((row, i) => {
+            h += `<tr><td>${i + 1}</td><td>${e(row[1] || "—")}</td><td>${e(row[2] || "—")}</td><td>${e(row[3] || "—")}</td><td>${e(row[4] || "—")}</td><td>${e(row[5] || "—")}</td><td>${e(row[6] || "—")}</td></tr>`;
+          });
+          h += `</tbody></table>`;
+        } else h += `<p class="m-empty">No AGAP entries recorded.</p>`;
+        h += `</div>`;
+
+        // Section III
+        const pr = r.proactRows || [];
+        h += `<div class="m-section"><div class="m-section-title">Section III — Professional Advancement through Capacity-Building (Pro-ACT) <span class="m-badge">Employee</span></div>`;
+        if (pr.length) {
+          h += `<table class="m-table"><thead><tr><th>#</th><th>Training / Workshop</th><th>Target Competency</th><th>Mode</th><th>Funding</th><th>Trainer / Provider</th><th>Timeline</th></tr></thead><tbody>`;
+          pr.forEach((row, i) => {
+            h += `<tr><td>${i + 1}</td><td>${e(row[1] || "—")}</td><td>${e(row[2] || "—")}</td><td>${e(row[3] || "—")}</td><td>${e(row[4] || "—")}</td><td>${e(row[5] || "—")}</td><td>${e(row[6] || "—")}</td></tr>`;
+          });
+          h += `</tbody></table>`;
+        } else h += `<p class="m-empty">No Pro-ACT entries recorded.</p>`;
+        h += `</div>`;
+
+        // Section IV
+        h += `<div class="m-section"><div class="m-section-title">Section IV — Supervisor's Assessment <span class="m-badge">Supervisor</span></div>`;
+        if (r.status === "COMPLETE" || r.supervisorReviewDate) {
+          h += `<div class="dgrid" style="margin-bottom:14px">
+      ${dfc("Supervisor", r.supervisorName)}${dfc("Review Date", fd(r.supervisorReviewDate))}
+      ${dfc("Performance Gaps?", r.perfGapsYN || "—")}${dfc("Gap Details", r.perfGapsSpec || "—")}
+      ${dfc("Ready for Advancement?", r.readinessYN || "—")}${dfc("Readiness Remarks", r.readinessRemarks || "—")}
+    </div>
+    <div class="df" style="margin-bottom:10px"><label>Recommended Interventions</label><span>${e((r.supervisorInterventions || []).join(", ") || "—")}</span></div>
+    <div class="df" style="margin-bottom:10px"><label>Implementation Period</label><span>${e((r.implementationPeriod || []).join(", ") || "—")}</span></div>
+    <div class="df"><label>Additional Comments</label><span style="white-space:pre-wrap">${e(r.additionalComments || "—")}</span></div>`;
+        } else {
+          h += `<div style="background:rgba(245,195,0,.08);border:1px solid rgba(245,195,0,.35);border-radius:8px;padding:16px;font-size:13px;color:var(--navy)">
+      ⏳ Supervisor assessment not yet completed. &nbsp; ${sb(r.status)}
+    </div>`;
+        }
+        h += `</div>`;
+
+        document.getElementById("idpMBody").innerHTML = h;
+        document.getElementById("idpModal").classList.add("active");
+      }
+
+      // ── VIEW LNA ──
+      function vLNA(refId) {
+        const r = LNAs.find((x) => x.refId === refId);
+        if (!r) return;
+        document.getElementById("lnaMTitle").textContent =
+          `LNA — ${r.office || "Unknown Office"}`;
+        document.getElementById("lnaMSub").innerHTML =
+          `${e(r.refId)} &nbsp;·&nbsp; ${e(r.yearCovered || "—")} &nbsp;·&nbsp; ${e(r.purpose || "—")}`;
+
+        const wf = safeJ(r.workforceProfile, {}),
+          core = safeJ(r.coreCompetencies, []),
+          lead = safeJ(r.leadershipComps, []),
+          org = safeJ(r.orgComps, []),
+          tech = safeJ(r.technicalComps, []),
+          cs = safeJ(r.clusterSummaryRaw, []),
+          ds = safeJ(r.dataSourcesRaw, []),
+          ins = safeJ(r.dataSourceInsights, []),
+          intv = safeJ(r.leadInterventions, []);
+
+        let h = `<div class="m-section"><div class="m-section-title">Office Information <span class="m-badge">Header</span></div>
+  <div class="dgrid g3">
+    ${dfc("Reference ID", "<code>" + e(r.refId || "—") + "</code>")}${dfc("Year Covered", r.yearCovered)}${dfc("Purpose", r.purpose)}
+    ${dfc("Office / Unit / College", r.office, "s3")}
+    ${dfc("Head of Office", r.headOfUnit)}${dfc("Position", r.position)}${dfc("Email", r.email)}
+    ${dfc("Campus", r.campus)}${dfc("Office Affiliation", r.officeAffiliation)}${dfc("Total Personnel", r.totalPersonnel)}
+    ${dfc("Rater / Submitted By", r.raterName)}${dfc("Date Prepared", r.datePrepared)}${dfc("Submitted At", fd(r.submittedAt))}
+  </div></div>`;
+
+        // Workforce
+        h += `<div class="m-section"><div class="m-section-title">Section I — Workforce Profile <span class="m-badge">By Position Level</span></div>
+  <table class="m-table"><thead><tr><th>Position Level</th><th>Permanent</th><th>Temporary</th><th>Contractual</th><th>Casual</th><th>Coterminus</th><th>COS</th><th>Job Order</th><th>Others</th></tr></thead><tbody>`;
+        [
+          ["first", "First Level"],
+          ["secondNonSup", "2nd Level (Non-Sup)"],
+          ["secondSup", "2nd Level (Sup)"],
+          ["third", "Third Level"],
+          ["faculty", "Faculty"],
+        ].forEach(([k, lbl]) => {
+          const lv = wf[k] || {};
+          h += `<tr><td>${lbl}</td>${["permanent", "temporary", "contractual", "casual", "coterminus", "cos", "jobOrder", "others"].map((t) => `<td style="text-align:center">${lv[t] || 0}</td>`).join("")}</tr>`;
+        });
+        h += `</tbody></table></div>`;
+
+        // Competency clusters
+        h += `<div class="m-section"><div class="m-section-title">Section II — Competency Mapping & Assessment <span class="m-badge">All Clusters</span></div>`;
+        const lvls = [
+          "1st Level",
+          "2nd (Non-Sup)",
+          "2nd (Sup)",
+          "3rd Level",
+          "Faculty",
+        ];
+        [
+          ["Core", core],
+          ["Leadership", lead],
+          ["Organizational", org],
+          ["Technical", tech],
+        ].forEach(([name, comps]) => {
+          h += `<div class="cluster-block"><div class="cluster-lbl">${name} Competencies<span class="cluster-badge">${name}</span></div>`;
+          if (comps.length) {
+            h += `<table class="m-table"><thead><tr><th>Competency</th>${lvls.map((l) => `<th colspan="2" style="text-align:center">${l}</th>`).join("")}<th>Observations</th></tr><tr><th></th>${lvls.map(() => "<th>CL</th><th>%</th>").join("")}<th></th></tr></thead><tbody>`;
+            comps.forEach((c) => {
+              h += `<tr><td>${e(c.competency || "—")}</td>`;
+              [
+                "first",
+                "secondNonSup",
+                "secondSup",
+                "third",
+                "faculty",
+              ].forEach((lv) => {
+                h += `<td style="text-align:center">${e(c[lv + "_cl"] || "—")}</td><td style="text-align:center">${e(c[lv + "_pct"] || "—")}</td>`;
+              });
+              h += `<td style="font-size:11px">${e(c.observations || "—")}</td></tr>`;
+            });
+            h += `</tbody></table>`;
+          } else h += `<p class="m-empty">No data recorded.</p>`;
+          h += `</div>`;
+        });
+        if (cs.length) {
+          h += `<div style="margin-top:12px"><strong style="font-size:12px;color:var(--navy)">Cluster Summary</strong>
+    <table class="m-table" style="margin-top:8px"><thead><tr><th>Cluster</th><th>Strongest</th><th>Weakest</th><th>Intervention Needed?</th></tr></thead><tbody>`;
+          cs.forEach((c) => {
+            h += `<tr><td>${e(c.cluster || "—")}</td><td>${e(c.strongest || "—")}</td><td>${e(c.weakest || "—")}</td><td>${c.interventionNeeded === "Y" ? '<span class="badge badge-red">Yes</span>' : '<span class="badge badge-green">No</span>'}</td></tr>`;
+          });
+          h += `</tbody></table></div>`;
+        }
+        h += `</div>`;
+
+        // Data sources
+        h += `<div class="m-section"><div class="m-section-title">Section III — Other LeaD Data Sources <span class="m-badge">Checklist & Insights</span></div>
+  <div class="df" style="margin-bottom:12px"><label>Data Sources Used</label><span>${ds.length ? ds.join(" &nbsp;·&nbsp; ") : "None specified."}</span></div>`;
+        if (ins.length) {
+          h += `<table class="m-table"><thead><tr><th>#</th><th>Data Source</th><th>Identified Gap / Issue</th><th>Relevant Personnel</th><th>Recommended Intervention</th></tr></thead><tbody>`;
+          ins.forEach((x, i) => {
+            h += `<tr><td>${i + 1}</td><td>${e(x.dataSource || "—")}</td><td>${e(x.gap || "—")}</td><td>${e(x.personnel || "—")}</td><td>${e(x.intervention || "—")}</td></tr>`;
+          });
+          h += `</tbody></table>`;
+        } else h += `<p class="m-empty">No insights recorded.</p>`;
+        h += `</div>`;
+
+        // Interventions
+        h += `<div class="m-section"><div class="m-section-title">Section IV — LeaD Interventions <span class="m-badge">Top 3 per Position Level</span></div>`;
+        const grp = {};
+        intv.forEach((iv) => {
+          if (!grp[iv.positionLevel]) grp[iv.positionLevel] = [];
+          grp[iv.positionLevel].push(iv);
+        });
+        Object.entries(grp).forEach(([lvl, ivs]) => {
+          h += `<div style="margin-bottom:14px"><strong style="font-size:12px;color:var(--navy-mid);display:block;margin-bottom:6px">${e(lvl)}</strong>
+    <table class="m-table"><thead><tr><th>#</th><th>Priority Need</th><th>Interventions</th><th>Timeline</th><th>Resource Needed</th></tr></thead><tbody>`;
+          ivs.forEach((iv) => {
+            const parts = [];
+            if (iv.onJob) parts.push("On-the-Job: " + (iv.onJobText || "—"));
+            if (iv.offJob) parts.push("Off-the-Job: " + (iv.offJobText || "—"));
+            if (iv.others) parts.push("Others: " + (iv.othersText || "—"));
+            h += `<tr><td>${iv.priority}</td><td>${e(iv.need || "—")}</td><td style="font-size:11px">${parts.map(e).join("<br>") || "—"}</td><td>${e(iv.timeline || "—")}</td><td style="font-size:11px">${e(iv.resource || "—")}</td></tr>`;
+          });
+          h += `</tbody></table></div>`;
+        });
+        if (!Object.keys(grp).length)
+          h += `<p class="m-empty">No interventions recorded.</p>`;
+        h += `</div>`;
+
+        document.getElementById("lnaMBody").innerHTML = h;
+        document.getElementById("lnaModal").classList.add("active");
+      }
+
+      // ── PDF / PRINT ──
+      function doPrint(type) {
+        const bodyId = type === "idp" ? "idpMBody" : "lnaMBody";
+        const titleId = type === "idp" ? "idpMTitle" : "lnaMTitle";
+        const subId = type === "idp" ? "idpMSub" : "lnaMSub";
+        const body = document.getElementById(bodyId);
+        const title = document.getElementById(titleId).textContent;
+        const sub = document.getElementById(subId).textContent;
+        const pa = document.getElementById("printArea");
+        pa.innerHTML = `<div style="font-family:Georgia,serif;color:#1a1a2e">
+    <div style="border-bottom:3px solid #1a4d2e;padding-bottom:10px;margin-bottom:18px">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#5a6070;margin-bottom:3px">Caraga State University — Office of Human Resource Management Services</div>
+      <h1 style="font-size:18px;color:#1a4d2e;margin-bottom:2px;font-family:Georgia,serif">${e(title)}</h1>
+      <p style="font-size:11px;color:#5a6070">${e(sub)}</p>
+    </div>
+    ${body.innerHTML}
+    <div style="margin-top:28px;padding-top:10px;border-top:1px solid #d8d4c8;font-size:9px;color:#aaa">
+      Printed from CarSU HRMS LeaD Dashboard &nbsp;·&nbsp; ${new Date().toLocaleDateString("en-PH", { year: "numeric", month: "long", day: "numeric" })}
+    </div>
+  </div>`;
+        pa.style.display = "block";
+        window.print();
+        setTimeout(() => {
+          pa.style.display = "none";
+          pa.innerHTML = "";
+        }, 1200);
+      }
+
+      // ── HR REGISTRY ──
+      function openAddHR() {
+        ["newEmail", "newName", "newRole"].forEach(
+          (id) => (document.getElementById(id).value = ""),
+        );
+        document.getElementById("addHRModal").classList.add("active");
+      }
+      function saveHR() {
+        const email = document.getElementById("newEmail").value.trim(),
+          name = document.getElementById("newName").value.trim(),
+          role = document.getElementById("newRole").value.trim();
+        if (!email || !name) {
+          toast("Email and Name are required.", "error");
+          return;
+        }
+        if (!email.endsWith("@carsu.edu.ph")) {
+          toast("Must be a @carsu.edu.ph email.", "error");
+          return;
+        }
+        fetch(API, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "addHRUser",
+            email,
+            name,
+            role,
+            requestedBy: CU.email,
+          }),
+        })
+          .then((r) => r.json())
+          .then((d) => {
+            if (d.success) {
+              toast(`${name} added.`, "success");
+              closeM("addHRModal");
+              loadDashboard();
+            } else toast(d.error || "Failed.", "error");
+          })
+          .catch(() => toast("Network error.", "error"));
+      }
+      function removeHR(email, name) {
+        if (!confirm(`Remove ${name || email} from the HR Registry?`)) return;
+        fetch(API, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "removeHRUser",
+            email,
+            requestedBy: CU.email,
+          }),
+        })
+          .then((r) => r.json())
+          .then((d) => {
+            if (d.success) {
+              toast(`${name || email} removed.`, "success");
+              loadDashboard();
+            } else toast(d.error || "Failed.", "error");
+          })
+          .catch(() => toast("Network error.", "error"));
+      }
+
+      // ── FILTERS / SORT / TABS ──
+      function populateFilters() {
+        const ic = [
+            ...new Set(IDPs.map((r) => r.campus).filter(Boolean)),
+          ].sort(),
+          iy = [...new Set(IDPs.map((r) => r.yearCovered).filter(Boolean))]
+            .sort()
+            .reverse(),
+          ly = [...new Set(LNAs.map((r) => r.yearCovered).filter(Boolean))]
+            .sort()
+            .reverse();
+        const csel = document.getElementById("idpCampus"),
+          pvc = csel.value;
+        csel.innerHTML =
+          '<option value="">All Campuses</option>' +
+          ic
+            .map(
+              (c) => `<option${c === pvc ? " selected" : ""}>${e(c)}</option>`,
+            )
+            .join("");
+        const ysel = document.getElementById("idpYear"),
+          pvy = ysel.value;
+        ysel.innerHTML =
+          '<option value="">All Years</option>' +
+          iy
+            .map(
+              (y) => `<option${y === pvy ? " selected" : ""}>${e(y)}</option>`,
+            )
+            .join("");
+        const lysel = document.getElementById("lnaYear"),
+          pvly = lysel.value;
+        lysel.innerHTML =
+          '<option value="">All Years</option>' +
+          ly
+            .map(
+              (y) => `<option${y === pvly ? " selected" : ""}>${e(y)}</option>`,
+            )
+            .join("");
+      }
+      function sortT(type, col) {
+        const s = SS[type];
+        if (s.col === col) s.asc = !s.asc;
+        else {
+          s.col = col;
+          s.asc = true;
+        }
+        type === "idp" ? renderIDP() : renderLNA();
+      }
+      function switchTab(tab) {
+        const tabs = ["overview", "idp", "lna", "registry"];
+        document
+          .querySelectorAll(".tab-btn")
+          .forEach((b, i) => b.classList.toggle("active", tabs[i] === tab));
+        document
+          .querySelectorAll(".tab-panel")
+          .forEach((p) => p.classList.toggle("active", p.id === `tab-${tab}`));
+      }
+      function closeM(id) {
+        document.getElementById(id).classList.remove("active");
+      }
+
+      // ── HELPERS ──
+      function e(s) {
+        return String(s)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+      function fd(v) {
+        if (!v) return "—";
+        const d = new Date(v);
+        return isNaN(d)
+          ? v
+          : d.toLocaleDateString("en-PH", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            });
+      }
+      function sb(s) {
+        const c = (s || "").toUpperCase();
+        if (c === "COMPLETE")
+          return '<span class="badge badge-green">Completed</span>';
+        if (c === "PENDING")
+          return '<span class="badge badge-gold">Pending Review</span>';
+        if (c === "OVERDUE")
+          return '<span class="badge badge-red">Overdue</span>';
+        return `<span class="badge badge-grey">${e(s || "Unknown")}</span>`;
+      }
+      function safeJ(v, d) {
+        try {
+          return JSON.parse(v || "");
+        } catch (x) {
+          return d;
+        }
+      }
+      function dfc(label, value, cls = "") {
+        const span = cls
+          ? ` style="grid-column:span ${cls.includes("3") ? 3 : 2}"`
+          : "";
+        return `<div class="df${cls ? " " + cls : ""}"${span}><label>${label}</label><span>${value || "—"}</span></div>`;
+      }
+      function toast(msg, type = "") {
+        const w = document.getElementById("toastWrap");
+        const t = document.createElement("div");
+        t.className = `toast${type ? " " + type : ""}`;
+        t.textContent = msg;
+        w.appendChild(t);
+        setTimeout(() => {
+          t.style.opacity = "0";
+          t.style.transition = "opacity .4s";
+          setTimeout(() => t.remove(), 400);
+        }, 3500);
+      }
+
+      // ── INIT ──
+      document.addEventListener("DOMContentLoaded", () => {
+        document
+          .getElementById("loginEmail")
+          .addEventListener("keydown", (ev) => {
+            if (ev.key === "Enter") doLogin();
+          });
+        document.querySelectorAll(".modal-overlay").forEach((o) => {
+          o.addEventListener("click", (ev) => {
+            if (ev.target === o) o.classList.remove("active");
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
