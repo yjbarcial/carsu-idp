@@ -10,10 +10,10 @@
     />
     <style>
       :root {
-        --navy: #0d1b3e;
-        --navy-mid: #1a2f5e;
-        --gold: #c9a84c;
-        --gold-light: #e8c97a;
+        --navy: #1a4d2e;
+        --navy-mid: #2d6a3f;
+        --gold: #f5c300;
+        --gold-light: #ffd740;
         --cream: #faf8f4;
         --white: #ffffff;
         --text: #1a1a2e;
@@ -22,8 +22,8 @@
         --error: #c0392b;
         --success: #1a6b3c;
         --input-bg: #f8f7f4;
-        --shadow: 0 4px 24px rgba(13, 27, 62, 0.1);
-        --shadow-sm: 0 2px 8px rgba(13, 27, 62, 0.07);
+        --shadow: 0 4px 24px rgba(26, 77, 46, 0.1);
+        --shadow-sm: 0 2px 8px rgba(26, 77, 46, 0.07);
       }
 
       * {
@@ -43,51 +43,31 @@
 
       /* ── Header ── */
       .site-header {
-        background: var(--navy);
-        padding: 0;
+        background: #ffffff;
         position: sticky;
         top: 0;
         z-index: 100;
-        box-shadow: 0 2px 16px rgba(0, 0, 0, 0.18);
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+        border-bottom: 3px solid var(--navy);
         display: flex;
         align-items: center;
         padding-left: 16px;
       }
       .header-inner {
-        max-width: 900px;
+        max-width: 1140px;
         margin: 0 auto;
-        padding: 16px 32px;
-        display: flex;
-        align-items: center;
-        gap: 18px;
-        flex: 1;
-      }
-      .header-logo {
-        width: 48px;
-        height: 48px;
-        background: var(--gold);
-        border-radius: 50%;
+        padding: 10px 32px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-family: "Playfair Display", serif;
-        font-size: 20px;
-        color: var(--navy);
-        font-weight: 700;
-        flex-shrink: 0;
+        flex: 1;
       }
-      .header-text h1 {
-        font-family: "Playfair Display", serif;
-        font-size: 18px;
-        color: var(--white);
-        font-weight: 600;
-        line-height: 1.2;
-      }
-      .header-text p {
-        font-size: 12px;
-        color: var(--gold-light);
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
+      .header-img {
+        width: 100%;
+        max-width: 860px;
+        height: auto;
+        display: block;
+        object-fit: contain;
       }
       .btn-back {
         display: flex;
@@ -95,9 +75,9 @@
         justify-content: center;
         width: 40px;
         height: 40px;
-        color: var(--gold);
-        background: rgba(201, 168, 76, 0.15);
-        border: 1.5px solid rgba(201, 168, 76, 0.4);
+        color: var(--navy);
+        background: rgba(26, 77, 46, 0.08);
+        border: 1.5px solid rgba(26, 77, 46, 0.2);
         border-radius: 8px;
         text-decoration: none;
         transition: all 0.2s;
@@ -108,22 +88,22 @@
         flex-shrink: 0;
       }
       .btn-back:hover {
-        background: var(--gold);
-        color: var(--navy);
-        border-color: var(--gold);
+        background: var(--navy);
+        color: var(--white);
+        border-color: var(--navy);
         transform: translateX(-2px);
       }
       .header-user {
         display: flex;
         align-items: center;
         gap: 8px;
-        background: rgba(255, 255, 255, 0.08);
+        background: rgba(26, 77, 46, 0.06);
         padding: 6px 14px;
         border-radius: 20px;
       }
       .header-user span {
         font-size: 13px;
-        color: var(--gold-light);
+        color: var(--text-light);
       }
       .user-dot {
         width: 8px;
@@ -134,9 +114,9 @@
 
       /* ── Main container ── */
       .container {
-        max-width: 900px;
+        max-width: 1140px;
         margin: 0 auto;
-        padding: 40px 32px 80px;
+        padding: 48px 40px 80px;
       }
 
       /* ── Form title block ── */
@@ -222,7 +202,7 @@
         margin-top: 1px;
       }
       .section-body {
-        padding: 28px;
+        padding: 36px;
       }
 
       /* ── Form fields ── */
@@ -280,11 +260,23 @@
           box-shadow 0.2s;
         outline: none;
       }
+      select {
+        width: 220px;
+        min-width: 160px;
+        max-width: 100%;
+        padding: 10px 14px;
+        font-size: 15px;
+        border-radius: 8px;
+        border: 1.5px solid var(--border);
+        background: var(--input-bg);
+        color: var(--text);
+        margin-bottom: 12px;
+      }
       input:focus,
       select:focus,
       textarea:focus {
         border-color: var(--navy);
-        box-shadow: 0 0 0 3px rgba(13, 27, 62, 0.08);
+        box-shadow: 0 0 0 3px rgba(26, 77, 46, 0.08);
         background: var(--white);
       }
       input.error,
@@ -350,7 +342,7 @@
       }
       .checkbox-item.checked {
         border-color: var(--navy);
-        background: rgba(13, 27, 62, 0.05);
+        background: rgba(26, 77, 46, 0.05);
       }
 
       /* ── Dynamic tables ── */
@@ -409,7 +401,7 @@
         text-align: center;
         font-weight: 600;
         color: var(--navy);
-        background: rgba(201, 168, 76, 0.15);
+        background: rgba(245, 195, 0, 0.15);
         border-color: var(--gold);
       }
 
@@ -454,7 +446,7 @@
 
       /* ── Section description ── */
       .section-desc {
-        background: rgba(201, 168, 76, 0.1);
+        background: rgba(245, 195, 0, 0.1);
         border-left: 3px solid var(--gold);
         padding: 12px 16px;
         border-radius: 0 8px 8px 0;
@@ -481,7 +473,7 @@
         background: var(--white);
         border: 1px solid var(--border);
         border-radius: 12px;
-        padding: 28px;
+        padding: 36px;
         text-align: center;
         box-shadow: var(--shadow-sm);
       }
@@ -505,12 +497,12 @@
           background 0.2s,
           transform 0.15s,
           box-shadow 0.2s;
-        box-shadow: 0 4px 16px rgba(13, 27, 62, 0.2);
+        box-shadow: 0 4px 16px rgba(26, 77, 46, 0.2);
       }
       .btn-submit:hover {
         background: var(--navy-mid);
         transform: translateY(-1px);
-        box-shadow: 0 6px 20px rgba(13, 27, 62, 0.25);
+        box-shadow: 0 6px 20px rgba(26, 77, 46, 0.25);
       }
       .btn-submit:active {
         transform: translateY(0);
@@ -558,7 +550,7 @@
       /* ── Success screen ── */
       .success-screen {
         display: none;
-        max-width: 520px;
+        max-width: 560px;
         margin: 80px auto;
         text-align: center;
         background: var(--white);
@@ -618,13 +610,13 @@
           grid-column: span 1;
         }
         .section-body {
-          padding: 20px 16px;
+          padding: 24px 20px;
         }
         .site-header {
           padding-left: 8px;
         }
         .header-inner {
-          padding: 14px 16px;
+          padding: 8px 16px;
         }
         .header-user {
           display: none;
@@ -648,15 +640,11 @@
     <header class="site-header">
       <a href="index.html" class="btn-back">←</a>
       <div class="header-inner">
-        <div class="header-logo">C</div>
-        <div class="header-text">
-          <h1>Caraga State University</h1>
-          <p>Human Resource Management Services</p>
-        </div>
-        <div class="header-user" style="margin-left: auto">
-          <div class="user-dot"></div>
-          <span id="userEmail">—</span>
-        </div>
+        <img
+          src="img/header-logo.png"
+          alt="Caraga State University - Office of Human Resource Management Services"
+          class="header-img"
+        />
       </div>
     </header>
 
@@ -762,8 +750,6 @@
               <label>Name of Personnel <span class="req">*</span></label>
               <input type="text" id="nameOfPersonnel" placeholder="Full name" />
             </div>
-
-            <!-- ── Employee email with CarSU validation ── -->
             <div class="field-group">
               <label>Your CarSU Email Address <span class="req">*</span></label>
               <input
@@ -774,7 +760,6 @@
               />
               <small class="email-hint" id="employeeEmailHint"></small>
             </div>
-
             <div class="field-group">
               <label>Date Prepared <span class="req">*</span></label>
               <input type="date" id="datePrepared" />
@@ -821,7 +806,6 @@
                 placeholder="e.g. Dr. Juan Dela Cruz"
               />
             </div>
-            <!-- ── Supervisor email with CarSU validation ── -->
             <div class="field-group">
               <label>Supervisor CarSU Email <span class="req">*</span></label>
               <input
@@ -1073,11 +1057,9 @@
 
       let rowCounts = { competency: 0, agap: 0, proact: 0 };
 
-      // ── Init ──
       window.addEventListener("DOMContentLoaded", () => {
         document.getElementById("datePrepared").valueAsDate = new Date();
 
-        // Radio/checkbox visual updates
         document.querySelectorAll(".checkbox-item input").forEach((input) => {
           input.addEventListener("change", function () {
             const name = this.name;
@@ -1109,29 +1091,23 @@
           });
         });
 
-        // ── Live validation: employee email ──
         document
           .getElementById("employeeEmail")
           .addEventListener("input", function () {
             clearEmailHint(this, "employeeEmailHint");
-            // Update header display as they type
-            document.getElementById("userEmail").textContent = this.value
-              .trim()
-              .endsWith("@carsu.edu.ph")
-              ? this.value.trim()
-              : "—";
+            document.getElementById("userEmail") &&
+              (document.getElementById("userEmail").textContent = this.value
+                .trim()
+                .endsWith("@carsu.edu.ph")
+                ? this.value.trim()
+                : "—");
           });
         document
           .getElementById("employeeEmail")
           .addEventListener("blur", function () {
             validateCarsuEmail(this, "employeeEmailHint");
-            if (this.value.trim().endsWith("@carsu.edu.ph")) {
-              document.getElementById("userEmail").textContent =
-                this.value.trim();
-            }
           });
 
-        // ── Live validation: supervisor email ──
         document
           .getElementById("supervisorEmail")
           .addEventListener("input", function () {
@@ -1143,13 +1119,11 @@
             validateCarsuEmail(this, "supervisorEmailHint");
           });
 
-        // Initialize with one row each
         addRow("competency");
         addRow("agap");
         addRow("proact");
       });
 
-      // ── Email helpers ──
       function clearEmailHint(inputEl, hintId) {
         inputEl.classList.remove("error", "valid");
         const hint = document.getElementById(hintId);
@@ -1178,7 +1152,6 @@
         return true;
       }
 
-      // ── Dynamic table rows ──
       function addRow(type) {
         rowCounts[type]++;
         const n = rowCounts[type];
@@ -1189,14 +1162,8 @@
           tr.innerHTML = `
             <td><input type="text" class="priority-num" value="${n}" readonly/></td>
             <td><textarea rows="2" placeholder=""></textarea></td>
-            <td><select>
-              <option value="">Select…</option>
-              <option>Basic</option><option>Intermediate</option><option>Advanced</option><option>Expert</option>
-            </select></td>
-            <td><select>
-              <option value="">Select…</option>
-              <option>Basic</option><option>Intermediate</option><option>Advanced</option><option>Expert</option>
-            </select></td>
+            <td><select><option value="">Select…</option><option>Basic</option><option>Intermediate</option><option>Advanced</option><option>Expert</option></select></td>
+            <td><select><option value="">Select…</option><option>Basic</option><option>Intermediate</option><option>Advanced</option><option>Expert</option></select></td>
             <td><textarea rows="2" placeholder=""></textarea></td>
             <td><textarea rows="2" placeholder=""></textarea></td>
             <td><input type="text" placeholder=""/></td>
@@ -1206,10 +1173,7 @@
             <td><input type="text" class="priority-num" value="${n}" readonly/></td>
             <td><input type="text" placeholder=""/></td>
             <td><input type="text" placeholder=""/></td>
-            <td><select>
-              <option value="">Select…</option>
-              <option>Full-time</option><option>Part-time</option><option>Online</option><option>Blended</option>
-            </select></td>
+            <td><select><option value="">Select…</option><option>Full-time</option><option>Part-time</option><option>Online</option><option>Blended</option></select></td>
             <td><input type="text" placeholder=""/></td>
             <td><input type="text" placeholder=""/></td>
             <td><input type="text" placeholder=""/></td>
@@ -1219,10 +1183,7 @@
             <td><input type="text" class="priority-num" value="${n}" readonly/></td>
             <td><input type="text" placeholder=""/></td>
             <td><input type="text" placeholder=""/></td>
-            <td><select>
-              <option value="">Select…</option>
-              <option>Face-to-face</option><option>Online</option><option>Blended</option><option>On-the-job</option>
-            </select></td>
+            <td><select><option value="">Select…</option><option>Face-to-face</option><option>Online</option><option>Blended</option><option>On-the-job</option></select></td>
             <td><input type="text" placeholder=""/></td>
             <td><input type="text" placeholder=""/></td>
             <td><input type="text" placeholder=""/></td>
@@ -1243,7 +1204,6 @@
         );
       }
 
-      // ── Collect table data ──
       function collectTableData(type) {
         const rows = [];
         const tbody = document.getElementById(type + "Body");
@@ -1280,20 +1240,17 @@
         return rows;
       }
 
-      // ── Validation ──
       function validate() {
         let ok = true;
-
-        // Required plain text fields
         const required = [
-          ["nameOfPersonnel", "Name of Personnel"],
-          ["datePrepared", "Date Prepared"],
-          ["currentPosition", "Current Position"],
-          ["yearCovered", "Year Covered"],
-          ["yearsInPosition", "Years in Position"],
-          ["yearsInCSU", "Years in CSU"],
-          ["collegeOfficeUnit", "College/Office/Unit"],
-          ["supervisorName", "Supervisor Name"],
+          ["nameOfPersonnel"],
+          ["datePrepared"],
+          ["currentPosition"],
+          ["yearCovered"],
+          ["yearsInPosition"],
+          ["yearsInCSU"],
+          ["collegeOfficeUnit"],
+          ["supervisorName"],
         ];
         required.forEach(([id]) => {
           const el = document.getElementById(id);
@@ -1303,7 +1260,6 @@
           } else el.classList.remove("error");
         });
 
-        // ── Employee email: required + @carsu.edu.ph only ──
         const empEmail = document.getElementById("employeeEmail").value.trim();
         if (!empEmail) {
           document.getElementById("employeeEmail").classList.add("error");
@@ -1324,7 +1280,6 @@
           ok = false;
         }
 
-        // ── Supervisor email: required + @carsu.edu.ph only ──
         const supEmail = document
           .getElementById("supervisorEmail")
           .value.trim();
@@ -1345,7 +1300,6 @@
           ok = false;
         }
 
-        // Radio groups
         if (!document.querySelector('input[name="campus"]:checked')) {
           alert("Please select a Campus.");
           ok = false;
@@ -1368,7 +1322,6 @@
         return ok;
       }
 
-      // ── Submit ──
       function submitForm() {
         if (!validate()) return;
 
@@ -1376,19 +1329,17 @@
           'input[name="headerPurpose"]:checked',
         );
         let headerPurpose = headerPurposeChecked?.value || "";
-        if (headerPurpose === "Other") {
+        if (headerPurpose === "Other")
           headerPurpose =
             document.getElementById("headerPurposeOtherText").value || "Other";
-        }
 
         const compPurposeChecked = document.querySelector(
           'input[name="compPurpose"]:checked',
         );
         let compPurpose = compPurposeChecked?.value || "";
-        if (compPurpose === "Others") {
+        if (compPurpose === "Others")
           compPurpose =
             document.getElementById("compPurposeOtherText").value || "Others";
-        }
 
         const payload = {
           action: "submitStage1",
