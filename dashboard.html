@@ -52,26 +52,27 @@
 
       /* HEADER */
       .site-header {
-        background: #fff;
+        background: #ffffff;
         position: sticky;
         top: 0;
-        z-index: 200;
+        z-index: 100;
         box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
         border-bottom: 3px solid var(--navy);
       }
       .header-inner {
-        max-width: 1280px;
-        margin: 0 auto;
-        padding: 8px 28px;
+        width: 100%;
+        padding: 0px 24px;
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: flex-start;
       }
       .header-img {
-        height: 48px;
         width: auto;
+        max-width: 700px;
+        height: auto;
         display: block;
         object-fit: contain;
+        margin-left: 0;
       }
       .header-right {
         display: flex;
@@ -1111,14 +1112,11 @@
   <body>
     <header class="site-header">
       <div class="header-inner">
-        <img src="img/header-logo.png" alt="CarSU HRMS" class="header-img" />
-        <div class="header-right" id="headerRight" style="display: none">
-          <div class="user-badge">
-            <div class="user-avatar" id="userAvatar">?</div>
-            <span id="userEmailDisplay">—</span>
-          </div>
-          <button class="btn-logout" onclick="logout()">Sign Out</button>
-        </div>
+        <img
+          src="img/header-logo.png"
+          alt="Caraga State University - Office of Human Resource Management Services"
+          class="header-img"
+        />
       </div>
     </header>
 
