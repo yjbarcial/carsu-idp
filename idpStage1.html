@@ -66,30 +66,6 @@
         object-fit: contain;
         margin-left: 0;
       }
-      .btn-back {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        color: var(--navy);
-        background: rgba(26, 77, 46, 0.08);
-        border: 1.5px solid rgba(26, 77, 46, 0.2);
-        border-radius: 8px;
-        text-decoration: none;
-        transition: all 0.2s;
-        cursor: pointer;
-        font-size: 24px;
-        font-weight: bold;
-        margin-right: 8px;
-        flex-shrink: 0;
-      }
-      .btn-back:hover {
-        background: var(--navy);
-        color: var(--white);
-        border-color: var(--navy);
-        transform: translateX(-2px);
-      }
       .header-user {
         display: flex;
         align-items: center;
@@ -154,18 +130,10 @@
           transform: translateY(0);
         }
       }
-      .section-card:nth-child(2) {
-        animation-delay: 0.05s;
-      }
-      .section-card:nth-child(3) {
-        animation-delay: 0.1s;
-      }
-      .section-card:nth-child(4) {
-        animation-delay: 0.15s;
-      }
-      .section-card:nth-child(5) {
-        animation-delay: 0.2s;
-      }
+      .section-card:nth-child(2) { animation-delay: 0.05s; }
+      .section-card:nth-child(3) { animation-delay: 0.1s; }
+      .section-card:nth-child(4) { animation-delay: 0.15s; }
+      .section-card:nth-child(5) { animation-delay: 0.2s; }
 
       .section-header {
         background: var(--navy);
@@ -252,9 +220,7 @@
         font-family: "Source Sans 3", sans-serif;
         font-size: 14px;
         color: var(--text);
-        transition:
-          border-color 0.2s,
-          box-shadow 0.2s;
+        transition: border-color 0.2s, box-shadow 0.2s;
         outline: none;
       }
       select {
@@ -490,10 +456,7 @@
         font-weight: 600;
         cursor: pointer;
         letter-spacing: 0.03em;
-        transition:
-          background 0.2s,
-          transform 0.15s,
-          box-shadow 0.2s;
+        transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
         box-shadow: 0 4px 16px rgba(26, 77, 46, 0.2);
       }
       .btn-submit:hover {
@@ -607,9 +570,7 @@
         font-size: 14px;
         font-weight: 600;
         cursor: pointer;
-        transition:
-          background 0.2s,
-          transform 0.15s;
+        transition: background 0.2s, transform 0.15s;
         box-shadow: 0 4px 16px rgba(26, 77, 46, 0.2);
         margin-top: 8px;
       }
@@ -630,13 +591,8 @@
         display: none;
       }
       @media print {
-        body * {
-          visibility: hidden !important;
-        }
-        #printArea,
-        #printArea * {
-          visibility: visible !important;
-        }
+        body * { visibility: hidden !important; }
+        #printArea, #printArea * { visibility: visible !important; }
         #printArea {
           position: fixed !important;
           inset: 0 !important;
@@ -646,44 +602,94 @@
           z-index: 9999 !important;
           font-size: 11px !important;
         }
-        .no-print {
-          display: none !important;
-        }
-        table {
-          page-break-inside: avoid;
-        }
+        .no-print { display: none !important; }
+        table { page-break-inside: avoid; }
       }
 
       /* ── Responsive ── */
       @media (max-width: 640px) {
-        .container {
-          padding: 24px 16px 60px;
+        .container { padding: 24px 16px 60px; }
+        .field-grid-2, .field-grid-3 { grid-template-columns: 1fr; }
+        .field-group.span-2, .field-group.span-3 { grid-column: span 1; }
+        .section-body { padding: 24px 20px; }
+        .header-inner { padding: 8px 16px; }
         }
-        .field-grid-2,
-        .field-grid-3 {
-          grid-template-columns: 1fr;
-        }
-        .field-group.span-2,
-        .field-group.span-3 {
-          grid-column: span 1;
-        }
-        .section-body {
-          padding: 24px 20px;
-        }
-        .site-header {
-          padding-left: 8px;
-        }
-        .header-inner {
-          padding: 8px 16px;
-        }
-        .header-user {
-          display: none;
-        }
-        .btn-back {
-          width: 36px;
-          height: 36px;
-          font-size: 20px;
-        }
+
+      /* ── Page Nav Bar (Back button strip) ── */
+      .page-nav {
+        background: var(--navy);
+        padding: 0 28px;
+        display: flex;
+        align-items: center;
+        gap: 0;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+      }
+      .page-nav a.back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 10px 0;
+        color: rgba(255,255,255,0.75);
+        text-decoration: none;
+        font-size: 12.5px;
+        font-weight: 500;
+        font-family: "Source Sans 3", sans-serif;
+        letter-spacing: 0.02em;
+        transition: color 0.2s;
+        position: relative;
+      }
+      .page-nav a.back-link::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--gold);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.25s ease;
+      }
+      .page-nav a.back-link:hover {
+        color: #fff;
+      }
+      .page-nav a.back-link:hover::after {
+        transform: scaleX(1);
+      }
+      .page-nav a.back-link svg {
+        width: 13px;
+        height: 13px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        transition: transform 0.2s;
+        flex-shrink: 0;
+        opacity: 0.8;
+      }
+      .page-nav a.back-link:hover svg {
+        transform: translateX(-3px);
+        opacity: 1;
+      }
+      .page-nav .nav-sep {
+        color: rgba(255,255,255,0.25);
+        font-size: 13px;
+        margin: 0 10px;
+        user-select: none;
+      }
+      .page-nav .nav-current {
+        font-size: 12.5px;
+        color: var(--gold);
+        font-weight: 600;
+        font-family: "Source Sans 3", sans-serif;
+        letter-spacing: 0.03em;
+      }
+
+      @media (max-width: 640px) {
+        .page-nav { padding: 0 16px; }
+        .page-nav .nav-current { display: none; }
+        .page-nav .nav-sep { display: none; }
       }
     </style>
   </head>
@@ -695,7 +701,6 @@
     </div>
 
     <!-- Site header -->
-
     <header class="site-header">
       <div class="header-inner">
         <img
@@ -705,6 +710,16 @@
         />
       </div>
     </header>
+
+    <!-- Page nav breadcrumb -->
+    <div class="page-nav">
+      <a href="index.html" class="back-link">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        Back to Home
+      </a>
+      <span class="nav-sep">/</span>
+      <span class="nav-current">Individual Development Plan (IDP)</span>
+    </div>
 
     <!-- Success screen -->
     <div class="success-screen" id="successScreen">
@@ -722,15 +737,17 @@
       </p>
       <button class="btn-pdf no-print" onclick="doPrint()">
         <svg viewBox="0 0 24 24">
-          <path
-            d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
-          />
-          <polyline points="14 2 14 8 20 8" />
-          <line x1="12" y1="18" x2="12" y2="12" />
-          <line x1="9" y1="15" x2="15" y2="15" />
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="12" y1="18" x2="12" y2="12"/>
+          <line x1="9" y1="15" x2="15" y2="15"/>
         </svg>
         Download PDF Copy
       </button>
+      <br>
+      <a href="index.html" style="display:inline-flex;align-items:center;gap:7px;margin-top:12px;padding:11px 24px;background:rgba(26,77,46,0.08);color:var(--navy);border:1.5px solid rgba(26,77,46,0.2);border-radius:9px;font-family:'Source Sans 3',sans-serif;font-size:14px;font-weight:600;text-decoration:none;transition:all 0.2s" onmouseover="this.style.background='var(--navy)';this.style.color='#fff'" onmouseout="this.style.background='rgba(26,77,46,0.08)';this.style.color='var(--navy)'">
+        ← Return to Home
+      </a>
     </div>
     <div id="printArea"></div>
 
@@ -763,11 +780,7 @@
                 Main Campus
               </label>
               <label class="checkbox-item">
-                <input
-                  type="radio"
-                  name="campus"
-                  value="CSU Cabadbaran City Campus"
-                />
+                <input type="radio" name="campus" value="CSU Cabadbaran City Campus" />
                 CSU Cabadbaran City Campus
               </label>
             </div>
@@ -777,32 +790,13 @@
           <div class="field-group" style="margin-bottom: 20px">
             <label>Office Affiliation <span class="req">*</span></label>
             <div class="checkbox-group" id="officeGroup">
-              <label class="checkbox-item"
-                ><input type="radio" name="officeAffiliation" value="OVPAF" />
-                OVPAF</label
-              >
-              <label class="checkbox-item"
-                ><input type="radio" name="officeAffiliation" value="OVPAA" />
-                OVPAA</label
-              >
-              <label class="checkbox-item"
-                ><input type="radio" name="officeAffiliation" value="OVPEO" />
-                OVPEO</label
-              >
-              <label class="checkbox-item"
-                ><input type="radio" name="officeAffiliation" value="OVPAF" />
-                OVPSAS</label
-              >
-              <label class="checkbox-item"
-                ><input type="radio" name="officeAffiliation" value="OVPRDIE" />
-                OVPRDIE</label
-              >
+              <label class="checkbox-item"><input type="radio" name="officeAffiliation" value="OVPAF" /> OVPAF</label>
+              <label class="checkbox-item"><input type="radio" name="officeAffiliation" value="OVPAA" /> OVPAA</label>
+              <label class="checkbox-item"><input type="radio" name="officeAffiliation" value="OVPEO" /> OVPEO</label>
+              <label class="checkbox-item"><input type="radio" name="officeAffiliation" value="OVPAF" /> OVPSAS</label>
+              <label class="checkbox-item"><input type="radio" name="officeAffiliation" value="OVPRDIE" /> OVPRDIE</label>
               <label class="checkbox-item">
-                <input
-                  type="radio"
-                  name="officeAffiliation"
-                  value="Office of the Campus Director"
-                />
+                <input type="radio" name="officeAffiliation" value="Office of the Campus Director" />
                 Office of the Campus Director
               </label>
             </div>
@@ -811,11 +805,7 @@
           <div class="field-grid field-grid-2" style="margin-bottom: 18px">
             <div class="field-group span-2">
               <label>College / Office / Unit <span class="req">*</span></label>
-              <input
-                type="text"
-                id="collegeOfficeUnit"
-                placeholder="e.g. College of Engineering"
-              />
+              <input type="text" id="collegeOfficeUnit" placeholder="e.g. College of Engineering" />
             </div>
           </div>
 
@@ -826,12 +816,7 @@
             </div>
             <div class="field-group">
               <label>Your CarSU Email Address <span class="req">*</span></label>
-              <input
-                type="email"
-                id="employeeEmail"
-                placeholder="yourname@carsu.edu.ph"
-                autocomplete="email"
-              />
+              <input type="email" id="employeeEmail" placeholder="yourname@carsu.edu.ph" autocomplete="email" />
               <small class="email-hint" id="employeeEmailHint"></small>
             </div>
             <div class="field-group">
@@ -839,15 +824,8 @@
               <input type="date" id="datePrepared" />
             </div>
             <div class="field-group">
-              <label
-                >Current Position / Designation
-                <span class="req">*</span></label
-              >
-              <input
-                type="text"
-                id="currentPosition"
-                placeholder="e.g. Instructor I"
-              />
+              <label>Current Position / Designation <span class="req">*</span></label>
+              <input type="text" id="currentPosition" placeholder="e.g. Instructor I" />
             </div>
             <div class="field-group">
               <label>Year Covered <span class="req">*</span></label>
@@ -855,12 +833,7 @@
             </div>
             <div class="field-group">
               <label>Years in Position <span class="req">*</span></label>
-              <input
-                type="number"
-                id="yearsInPosition"
-                min="0"
-                placeholder="0"
-              />
+              <input type="number" id="yearsInPosition" min="0" placeholder="0" />
             </div>
             <div class="field-group">
               <label>Years in CSU <span class="req">*</span></label>
@@ -871,22 +844,12 @@
           <!-- Supervisor fields -->
           <div class="field-grid field-grid-2" style="margin-bottom: 20px">
             <div class="field-group">
-              <label
-                >Immediate Supervisor Name <span class="req">*</span></label
-              >
-              <input
-                type="text"
-                id="supervisorName"
-                placeholder="e.g. Dr. Juan Dela Cruz"
-              />
+              <label>Immediate Supervisor Name <span class="req">*</span></label>
+              <input type="text" id="supervisorName" placeholder="e.g. Dr. Juan Dela Cruz" />
             </div>
             <div class="field-group">
               <label>Supervisor CarSU Email <span class="req">*</span></label>
-              <input
-                type="email"
-                id="supervisorEmail"
-                placeholder="supervisor@carsu.edu.ph"
-              />
+              <input type="email" id="supervisorEmail" placeholder="supervisor@carsu.edu.ph" />
               <small class="email-hint" id="supervisorEmailHint"></small>
             </div>
           </div>
@@ -895,41 +858,13 @@
           <div class="field-group">
             <label>Purpose <span class="req">*</span></label>
             <div class="checkbox-group" id="headerPurposeGroup">
-              <label class="checkbox-item"
-                ><input
-                  type="radio"
-                  name="headerPurpose"
-                  value="Initial Assessment"
-                />
-                Initial Assessment</label
-              >
-              <label class="checkbox-item"
-                ><input
-                  type="radio"
-                  name="headerPurpose"
-                  value="Mid-Year Review"
-                />
-                Mid-Year Review</label
-              >
-              <label class="checkbox-item"
-                ><input
-                  type="radio"
-                  name="headerPurpose"
-                  value="Annual Review"
-                />
-                Annual Review</label
-              >
-              <label class="checkbox-item"
-                ><input type="radio" name="headerPurpose" value="Other" />
-                Other</label
-              >
+              <label class="checkbox-item"><input type="radio" name="headerPurpose" value="Initial Assessment" /> Initial Assessment</label>
+              <label class="checkbox-item"><input type="radio" name="headerPurpose" value="Mid-Year Review" /> Mid-Year Review</label>
+              <label class="checkbox-item"><input type="radio" name="headerPurpose" value="Annual Review" /> Annual Review</label>
+              <label class="checkbox-item"><input type="radio" name="headerPurpose" value="Other" /> Other</label>
             </div>
             <div class="other-specify" id="headerPurposeOther">
-              <input
-                type="text"
-                id="headerPurposeOtherText"
-                placeholder="Please specify…"
-              />
+              <input type="text" id="headerPurposeOtherText" placeholder="Please specify…" />
             </div>
           </div>
         </div>
@@ -947,61 +882,21 @@
         <div class="section-body">
           <div class="section-desc">
             Identify key competencies you need to develop based on your current
-            or target role. For detailed descriptions and behavioral indicators,
-            please refer to the
-            <a
-              href="https://tinyurl.com/CompetencyManualandModel"
-              target="_blank"
-              >Competency Manual and Model</a
-            >.
+            or target role. For detailed descriptions and behavioral indicators, please refer to the
+            <a href="https://tinyurl.com/CompetencyManualandModel" target="_blank">Competency Manual and Model</a>.
           </div>
 
           <div class="field-group" style="margin-bottom: 20px">
             <label>Purpose <span class="req">*</span></label>
             <div class="checkbox-group" id="competencyPurposeGroup">
-              <label class="checkbox-item"
-                ><input
-                  type="radio"
-                  name="compPurpose"
-                  value="To meet the competencies of my current position."
-                />
-                Meet competencies of current position</label
-              >
-              <label class="checkbox-item"
-                ><input
-                  type="radio"
-                  name="compPurpose"
-                  value="To increase the level of competencies of the current position."
-                />
-                Increase level of current competencies</label
-              >
-              <label class="checkbox-item"
-                ><input
-                  type="radio"
-                  name="compPurpose"
-                  value="To meet the competencies of the next higher position."
-                />
-                Meet competencies of next higher position</label
-              >
-              <label class="checkbox-item"
-                ><input
-                  type="radio"
-                  name="compPurpose"
-                  value="To acquire new competencies across different functions/positions."
-                />
-                Acquire new competencies across functions</label
-              >
-              <label class="checkbox-item"
-                ><input type="radio" name="compPurpose" value="Others" />
-                Others</label
-              >
+              <label class="checkbox-item"><input type="radio" name="compPurpose" value="To meet the competencies of my current position." /> Meet competencies of current position</label>
+              <label class="checkbox-item"><input type="radio" name="compPurpose" value="To increase the level of competencies of the current position." /> Increase level of current competencies</label>
+              <label class="checkbox-item"><input type="radio" name="compPurpose" value="To meet the competencies of the next higher position." /> Meet competencies of next higher position</label>
+              <label class="checkbox-item"><input type="radio" name="compPurpose" value="To acquire new competencies across different functions/positions." /> Acquire new competencies across functions</label>
+              <label class="checkbox-item"><input type="radio" name="compPurpose" value="Others" /> Others</label>
             </div>
             <div class="other-specify" id="compPurposeOther">
-              <input
-                type="text"
-                id="compPurposeOtherText"
-                placeholder="Please specify…"
-              />
+              <input type="text" id="compPurposeOtherText" placeholder="Please specify…" />
             </div>
           </div>
 
@@ -1023,9 +918,7 @@
             </table>
           </div>
           <div class="table-actions">
-            <button class="btn-add-row" onclick="addRow('competency')">
-              + Add Row
-            </button>
+            <button class="btn-add-row" onclick="addRow('competency')">+ Add Row</button>
           </div>
         </div>
       </div>
@@ -1042,8 +935,7 @@
         <div class="section-body">
           <div class="section-desc">
             Outline your plans for academic advancement, such as enrolling in
-            graduate or certification programs. Ensure alignment with your role
-            and CSU's academic goals.
+            graduate or certification programs. Ensure alignment with your role and CSU's academic goals.
           </div>
           <div class="table-wrapper">
             <table class="dynamic-table" id="agapTable">
@@ -1063,9 +955,7 @@
             </table>
           </div>
           <div class="table-actions">
-            <button class="btn-add-row" onclick="addRow('agap')">
-              + Add Row
-            </button>
+            <button class="btn-add-row" onclick="addRow('agap')">+ Add Row</button>
           </div>
         </div>
       </div>
@@ -1075,17 +965,13 @@
         <div class="section-header">
           <div class="section-num">III</div>
           <div>
-            <h3>
-              Professional Advancement through Capacity-Building and Trainings
-              (Pro-ACT)
-            </h3>
+            <h3>Professional Advancement through Capacity-Building and Trainings (Pro-ACT)</h3>
             <p>Training and workshop interventions</p>
           </div>
         </div>
         <div class="section-body">
           <div class="section-desc">
-            If a training intervention is identified in Part I (Competency
-            Assessment), provide more detailed information here.
+            If a training intervention is identified in Part I (Competency Assessment), provide more detailed information here.
           </div>
           <div class="table-wrapper">
             <table class="dynamic-table" id="proactTable">
@@ -1105,9 +991,7 @@
             </table>
           </div>
           <div class="table-actions">
-            <button class="btn-add-row" onclick="addRow('proact')">
-              + Add Row
-            </button>
+            <button class="btn-add-row" onclick="addRow('proact')">+ Add Row</button>
           </div>
         </div>
       </div>
@@ -1140,25 +1024,17 @@
       }
 
       function doPrint() {
-        if (!lastPayload) {
-          alert("No submission data available to print.");
-          return;
-        }
+        if (!lastPayload) { alert("No submission data available to print."); return; }
         const p = lastPayload;
         const refId = p._refId || "—";
-        const dateNow = new Date().toLocaleDateString("en-PH", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        });
+        const dateNow = new Date().toLocaleDateString("en-PH", { year: "numeric", month: "long", day: "numeric" });
 
         function tableHTML(rows, cols, headers) {
-          if (!rows || !rows.length)
-            return `<p style="font-size:11px;color:#888;font-style:italic">No entries.</p>`;
+          if (!rows || !rows.length) return `<p style="font-size:11px;color:#888;font-style:italic">No entries.</p>`;
           let h = `<table style="width:100%;border-collapse:collapse;font-size:11px;margin-bottom:12px;border:1px solid #d8d4c8">
-            <thead><tr style="background:#2d6a3f;color:#fff">${headers.map((hd) => `<th style="padding:5px 8px;text-align:left">${esc(hd)}</th>`).join("")}</tr></thead><tbody>`;
+            <thead><tr style="background:#2d6a3f;color:#fff">${headers.map(hd => `<th style="padding:5px 8px;text-align:left">${esc(hd)}</th>`).join("")}</tr></thead><tbody>`;
           rows.forEach((row, i) => {
-            h += `<tr style="background:${i % 2 ? "#f9f8f5" : "#fff"}">${cols.map((c) => `<td style="padding:4px 8px;border-right:1px solid #d8d4c8">${esc(row[c])}</td>`).join("")}</tr>`;
+            h += `<tr style="background:${i % 2 ? "#f9f8f5" : "#fff"}">${cols.map(c => `<td style="padding:4px 8px;border-right:1px solid #d8d4c8">${esc(row[c])}</td>`).join("")}</tr>`;
           });
           return h + `</tbody></table>`;
         }
@@ -1177,21 +1053,13 @@
                 <td style="padding:3px 8px;color:#5a6070;font-size:10px;font-weight:700;text-transform:uppercase">Office/Unit</td><td style="padding:3px 8px">${esc(p.collegeOfficeUnit)}</td></tr>
             <tr><td style="padding:3px 8px;color:#5a6070;font-size:10px;font-weight:700;text-transform:uppercase">Campus</td><td style="padding:3px 8px">${esc(p.campus)}</td>
                 <td style="padding:3px 8px;color:#5a6070;font-size:10px;font-weight:700;text-transform:uppercase">Affiliation</td><td style="padding:3px 8px">${esc(p.officeAffiliation)}</td></tr>
-            <tr style="background:#faf9f6"><td style="padding:3px 8px;color:#5a6070;font-size:10px;font-weight:700;text-transform:uppercase">Year Covered</td><td style="padding:3px 8px">${esc(p.yearCovered)}</td>
-                <td style="padding:3px 8px;color:#5a6070;font-size:10px;font-weight:700;text-transform:uppercase">Date Prepared</td><td style="padding:3px 8px">${esc(p.datePrepared)}</td></tr>
-            <tr><td style="padding:3px 8px;color:#5a6070;font-size:10px;font-weight:700;text-transform:uppercase">Years in Position</td><td style="padding:3px 8px">${esc(p.yearsInPosition)}</td>
-                <td style="padding:3px 8px;color:#5a6070;font-size:10px;font-weight:700;text-transform:uppercase">Years in CSU</td><td style="padding:3px 8px">${esc(p.yearsInCSU)}</td></tr>
-            <tr style="background:#faf9f6"><td style="padding:3px 8px;color:#5a6070;font-size:10px;font-weight:700;text-transform:uppercase">Supervisor</td><td style="padding:3px 8px">${esc(p.supervisorName)}</td>
-                <td style="padding:3px 8px;color:#5a6070;font-size:10px;font-weight:700;text-transform:uppercase">Supervisor Email</td><td style="padding:3px 8px">${esc(p.supervisorEmail)}</td></tr>
-            <tr><td style="padding:3px 8px;color:#5a6070;font-size:10px;font-weight:700;text-transform:uppercase">Purpose</td><td style="padding:3px 8px">${esc(p.headerPurpose)}</td>
-                <td style="padding:3px 8px;color:#5a6070;font-size:10px;font-weight:700;text-transform:uppercase">Competency Purpose</td><td style="padding:3px 8px">${esc(p.competencyPurpose)}</td></tr>
           </table>
           <h3 style="font-size:12px;color:#1a4d2e;margin:14px 0 8px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #d8d4c8;padding-bottom:4px">I. Competency-Based LeaD</h3>
-          ${tableHTML(p.competencyRows, ["priority", "targetCompetency", "currentLevel", "requiredLevel", "leadInterventions", "resourceSupport", "targetTimeline"], ["#", "Target Competency", "Current Level", "Required Level", "LeaD Interventions", "Resource/Support", "Timeline"])}
-          <h3 style="font-size:12px;color:#1a4d2e;margin:14px 0 8px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #d8d4c8;padding-bottom:4px">II. Academic Growth &amp; Advancement Program (AGAP)</h3>
-          ${tableHTML(p.agapRows, ["priority", "degreeProgram", "targetHEI", "modeOfStudy", "sourceOfFunding", "scholarshipGrant", "targetTimeline"], ["#", "Degree Program", "Target HEI", "Mode of Study", "Source of Funding", "Scholarship/Grant", "Timeline"])}
-          <h3 style="font-size:12px;color:#1a4d2e;margin:14px 0 8px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #d8d4c8;padding-bottom:4px">III. ProACT — Professional Activities &amp; Career Training</h3>
-          ${tableHTML(p.proactRows, ["priority", "trainingTitle", "targetSkill", "modeOfActivity", "sourceOfFunding", "trainerProvider", "targetTimeline"], ["#", "Training Title", "Target Skill", "Mode of Activity", "Source of Funding", "Trainer/Provider", "Timeline"])}
+          ${tableHTML(p.competencyRows, ["priority","targetCompetency","currentLevel","requiredLevel","leadInterventions","resourceSupport","targetTimeline"], ["#","Target Competency","Current Level","Required Level","LeaD Interventions","Resource/Support","Timeline"])}
+          <h3 style="font-size:12px;color:#1a4d2e;margin:14px 0 8px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #d8d4c8;padding-bottom:4px">II. AGAP</h3>
+          ${tableHTML(p.agapRows, ["priority","degreeProgram","targetHEI","modeOfStudy","sourceOfFunding","scholarshipGrant","targetTimeline"], ["#","Degree Program","Target HEI","Mode of Study","Source of Funding","Scholarship/Grant","Timeline"])}
+          <h3 style="font-size:12px;color:#1a4d2e;margin:14px 0 8px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #d8d4c8;padding-bottom:4px">III. Pro-ACT</h3>
+          ${tableHTML(p.proactRows, ["priority","trainingTitle","targetSkill","modeOfActivity","sourceOfFunding","trainerProvider","targetTimeline"], ["#","Training Title","Target Skill","Mode of Activity","Source of Funding","Trainer/Provider","Timeline"])}
           <div style="margin-top:28px;padding-top:10px;border-top:1px solid #d8d4c8;font-size:9px;color:#aaa">
             Submitted via CarSU HRMS IDP Tool &nbsp;·&nbsp; ${dateNow} &nbsp;·&nbsp; Ref: ${esc(refId)}
           </div>
@@ -1201,73 +1069,38 @@
         pa.innerHTML = html;
         pa.style.display = "block";
         window.print();
-        setTimeout(() => {
-          pa.style.display = "none";
-          pa.innerHTML = "";
-        }, 1500);
+        setTimeout(() => { pa.style.display = "none"; pa.innerHTML = ""; }, 1500);
       }
 
       window.addEventListener("DOMContentLoaded", () => {
         document.getElementById("datePrepared").valueAsDate = new Date();
 
-        document.querySelectorAll(".checkbox-item input").forEach((input) => {
+        document.querySelectorAll(".checkbox-item input").forEach(input => {
           input.addEventListener("change", function () {
             const name = this.name;
             if (name) {
-              document
-                .querySelectorAll(`input[name="${name}"]`)
-                .forEach((r) => {
-                  r.closest(".checkbox-item").classList.toggle(
-                    "checked",
-                    r.checked,
-                  );
-                });
+              document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+                r.closest(".checkbox-item").classList.toggle("checked", r.checked);
+              });
             }
             if (this.value === "Other" || this.value === "Others") {
-              const otherId =
-                name === "headerPurpose"
-                  ? "headerPurposeOther"
-                  : "compPurposeOther";
+              const otherId = name === "headerPurpose" ? "headerPurposeOther" : "compPurposeOther";
               const el = document.getElementById(otherId);
               if (el) el.classList.toggle("visible", this.checked);
             } else if (this.type === "radio") {
-              const otherId =
-                name === "headerPurpose"
-                  ? "headerPurposeOther"
-                  : "compPurposeOther";
+              const otherId = name === "headerPurpose" ? "headerPurposeOther" : "compPurposeOther";
               const el = document.getElementById(otherId);
               if (el) el.classList.remove("visible");
             }
           });
         });
 
-        document
-          .getElementById("employeeEmail")
-          .addEventListener("input", function () {
-            clearEmailHint(this, "employeeEmailHint");
-            document.getElementById("userEmail") &&
-              (document.getElementById("userEmail").textContent = this.value
-                .trim()
-                .endsWith("@carsu.edu.ph")
-                ? this.value.trim()
-                : "—");
-          });
-        document
-          .getElementById("employeeEmail")
-          .addEventListener("blur", function () {
-            validateCarsuEmail(this, "employeeEmailHint");
-          });
-
-        document
-          .getElementById("supervisorEmail")
-          .addEventListener("input", function () {
-            clearEmailHint(this, "supervisorEmailHint");
-          });
-        document
-          .getElementById("supervisorEmail")
-          .addEventListener("blur", function () {
-            validateCarsuEmail(this, "supervisorEmailHint");
-          });
+        document.getElementById("employeeEmail").addEventListener("blur", function () {
+          validateCarsuEmail(this, "employeeEmailHint");
+        });
+        document.getElementById("supervisorEmail").addEventListener("blur", function () {
+          validateCarsuEmail(this, "supervisorEmailHint");
+        });
 
         addRow("competency");
         addRow("agap");
@@ -1284,10 +1117,7 @@
       function validateCarsuEmail(inputEl, hintId) {
         const val = inputEl.value.trim();
         const hint = document.getElementById(hintId);
-        if (!val) {
-          clearEmailHint(inputEl, hintId);
-          return false;
-        }
+        if (!val) { clearEmailHint(inputEl, hintId); return false; }
         if (!val.endsWith("@carsu.edu.ph")) {
           inputEl.classList.add("error");
           inputEl.classList.remove("valid");
@@ -1349,15 +1179,13 @@
         const tbody = tr.closest("tbody");
         if (tbody.children.length <= 1) return;
         tr.remove();
-        Array.from(tbody.querySelectorAll(".priority-num")).forEach(
-          (el, i) => (el.value = i + 1),
-        );
+        Array.from(tbody.querySelectorAll(".priority-num")).forEach((el, i) => (el.value = i + 1));
       }
 
       function collectTableData(type) {
         const rows = [];
         const tbody = document.getElementById(type + "Body");
-        Array.from(tbody.querySelectorAll("tr")).forEach((tr) => {
+        Array.from(tbody.querySelectorAll("tr")).forEach(tr => {
           const cells = tr.querySelectorAll("input, select, textarea");
           const row = {};
           if (type === "competency") {
@@ -1392,82 +1220,45 @@
 
       function validate() {
         let ok = true;
-        const required = [
-          ["nameOfPersonnel"],
-          ["datePrepared"],
-          ["currentPosition"],
-          ["yearCovered"],
-          ["yearsInPosition"],
-          ["yearsInCSU"],
-          ["collegeOfficeUnit"],
-          ["supervisorName"],
-        ];
+        const required = [["nameOfPersonnel"],["datePrepared"],["currentPosition"],["yearCovered"],["yearsInPosition"],["yearsInCSU"],["collegeOfficeUnit"],["supervisorName"]];
         required.forEach(([id]) => {
           const el = document.getElementById(id);
-          if (!el.value.trim()) {
-            el.classList.add("error");
-            ok = false;
-          } else el.classList.remove("error");
+          if (!el.value.trim()) { el.classList.add("error"); ok = false; }
+          else el.classList.remove("error");
         });
 
         const empEmail = document.getElementById("employeeEmail").value.trim();
         if (!empEmail) {
           document.getElementById("employeeEmail").classList.add("error");
-          document.getElementById("employeeEmailHint").textContent =
-            "Email address is required.";
-          document.getElementById("employeeEmailHint").className =
-            "email-hint error";
+          document.getElementById("employeeEmailHint").textContent = "Email address is required.";
+          document.getElementById("employeeEmailHint").className = "email-hint error";
           ok = false;
         } else if (!empEmail.endsWith("@carsu.edu.ph")) {
           document.getElementById("employeeEmail").classList.add("error");
-          document.getElementById("employeeEmailHint").textContent =
-            "Only @carsu.edu.ph emails are allowed.";
-          document.getElementById("employeeEmailHint").className =
-            "email-hint error";
-          alert(
-            "Only CarSU email addresses (@carsu.edu.ph) are allowed to submit an IDP.",
-          );
+          document.getElementById("employeeEmailHint").textContent = "Only @carsu.edu.ph emails are allowed.";
+          document.getElementById("employeeEmailHint").className = "email-hint error";
+          alert("Only CarSU email addresses (@carsu.edu.ph) are allowed to submit an IDP.");
           ok = false;
         }
 
-        const supEmail = document
-          .getElementById("supervisorEmail")
-          .value.trim();
+        const supEmail = document.getElementById("supervisorEmail").value.trim();
         if (!supEmail) {
           document.getElementById("supervisorEmail").classList.add("error");
-          document.getElementById("supervisorEmailHint").textContent =
-            "Supervisor email is required.";
-          document.getElementById("supervisorEmailHint").className =
-            "email-hint error";
+          document.getElementById("supervisorEmailHint").textContent = "Supervisor email is required.";
+          document.getElementById("supervisorEmailHint").className = "email-hint error";
           ok = false;
         } else if (!supEmail.endsWith("@carsu.edu.ph")) {
           document.getElementById("supervisorEmail").classList.add("error");
-          document.getElementById("supervisorEmailHint").textContent =
-            "Supervisor must have a @carsu.edu.ph email.";
-          document.getElementById("supervisorEmailHint").className =
-            "email-hint error";
+          document.getElementById("supervisorEmailHint").textContent = "Supervisor must have a @carsu.edu.ph email.";
+          document.getElementById("supervisorEmailHint").className = "email-hint error";
           alert("Supervisor email must also be a @carsu.edu.ph address.");
           ok = false;
         }
 
-        if (!document.querySelector('input[name="campus"]:checked')) {
-          alert("Please select a Campus.");
-          ok = false;
-        }
-        if (
-          !document.querySelector('input[name="officeAffiliation"]:checked')
-        ) {
-          alert("Please select an Office Affiliation.");
-          ok = false;
-        }
-        if (!document.querySelector('input[name="headerPurpose"]:checked')) {
-          alert("Please select a Purpose.");
-          ok = false;
-        }
-        if (!document.querySelector('input[name="compPurpose"]:checked')) {
-          alert("Please select a Competency Assessment Purpose.");
-          ok = false;
-        }
+        if (!document.querySelector('input[name="campus"]:checked')) { alert("Please select a Campus."); ok = false; }
+        if (!document.querySelector('input[name="officeAffiliation"]:checked')) { alert("Please select an Office Affiliation."); ok = false; }
+        if (!document.querySelector('input[name="headerPurpose"]:checked')) { alert("Please select a Purpose."); ok = false; }
+        if (!document.querySelector('input[name="compPurpose"]:checked')) { alert("Please select a Competency Assessment Purpose."); ok = false; }
 
         return ok;
       }
@@ -1475,48 +1266,28 @@
       function submitForm() {
         if (!validate()) return;
 
-        const headerPurposeChecked = document.querySelector(
-          'input[name="headerPurpose"]:checked',
-        );
+        const headerPurposeChecked = document.querySelector('input[name="headerPurpose"]:checked');
         let headerPurpose = headerPurposeChecked?.value || "";
-        if (headerPurpose === "Other")
-          headerPurpose =
-            document.getElementById("headerPurposeOtherText").value || "Other";
+        if (headerPurpose === "Other") headerPurpose = document.getElementById("headerPurposeOtherText").value || "Other";
 
-        const compPurposeChecked = document.querySelector(
-          'input[name="compPurpose"]:checked',
-        );
+        const compPurposeChecked = document.querySelector('input[name="compPurpose"]:checked');
         let compPurpose = compPurposeChecked?.value || "";
-        if (compPurpose === "Others")
-          compPurpose =
-            document.getElementById("compPurposeOtherText").value || "Others";
+        if (compPurpose === "Others") compPurpose = document.getElementById("compPurposeOtherText").value || "Others";
 
         const payload = {
           action: "submitStage1",
           employeeEmail: document.getElementById("employeeEmail").value.trim(),
           campus: document.querySelector('input[name="campus"]:checked')?.value,
-          officeAffiliation: document.querySelector(
-            'input[name="officeAffiliation"]:checked',
-          )?.value,
-          collegeOfficeUnit: document
-            .getElementById("collegeOfficeUnit")
-            .value.trim(),
-          nameOfPersonnel: document
-            .getElementById("nameOfPersonnel")
-            .value.trim(),
+          officeAffiliation: document.querySelector('input[name="officeAffiliation"]:checked')?.value,
+          collegeOfficeUnit: document.getElementById("collegeOfficeUnit").value.trim(),
+          nameOfPersonnel: document.getElementById("nameOfPersonnel").value.trim(),
           datePrepared: document.getElementById("datePrepared").value,
-          currentPosition: document
-            .getElementById("currentPosition")
-            .value.trim(),
+          currentPosition: document.getElementById("currentPosition").value.trim(),
           yearCovered: document.getElementById("yearCovered").value.trim(),
           yearsInPosition: document.getElementById("yearsInPosition").value,
           yearsInCSU: document.getElementById("yearsInCSU").value,
-          supervisorName: document
-            .getElementById("supervisorName")
-            .value.trim(),
-          supervisorEmail: document
-            .getElementById("supervisorEmail")
-            .value.trim(),
+          supervisorName: document.getElementById("supervisorName").value.trim(),
+          supervisorEmail: document.getElementById("supervisorEmail").value.trim(),
           headerPurpose,
           competencyPurpose: compPurpose,
           competencyRows: collectTableData("competency"),
@@ -1527,15 +1298,10 @@
         document.getElementById("loadingOverlay").classList.add("active");
         document.getElementById("submitBtn").disabled = true;
 
-        fetch(APPS_SCRIPT_URL, {
-          method: "POST",
-          body: JSON.stringify(payload),
-        })
-          .then((r) => r.json())
-          .then((data) => {
-            document
-              .getElementById("loadingOverlay")
-              .classList.remove("active");
+        fetch(APPS_SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
+          .then(r => r.json())
+          .then(data => {
+            document.getElementById("loadingOverlay").classList.remove("active");
             if (data.success) {
               lastPayload = payload;
               lastPayload._refId = data.refId;
@@ -1548,9 +1314,7 @@
             }
           })
           .catch(() => {
-            document
-              .getElementById("loadingOverlay")
-              .classList.remove("active");
+            document.getElementById("loadingOverlay").classList.remove("active");
             alert("Network error. Please try again.");
             document.getElementById("submitBtn").disabled = false;
           });
