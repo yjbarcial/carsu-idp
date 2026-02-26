@@ -572,66 +572,6 @@
         display: block;
       }
 
-      /* ── PDF Button ── */
-      .btn-pdf {
-        display: inline-flex;
-        align-items: center;
-        gap: 7px;
-        padding: 11px 24px;
-        background: var(--navy);
-        color: var(--white);
-        border: none;
-        border-radius: 9px;
-        font-family: "Source Sans 3", sans-serif;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        transition:
-          background 0.2s,
-          transform 0.15s;
-        box-shadow: 0 4px 16px rgba(26, 77, 46, 0.2);
-        margin-top: 16px;
-      }
-      .btn-pdf:hover {
-        background: var(--navy-mid);
-        transform: translateY(-1px);
-      }
-      .btn-pdf svg {
-        width: 15px;
-        height: 15px;
-        stroke: currentColor;
-        fill: none;
-        stroke-width: 2;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-      }
-      #printArea {
-        display: none;
-      }
-      @media print {
-        body * {
-          visibility: hidden !important;
-        }
-        #printArea,
-        #printArea * {
-          visibility: visible !important;
-        }
-        #printArea {
-          position: fixed !important;
-          inset: 0 !important;
-          background: #fff !important;
-          padding: 20px 28px !important;
-          overflow: auto !important;
-          z-index: 9999 !important;
-          font-size: 11px !important;
-        }
-        .no-print {
-          display: none !important;
-        }
-        table {
-          page-break-inside: avoid;
-        }
-      }
 
       @media (max-width: 640px) {
         .container {
@@ -812,19 +752,13 @@
         Your assessment for this IDP has been recorded. HRMS has been notified
         that the IDP is now fully complete. Thank you.
       </p>
-      <button class="btn-pdf no-print" onclick="doPrint()">
-        <svg viewBox="0 0 24 24">
-          <path
-            d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
-          />
-          <polyline points="14 2 14 8 20 8" />
-          <line x1="12" y1="18" x2="12" y2="12" />
-          <line x1="9" y1="15" x2="15" y2="15" />
-        </svg>
-        Download PDF Copy
-      </button>
+      <div style="margin:16px 0;padding:14px 18px;background:rgba(26,77,46,0.07);border-left:4px solid var(--navy);border-radius:8px;text-align:left;">
+        <p style="margin:0 0 4px;font-weight:600;color:var(--navy);">&#128231; Employee has been notified</p>
+        <p style="margin:0;color:var(--text-light);font-size:14px;">
+          A complete copy of the IDP — including your assessment — has been automatically emailed to the employee.
+        </p>
+      </div>
     </div>
-    <div id="printArea"></div>
 
     <!-- Main assessment view (hidden until loaded) -->
     <div class="container" id="mainContent" style="display: none">
@@ -1229,78 +1163,7 @@
           .replace(/>/g, "&gt;");
       }
 
-      function doPrint() {
-        if (!lastIDPData) {
-          alert("No submission data available to print.");
-          return;
-        }
-        const d = lastIDPData;
-        const a = lastAssessmentPayload || {};
-        const dateNow = new Date().toLocaleDateString("en-PH", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        });
 
-        function tableHTML(rows, cols, headers) {
-          if (!rows || !rows.length)
-            return `<p style="font-size:11px;color:#888;font-style:italic">No entries.</p>`;
-          let h = `<table style="width:100%;border-collapse:collapse;font-size:11px;margin-bottom:12px;border:1px solid #d8d4c8">
-            <thead><tr style="background:#2d6a3f;color:#fff">${headers.map((hd) => `<th style="padding:5px 8px;text-align:left">${esc(hd)}</th>`).join("")}</tr></thead><tbody>`;
-          rows.forEach((row, i) => {
-            h += `<tr style="background:${i % 2 ? "#f9f8f5" : "#fff"}">${cols.map((c) => `<td style="padding:4px 8px;border-right:1px solid #d8d4c8">${esc(row[c])}</td>`).join("")}</tr>`;
-          });
-          return h + `</tbody></table>`;
-        }
-
-        const html = `<div style="font-family:Georgia,serif;color:#1a1a2e;max-width:900px">
-          <div style="border-bottom:3px solid #1a4d2e;padding-bottom:10px;margin-bottom:18px">
-            <div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#5a6070;margin-bottom:3px">Caraga State University — Office of Human Resource Management Services</div>
-            <h1 style="font-size:18px;color:#1a4d2e;margin-bottom:2px;font-family:Georgia,serif">Individual Development Plan (IDP) — Supervisor's Assessment</h1>
-            <p style="font-size:11px;color:#5a6070">Reference ID: <strong>${esc(d.refId)}</strong> &nbsp;·&nbsp; Printed: ${dateNow}</p>
-          </div>
-          <h3 style="font-size:12px;color:#1a4d2e;margin:0 0 8px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #d8d4c8;padding-bottom:4px">Employee Information</h3>
-          <table style="width:100%;border-collapse:collapse;font-size:11px;margin-bottom:16px">
-            <tr><td style="padding:3px 8px;width:25%;color:#5a6070;font-size:10px;font-weight:700;text-transform:uppercase">Personnel</td><td style="padding:3px 8px;width:25%">${esc(d.nameOfPersonnel)}</td>
-                <td style="padding:3px 8px;width:25%;color:#5a6070;font-size:10px;font-weight:700;text-transform:uppercase">Campus</td><td style="padding:3px 8px">${esc(d.campus)}</td></tr>
-            <tr style="background:#faf9f6"><td style="padding:3px 8px;color:#5a6070;font-size:10px;font-weight:700;text-transform:uppercase">Position</td><td style="padding:3px 8px">${esc(d.currentPosition)}</td>
-                <td style="padding:3px 8px;color:#5a6070;font-size:10px;font-weight:700;text-transform:uppercase">Affiliation</td><td style="padding:3px 8px">${esc(d.officeAffiliation)}</td></tr>
-            <tr><td style="padding:3px 8px;color:#5a6070;font-size:10px;font-weight:700;text-transform:uppercase">Office/Unit</td><td style="padding:3px 8px">${esc(d.collegeOfficeUnit)}</td>
-                <td style="padding:3px 8px;color:#5a6070;font-size:10px;font-weight:700;text-transform:uppercase">Year Covered</td><td style="padding:3px 8px">${esc(d.yearCovered)}</td></tr>
-            <tr style="background:#faf9f6"><td style="padding:3px 8px;color:#5a6070;font-size:10px;font-weight:700;text-transform:uppercase">Years in Position</td><td style="padding:3px 8px">${esc(d.yearsInPosition)}</td>
-                <td style="padding:3px 8px;color:#5a6070;font-size:10px;font-weight:700;text-transform:uppercase">Years in CSU</td><td style="padding:3px 8px">${esc(d.yearsInCSU)}</td></tr>
-            <tr><td style="padding:3px 8px;color:#5a6070;font-size:10px;font-weight:700;text-transform:uppercase">Purpose</td><td style="padding:3px 8px">${esc(d.headerPurpose)}</td>
-                <td style="padding:3px 8px;color:#5a6070;font-size:10px;font-weight:700;text-transform:uppercase">Supervisor Email</td><td style="padding:3px 8px">${esc(supervisorEmail)}</td></tr>
-          </table>
-          <h3 style="font-size:12px;color:#1a4d2e;margin:14px 0 8px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #d8d4c8;padding-bottom:4px">Section I — Competency Development Plan</h3>
-          ${tableHTML(d.competencyRows, ["priority", "targetCompetency", "currentLevel", "requiredLevel", "leadInterventions", "resourceSupport", "targetTimeline"], ["#", "Target Competency", "Current Level", "Required Level", "LeaD Interventions", "Resource/Support", "Timeline"])}
-          <h3 style="font-size:12px;color:#1a4d2e;margin:14px 0 8px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #d8d4c8;padding-bottom:4px">Section II — AGAP</h3>
-          ${tableHTML(d.agapRows, ["priority", "degreeProgram", "targetHEI", "modeOfStudy", "sourceOfFunding", "scholarshipGrant", "targetTimeline"], ["#", "Degree Program", "Target HEI", "Mode of Study", "Source of Funding", "Scholarship/Grant", "Timeline"])}
-          <h3 style="font-size:12px;color:#1a4d2e;margin:14px 0 8px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #d8d4c8;padding-bottom:4px">Section III — PROACT</h3>
-          ${tableHTML(d.proactRows, ["priority", "trainingTitle", "targetSkill", "modeOfActivity", "sourceOfFunding", "trainerProvider", "targetTimeline"], ["#", "Training Title", "Target Skill", "Mode of Activity", "Source of Funding", "Trainer/Provider", "Timeline"])}
-          <h3 style="font-size:12px;color:#1a4d2e;margin:14px 0 8px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #d8d4c8;padding-bottom:4px">Section IV — Supervisor's Assessment</h3>
-          <table style="width:100%;border-collapse:collapse;font-size:11px;margin-bottom:14px;border:1px solid #d8d4c8">
-            <tr><td style="padding:4px 8px;width:50%;border-right:1px solid #d8d4c8"><strong>Performance Gaps:</strong> ${esc(a.perfGapsYN)}${a.perfGapsSpec ? " — " + esc(a.perfGapsSpec) : ""}</td>
-                <td style="padding:4px 8px"><strong>Readiness for Advancement:</strong> ${esc(a.readinessYN)}</td></tr>
-            <tr style="background:#faf9f6"><td colspan="2" style="padding:4px 8px"><strong>Readiness Remarks:</strong> ${esc(a.readinessRemarks)}</td></tr>
-            <tr><td colspan="2" style="padding:4px 8px"><strong>Recommended Interventions:</strong> ${esc((a.interventions || []).join(", "))}</td></tr>
-            <tr style="background:#faf9f6"><td colspan="2" style="padding:4px 8px"><strong>Implementation Period:</strong> ${esc((a.implementationPeriod || []).join(", "))}</td></tr>
-            <tr><td colspan="2" style="padding:4px 8px"><strong>Additional Comments:</strong> ${esc(a.additionalComments)}</td></tr>
-          </table>
-          <div style="margin-top:28px;padding-top:10px;border-top:1px solid #d8d4c8;font-size:9px;color:#aaa">
-            Submitted via CarSU HRMS IDP Supervisor Assessment &nbsp;·&nbsp; ${dateNow} &nbsp;·&nbsp; Ref: ${esc(d.refId)}
-          </div>
-        </div>`;
-
-        const pa = document.getElementById("printArea");
-        pa.innerHTML = html;
-        pa.style.display = "block";
-        window.print();
-        setTimeout(() => {
-          pa.style.display = "none";
-          pa.innerHTML = "";
-        }, 1500);
-      }
 
       window.addEventListener("DOMContentLoaded", () => {
         const params = new URLSearchParams(window.location.search);
