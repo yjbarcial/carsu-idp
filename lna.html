@@ -701,67 +701,6 @@
         border-color: var(--success);
       }
 
-      /* ── PDF Button ── */
-      .btn-pdf {
-        display: inline-flex;
-        align-items: center;
-        gap: 7px;
-        padding: 11px 24px;
-        background: var(--navy);
-        color: var(--white);
-        border: none;
-        border-radius: 9px;
-        font-family: "Source Sans 3", sans-serif;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        transition:
-          background 0.2s,
-          transform 0.15s;
-        box-shadow: 0 4px 16px rgba(26, 77, 46, 0.2);
-        margin-top: 8px;
-      }
-      .btn-pdf:hover {
-        background: var(--navy-mid);
-        transform: translateY(-1px);
-      }
-      .btn-pdf svg {
-        width: 15px;
-        height: 15px;
-        stroke: currentColor;
-        fill: none;
-        stroke-width: 2;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-      }
-      #printArea {
-        display: none;
-      }
-      @media print {
-        body * {
-          visibility: hidden !important;
-        }
-        #printArea,
-        #printArea * {
-          visibility: visible !important;
-        }
-        #printArea {
-          position: fixed !important;
-          inset: 0 !important;
-          background: #fff !important;
-          padding: 20px 28px !important;
-          overflow: auto !important;
-          z-index: 9999 !important;
-          font-size: 11px !important;
-        }
-        .no-print {
-          display: none !important;
-        }
-        table {
-          page-break-inside: avoid;
-        }
-      }
-
       /* ── Responsive ── */
       @media (max-width: 640px) {
         .container {
@@ -923,17 +862,6 @@
         Please keep your <strong>Reference ID</strong> for your records. A
         confirmation email has been sent to your address.
       </p>
-      <button class="btn-pdf no-print" onclick="doPrint()">
-        <svg viewBox="0 0 24 24">
-          <path
-            d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
-          />
-          <polyline points="14 2 14 8 20 8" />
-          <line x1="12" y1="18" x2="12" y2="12" />
-          <line x1="9" y1="15" x2="15" y2="15" />
-        </svg>
-        Download PDF Copy
-      </button>
     </div>
     <div id="printArea"></div>
 
