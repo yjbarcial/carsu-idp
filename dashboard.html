@@ -1389,11 +1389,7 @@
               <p class="chart-sub">IDP and LNA counts per campus</p>
               <div class="chart-wrap"><canvas id="chartCampus"></canvas></div>
             </div>
-            <div class="chart-card">
-              <h4>Monthly Submissions</h4>
-              <p class="chart-sub">IDP and LNA submissions over time</p>
-              <div class="chart-wrap"><canvas id="chartMonthly"></canvas></div>
-            </div>
+
             <div class="chart-card">
               <h4>Top Competency Gaps</h4>
               <p class="chart-sub">
@@ -1404,45 +1400,65 @@
           </div>
           <div
             class="charts-grid"
-            style="grid-template-columns: 1fr 1fr; margin-bottom: 0"
+            style="grid-template-columns: 1fr 1fr; margin-bottom: 22px"
           >
             <div class="chart-card">
-              <h4>IDP Purpose Distribution</h4>
-              <p class="chart-sub">Why employees are submitting IDPs</p>
-              <div class="chart-wrap"><canvas id="chartPurpose"></canvas></div>
-            </div>
-            <div class="chart-card">
-              <h4>Key Insights</h4>
-              <p class="chart-sub">
-                Aggregated highlights from all submissions
-              </p>
-              <div class="insight-grid">
-                <div class="insight-item">
-                  <div class="i-label">Avg Years in Position</div>
-                  <div class="i-val" id="iYears">—</div>
-                </div>
-                <div class="insight-item">
-                  <div class="i-label">IDP Completion Rate</div>
-                  <div class="i-val" id="iRate">—</div>
-                </div>
-                <div class="insight-item">
-                  <div class="i-label">Supervisors w/ Pending</div>
-                  <div class="i-val" id="iSup">—</div>
-                </div>
-                <div class="insight-item">
-                  <div class="i-label">LNA Offices Flagging Intervention</div>
-                  <div class="i-val" id="iFlag">—</div>
-                </div>
-                <div class="insight-item">
-                  <div class="i-label">Most Common AGAP Mode</div>
-                  <div class="i-val" id="iAGAP">—</div>
-                </div>
-                <div class="insight-item">
-                  <div class="i-label">Top Supervisor Recommendation</div>
-                  <div class="i-val" id="iRec">—</div>
-                </div>
+              <h4>Top Target Competencies — IDP</h4>
+              <p class="chart-sub">Most frequently cited in Section I</p>
+              <div class="chart-wrap">
+                <canvas id="chartTargetComp"></canvas>
               </div>
             </div>
+            <div class="chart-card">
+              <h4>Supervisor L&amp;D Interventions</h4>
+              <p class="chart-sub">
+                Most recommended by supervisors in Section IV
+              </p>
+              <div class="chart-wrap">
+                <canvas id="chartSupervisorLD"></canvas>
+              </div>
+            </div>
+          </div>
+          <div
+            class="charts-grid"
+            style="grid-template-columns: 1fr 1fr; margin-bottom: 22px"
+          >
+            <div class="chart-card">
+              <h4>AGAP Mode of Study</h4>
+              <p class="chart-sub">
+                Distribution of preferred study modes in Section II
+              </p>
+              <div class="chart-wrap"><canvas id="chartAGAPMode"></canvas></div>
+            </div>
+            <div class="chart-card">
+              <h4>Pro-ACT Mode of Activity</h4>
+              <p class="chart-sub">
+                Distribution of training modes in Section III
+              </p>
+              <div class="chart-wrap">
+                <canvas id="chartProACTMode"></canvas>
+              </div>
+            </div>
+          </div>
+          <div
+            class="chart-card"
+            style="margin-bottom: 22px"
+            id="lnaClusterCard"
+          >
+            <h4>LNA Competency Cluster Analysis</h4>
+            <p class="chart-sub">
+              Strongest &amp; weakest competencies and intervention flags per
+              cluster across all LNA submissions
+            </p>
+            <div id="lnaClusterTable" style="margin-top: 12px"></div>
+          </div>
+          <div class="chart-card" id="lnaInterventionCard">
+            <h4>LNA Priority LeaD Needs by Position Level</h4>
+            <p class="chart-sub">
+              Aggregated priority needs and suggested interventions from Section
+              IV across all submissions
+            </p>
+            <div id="lnaInterventionTable" style="margin-top: 12px"></div>
           </div>
         </div>
 
@@ -1994,51 +2010,15 @@
               year: "2-digit",
             });
           };
-        charts.m = new Chart(document.getElementById("chartMonthly"), {
-          type: "line",
-          data: {
-            labels: lbls.map(fmt),
-            datasets: [
-              {
-                label: "IDPs",
-                data: lbls.map((l) => mm[l].i),
-                borderColor: GRN[0],
-                backgroundColor: "rgba(26,77,46,.08)",
-                tension: 0.3,
-                fill: true,
-                pointRadius: 4,
-              },
-              {
-                label: "LNAs",
-                data: lbls.map((l) => mm[l].l),
-                borderColor: GLD[0],
-                backgroundColor: "rgba(245,195,0,.08)",
-                tension: 0.3,
-                fill: true,
-                pointRadius: 4,
-              },
-            ],
-          },
-          options: {
-            ...baseOpts,
-            plugins: {
-              legend: { position: "bottom", labels: { font: { size: 11 } } },
-            },
-            scales: {
-              x: { grid: { display: false } },
-              y: { beginAtZero: true, ticks: { stepSize: 1 } },
-            },
-          },
-        });
 
-        // Competency gaps horizontal bar
+        // Top Competency Gaps (Required > Current)
         dc("g");
         const freq = {};
         IDPs.forEach((r) => {
           (r.competencyRows || []).forEach((row) => {
-            const comp = (row[1] || "").trim(),
-              cur = parseInt(row[2]) || 0,
-              req = parseInt(row[3]) || 0;
+            const comp = (row.targetCompetency || row[1] || "").trim(),
+              cur = parseInt(row.currentLevel ?? row[2]) || 0,
+              req = parseInt(row.requiredLevel ?? row[3]) || 0;
             if (comp && req > cur) freq[comp] = (freq[comp] || 0) + 1;
           });
         });
@@ -2071,87 +2051,347 @@
           },
         });
 
-        // Purpose pie
-        dc("p");
-        const pf = {};
+        // Top Target Competencies (Section I)
+        dc("tc");
+        const tcFreq = {};
         IDPs.forEach((r) => {
-          const p = (r.headerPurpose || "Not specified").trim();
-          pf[p] = (pf[p] || 0) + 1;
+          (r.competencyRows || []).forEach((row) => {
+            const comp = (row.targetCompetency || row[1] || "").trim();
+            if (comp) tcFreq[comp] = (tcFreq[comp] || 0) + 1;
+          });
         });
-        const pLbls = Object.keys(pf);
-        charts.p = new Chart(document.getElementById("chartPurpose"), {
-          type: "pie",
+        const tcSorted = Object.entries(tcFreq)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 8);
+        charts.tc = new Chart(document.getElementById("chartTargetComp"), {
+          type: "bar",
           data: {
-            labels: pLbls,
+            labels: tcSorted.map(([k]) =>
+              k.length > 26 ? k.slice(0, 26) + "…" : k,
+            ),
             datasets: [
               {
-                data: Object.values(pf),
-                backgroundColor: [...GRN, ...GLD].slice(0, pLbls.length),
-                borderWidth: 2,
-                borderColor: "#fff",
+                label: "# employees",
+                data: tcSorted.map(([, v]) => v),
+                backgroundColor: GRN.slice(0, tcSorted.length)
+                  .concat(GLD)
+                  .slice(0, tcSorted.length),
+                borderRadius: 4,
               },
             ],
           },
           options: {
+            indexAxis: "y",
             ...baseOpts,
-            plugins: {
-              legend: {
-                position: "bottom",
-                labels: { font: { size: 11 }, padding: 10 },
-              },
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { beginAtZero: true, ticks: { stepSize: 1 } },
+              y: { grid: { display: false }, ticks: { font: { size: 11 } } },
             },
           },
         });
 
-        // Insights
-        const yrs = IDPs.map((r) => parseFloat(r.yearsInPosition)).filter(
-          (n) => !isNaN(n),
-        );
-        document.getElementById("iYears").textContent = yrs.length
-          ? (yrs.reduce((a, b) => a + b, 0) / yrs.length).toFixed(1) + " yrs"
-          : "—";
-        document.getElementById("iRate").textContent = IDPs.length
-          ? Math.round(
-              (IDPs.filter((r) => r.status === "COMPLETE").length /
-                IDPs.length) *
-                100,
-            ) + "%"
-          : "—";
-        document.getElementById("iSup").textContent = new Set(
-          IDPs.filter((r) => r.status === "PENDING")
-            .map((r) => r.supervisorEmail)
-            .filter(Boolean),
-        ).size;
-        let flagCount = 0;
-        LNAs.forEach((r) => {
-          try {
-            if (
-              safeJ(r.clusterSummaryRaw, []).some(
-                (c) => c.interventionNeeded === "Y",
-              )
-            )
-              flagCount++;
-          } catch (e) {}
-        });
-        document.getElementById("iFlag").textContent =
-          flagCount + (flagCount === 1 ? " office" : " offices");
-        const modes = {};
-        IDPs.forEach((r) => {
-          (r.agapRows || []).forEach((row) => {
-            const m = (row[3] || "").trim();
-            if (m) modes[m] = (modes[m] || 0) + 1;
-          });
-        });
-        const tm = Object.entries(modes).sort((a, b) => b[1] - a[1])[0];
-        document.getElementById("iAGAP").textContent = tm ? tm[0] : "—";
-        const rf = {};
+        // Supervisor L&D Interventions (Section IV)
+        dc("sld");
+        const rfFreq = {};
         IDPs.forEach((r) => {
           (r.supervisorInterventions || []).forEach((i) => {
-            rf[i] = (rf[i] || 0) + 1;
+            const s = (i || "").trim();
+            if (s) rfFreq[s] = (rfFreq[s] || 0) + 1;
           });
         });
-        const tr = Object.entries(rf).sort((a, b) => b[1] - a[1])[0];
-        document.getElementById("iRec").textContent = tr ? tr[0] : "—";
+        const rfSorted = Object.entries(rfFreq)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 8);
+        if (rfSorted.length) {
+          charts.sld = new Chart(document.getElementById("chartSupervisorLD"), {
+            type: "bar",
+            data: {
+              labels: rfSorted.map(([k]) =>
+                k.length > 26 ? k.slice(0, 26) + "…" : k,
+              ),
+              datasets: [
+                {
+                  label: "# recommended",
+                  data: rfSorted.map(([, v]) => v),
+                  backgroundColor: GLD[0],
+                  borderRadius: 4,
+                },
+              ],
+            },
+            options: {
+              indexAxis: "y",
+              ...baseOpts,
+              plugins: { legend: { display: false } },
+              scales: {
+                x: { beginAtZero: true, ticks: { stepSize: 1 } },
+                y: { grid: { display: false }, ticks: { font: { size: 11 } } },
+              },
+            },
+          });
+        } else {
+          document.getElementById("chartSupervisorLD").parentElement.innerHTML =
+            '<p class="m-empty" style="padding:40px 0">No supervisor interventions recorded yet.</p>';
+        }
+
+        // AGAP Mode of Study
+        dc("am");
+        const amFreq = {};
+        IDPs.forEach((r) => {
+          (r.agapRows || []).forEach((row) => {
+            const m = (row.modeOfStudy || row[3] || "").trim();
+            if (m) amFreq[m] = (amFreq[m] || 0) + 1;
+          });
+        });
+        const amLbls = Object.keys(amFreq);
+        if (amLbls.length) {
+          charts.am = new Chart(document.getElementById("chartAGAPMode"), {
+            type: "doughnut",
+            data: {
+              labels: amLbls,
+              datasets: [
+                {
+                  data: Object.values(amFreq),
+                  backgroundColor: [...GRN, ...GLD].slice(0, amLbls.length),
+                  borderWidth: 2,
+                  borderColor: "#fff",
+                },
+              ],
+            },
+            options: {
+              ...baseOpts,
+              plugins: {
+                legend: {
+                  position: "bottom",
+                  labels: { font: { size: 11 }, padding: 10 },
+                },
+              },
+              cutout: "55%",
+            },
+          });
+        } else {
+          document.getElementById("chartAGAPMode").parentElement.innerHTML =
+            '<p class="m-empty" style="padding:40px 0">No AGAP entries recorded yet.</p>';
+        }
+
+        // Pro-ACT Mode of Activity
+        dc("pm");
+        const pmFreq = {};
+        IDPs.forEach((r) => {
+          (r.proactRows || []).forEach((row) => {
+            const m = (row.modeOfActivity || row[3] || "").trim();
+            if (m) pmFreq[m] = (pmFreq[m] || 0) + 1;
+          });
+        });
+        const pmLbls = Object.keys(pmFreq);
+        if (pmLbls.length) {
+          charts.pm = new Chart(document.getElementById("chartProACTMode"), {
+            type: "doughnut",
+            data: {
+              labels: pmLbls,
+              datasets: [
+                {
+                  data: Object.values(pmFreq),
+                  backgroundColor: [...GLD, ...GRN].slice(0, pmLbls.length),
+                  borderWidth: 2,
+                  borderColor: "#fff",
+                },
+              ],
+            },
+            options: {
+              ...baseOpts,
+              plugins: {
+                legend: {
+                  position: "bottom",
+                  labels: { font: { size: 11 }, padding: 10 },
+                },
+              },
+              cutout: "55%",
+            },
+          });
+        } else {
+          document.getElementById("chartProACTMode").parentElement.innerHTML =
+            '<p class="m-empty" style="padding:40px 0">No Pro-ACT entries recorded yet.</p>';
+        }
+
+        // LNA Cluster Analysis table
+        renderLNAClusterAnalysis();
+
+        // LNA Position-Level Interventions table
+        renderLNAInterventions();
+      }
+
+      function renderLNAClusterAnalysis() {
+        const clusterNames = [
+          "Core",
+          "Leadership",
+          "Organizational",
+          "Technical",
+        ];
+        const clusterFields = {
+          Core: "coreCompetencies",
+          Leadership: "leadershipComps",
+          Organizational: "orgComps",
+          Technical: "technicalComps",
+        };
+
+        // Also build from clusterSummaryRaw across all LNAs
+        // Aggregate: count strongest, weakest, intervention flags per cluster
+        const agg = {};
+        clusterNames.forEach((cn) => {
+          agg[cn] = { strongCount: {}, weakCount: {}, flagCount: 0, total: 0 };
+        });
+
+        LNAs.forEach((lna) => {
+          const cs = lna.clusterSummaryRaw || [];
+          cs.forEach((c) => {
+            const cn = (c.cluster || "").trim();
+            if (!agg[cn]) return;
+            agg[cn].total++;
+            if (c.strongest)
+              agg[cn].strongCount[c.strongest] =
+                (agg[cn].strongCount[c.strongest] || 0) + 1;
+            if (c.weakest)
+              agg[cn].weakCount[c.weakest] =
+                (agg[cn].weakCount[c.weakest] || 0) + 1;
+            if (c.interventionNeeded === "Y") agg[cn].flagCount++;
+          });
+        });
+
+        const el = document.getElementById("lnaClusterTable");
+        const anyData = clusterNames.some((cn) => agg[cn].total > 0);
+        if (!anyData) {
+          el.innerHTML =
+            '<p class="m-empty">No LNA cluster data available yet.</p>';
+          return;
+        }
+
+        let h = `<table class="m-table"><thead><tr>
+          <th>Cluster</th>
+          <th>Most Common Strongest Competency</th>
+          <th>Most Common Weakest Competency</th>
+          <th>Offices Flagging Intervention</th>
+          <th>LNA Count</th>
+        </tr></thead><tbody>`;
+
+        clusterNames.forEach((cn) => {
+          const a = agg[cn];
+          const topStrong = Object.entries(a.strongCount).sort(
+            (x, y) => y[1] - x[1],
+          )[0];
+          const topWeak = Object.entries(a.weakCount).sort(
+            (x, y) => y[1] - x[1],
+          )[0];
+          const flagBadge =
+            a.flagCount > 0
+              ? `<span class="badge badge-red">${a.flagCount} office${a.flagCount !== 1 ? "s" : ""}</span>`
+              : `<span class="badge badge-green">None</span>`;
+          h += `<tr>
+            <td><strong>${e(cn)}</strong></td>
+            <td>${topStrong ? `<span style="color:var(--success);font-weight:600">▲</span> ${e(topStrong[0])} <span style="font-size:11px;color:var(--text-light)">(${topStrong[1]}x)</span>` : "—"}</td>
+            <td>${topWeak ? `<span style="color:var(--error);font-weight:600">▼</span> ${e(topWeak[0])} <span style="font-size:11px;color:var(--text-light)">(${topWeak[1]}x)</span>` : "—"}</td>
+            <td>${flagBadge}</td>
+            <td style="text-align:center;color:var(--text-light)">${a.total}</td>
+          </tr>`;
+        });
+
+        h += `</tbody></table>`;
+        el.innerHTML = h;
+      }
+
+      function renderLNAInterventions() {
+        // Aggregate priority needs + interventions per position level across all LNA Section IV
+        const posLevels = {};
+        LNAs.forEach((lna) => {
+          (lna.leadInterventions || []).forEach((iv) => {
+            const lv = (iv.positionLevel || "Unknown").trim();
+            if (!posLevels[lv])
+              posLevels[lv] = { needs: {}, onJob: {}, offJob: {}, others: {} };
+            const need = (iv.need || "").trim();
+            if (need)
+              posLevels[lv].needs[need] = (posLevels[lv].needs[need] || 0) + 1;
+            if (iv.onJob && iv.onJobText) {
+              const t = iv.onJobText.trim();
+              if (t) posLevels[lv].onJob[t] = (posLevels[lv].onJob[t] || 0) + 1;
+            }
+            if (iv.offJob && iv.offJobText) {
+              const t = iv.offJobText.trim();
+              if (t)
+                posLevels[lv].offJob[t] = (posLevels[lv].offJob[t] || 0) + 1;
+            }
+            if (iv.others && iv.othersText) {
+              const t = iv.othersText.trim();
+              if (t)
+                posLevels[lv].others[t] = (posLevels[lv].others[t] || 0) + 1;
+            }
+          });
+        });
+
+        const el = document.getElementById("lnaInterventionTable");
+        if (!Object.keys(posLevels).length) {
+          el.innerHTML =
+            '<p class="m-empty">No LNA intervention data available yet.</p>';
+          return;
+        }
+
+        const orderedLevels = [
+          "First Level",
+          "2nd Level (Non-Sup)",
+          "2nd Level (Sup)",
+          "Third Level",
+          "Faculty",
+        ];
+        const allLevels = [
+          ...orderedLevels.filter((l) => posLevels[l]),
+          ...Object.keys(posLevels).filter((l) => !orderedLevels.includes(l)),
+        ];
+
+        let h = `<table class="m-table"><thead><tr>
+          <th>Position Level</th>
+          <th>Top Priority Needs</th>
+          <th>Suggested On-the-Job Interventions</th>
+          <th>Suggested Off-the-Job Interventions</th>
+        </tr></thead><tbody>`;
+
+        allLevels.forEach((lv) => {
+          const a = posLevels[lv];
+          const topNeeds =
+            Object.entries(a.needs)
+              .sort((x, y) => y[1] - x[1])
+              .slice(0, 3)
+              .map(
+                ([n, c]) =>
+                  `${e(n)} <span style="font-size:10px;color:var(--text-light)">(${c}x)</span>`,
+              )
+              .join("<br>") || "—";
+          const topOnJob =
+            Object.entries(a.onJob)
+              .sort((x, y) => y[1] - x[1])
+              .slice(0, 3)
+              .map(
+                ([n, c]) =>
+                  `${e(n)} <span style="font-size:10px;color:var(--text-light)">(${c}x)</span>`,
+              )
+              .join("<br>") || "—";
+          const topOffJob =
+            Object.entries(a.offJob)
+              .sort((x, y) => y[1] - x[1])
+              .slice(0, 3)
+              .map(
+                ([n, c]) =>
+                  `${e(n)} <span style="font-size:10px;color:var(--text-light)">(${c}x)</span>`,
+              )
+              .join("<br>") || "—";
+          h += `<tr>
+            <td><strong>${e(lv)}</strong></td>
+            <td style="font-size:12px">${topNeeds}</td>
+            <td style="font-size:12px">${topOnJob}</td>
+            <td style="font-size:12px">${topOffJob}</td>
+          </tr>`;
+        });
+
+        h += `</tbody></table>`;
+        el.innerHTML = h;
       }
 
       // ── IDP TABLE ──
@@ -2324,7 +2564,7 @@
         if (cr.length) {
           h += `<table class="m-table"><thead><tr><th>#</th><th>Target Competency</th><th>Current Level</th><th>Required Level</th><th>Suggested Interventions</th><th>Resource / Support</th><th>Timeline</th></tr></thead><tbody>`;
           cr.forEach((row, i) => {
-            h += `<tr><td>${i + 1}</td><td>${e(row[1] || "—")}</td><td style="text-align:center">${e(row[2] || "—")}</td><td style="text-align:center">${e(row[3] || "—")}</td><td>${e(row[4] || "—")}</td><td>${e(row[5] || "—")}</td><td>${e(row[6] || "—")}</td></tr>`;
+            h += `<tr><td>${i + 1}</td><td>${e(row.targetCompetency || row[1] || "—")}</td><td style="text-align:center">${e(row.currentLevel ?? row[2] ?? "—")}</td><td style="text-align:center">${e(row.requiredLevel ?? row[3] ?? "—")}</td><td>${e(row.leadInterventions || row[4] || "—")}</td><td>${e(row.resourceSupport || row[5] || "—")}</td><td>${e(row.targetTimeline || row[6] || "—")}</td></tr>`;
           });
           h += `</tbody></table>`;
         } else h += `<p class="m-empty">No competency entries recorded.</p>`;
@@ -2336,7 +2576,7 @@
         if (ar.length) {
           h += `<table class="m-table"><thead><tr><th>#</th><th>Degree Program</th><th>Target HEI</th><th>Mode of Study</th><th>Source of Funding</th><th>Target Scholarship</th><th>Timeline</th></tr></thead><tbody>`;
           ar.forEach((row, i) => {
-            h += `<tr><td>${i + 1}</td><td>${e(row[1] || "—")}</td><td>${e(row[2] || "—")}</td><td>${e(row[3] || "—")}</td><td>${e(row[4] || "—")}</td><td>${e(row[5] || "—")}</td><td>${e(row[6] || "—")}</td></tr>`;
+            h += `<tr><td>${i + 1}</td><td>${e(row.degreeProgram || row[1] || "—")}</td><td>${e(row.targetHEI || row[2] || "—")}</td><td>${e(row.modeOfStudy || row[3] || "—")}</td><td>${e(row.sourceOfFunding || row[4] || "—")}</td><td>${e(row.scholarshipGrant || row[5] || "—")}</td><td>${e(row.targetTimeline || row[6] || "—")}</td></tr>`;
           });
           h += `</tbody></table>`;
         } else h += `<p class="m-empty">No AGAP entries recorded.</p>`;
@@ -2348,7 +2588,7 @@
         if (pr.length) {
           h += `<table class="m-table"><thead><tr><th>#</th><th>Training / Workshop</th><th>Target Competency</th><th>Mode</th><th>Funding</th><th>Trainer / Provider</th><th>Timeline</th></tr></thead><tbody>`;
           pr.forEach((row, i) => {
-            h += `<tr><td>${i + 1}</td><td>${e(row[1] || "—")}</td><td>${e(row[2] || "—")}</td><td>${e(row[3] || "—")}</td><td>${e(row[4] || "—")}</td><td>${e(row[5] || "—")}</td><td>${e(row[6] || "—")}</td></tr>`;
+            h += `<tr><td>${i + 1}</td><td>${e(row.trainingTitle || row[1] || "—")}</td><td>${e(row.targetSkill || row[2] || "—")}</td><td>${e(row.modeOfActivity || row[3] || "—")}</td><td>${e(row.sourceOfFunding || row[4] || "—")}</td><td>${e(row.trainerProvider || row[5] || "—")}</td><td>${e(row.targetTimeline || row[6] || "—")}</td></tr>`;
           });
           h += `</tbody></table>`;
         } else h += `<p class="m-empty">No Pro-ACT entries recorded.</p>`;
