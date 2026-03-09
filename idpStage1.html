@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="img/csu-logo-square1.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Individual Development Plan — CarSU HRMS</title>
+    <title>Individual Development Plan — CarSU HRMS (2026-2029)</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap"
       rel="stylesheet"
@@ -760,7 +760,7 @@
         Back to Home
       </a>
       <span class="nav-sep">/</span>
-      <span class="nav-current">Individual Development Plan (IDP)</span>
+      <span class="nav-current">Individual Development Plan (IDP) 2026-2029</span>
     </div>
 
     <!-- Success screen -->
@@ -817,7 +817,7 @@
     <!-- Main form -->
     <div class="container" id="mainForm">
       <div class="form-title-block">
-        <h2>Individual Development Plan (IDP)</h2>
+        <h2>Individual Development Plan (IDP) 2026-2029</h2>
         <p>
           Complete all sections carefully. Your supervisor will be notified
           automatically upon submission.
@@ -1094,7 +1094,6 @@
                   <th style="width: 130px">Current Level</th>
                   <th style="width: 130px">Required Level</th>
                   <th>Suggested LeaD Interventions</th>
-                  <th>Resource / Support Needed</th>
                   <th style="width: 120px">Target Timeline</th>
                   <th style="width: 40px"></th>
                 </tr>
@@ -1244,7 +1243,7 @@
         const html = `<div style="font-family:Georgia,serif;color:#1a1a2e;max-width:900px">
           <div style="border-bottom:3px solid #1a4d2e;padding-bottom:10px;margin-bottom:18px">
             <div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#5a6070;margin-bottom:3px">Caraga State University — Office of Human Resource Management Services</div>
-            <h1 style="font-size:18px;color:#1a4d2e;margin-bottom:2px;font-family:Georgia,serif">Individual Development Plan (IDP)</h1>
+            <h1 style="font-size:18px;color:#1a4d2e;margin-bottom:2px;font-family:Georgia,serif">Individual Development Plan (IDP) 2026-2029</h1>
             <p style="font-size:11px;color:#5a6070">Reference ID: <strong>${esc(refId)}</strong> &nbsp;·&nbsp; Printed: ${dateNow}</p>
           </div>
           <h3 style="font-size:12px;color:#1a4d2e;margin:0 0 8px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #d8d4c8;padding-bottom:4px">Personnel Information</h3>
@@ -1257,7 +1256,7 @@
                 <td style="padding:3px 8px;color:#5a6070;font-size:10px;font-weight:700;text-transform:uppercase">Affiliation</td><td style="padding:3px 8px">${esc(p.officeAffiliation)}</td></tr>
           </table>
           <h3 style="font-size:12px;color:#1a4d2e;margin:14px 0 8px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #d8d4c8;padding-bottom:4px">I. Competency-Based LeaD</h3>
-          ${tableHTML(p.competencyRows, ["priority", "targetCompetency", "currentLevel", "requiredLevel", "leadInterventions", "resourceSupport", "targetTimeline"], ["#", "Target Competency", "Current Level", "Required Level", "LeaD Interventions", "Resource/Support", "Timeline"])}
+          ${tableHTML(p.competencyRows, ["priority", "targetCompetency", "currentLevel", "requiredLevel", "leadInterventions", "targetTimeline"], ["#", "Target Competency", "Current Level", "Required Level", "LeaD Interventions", "Timeline"])}
           <h3 style="font-size:12px;color:#1a4d2e;margin:14px 0 8px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #d8d4c8;padding-bottom:4px">II. AGAP</h3>
           ${tableHTML(p.agapRows, ["priority", "degreeProgram", "targetHEI", "modeOfStudy", "sourceOfFunding", "scholarshipGrant", "targetTimeline"], ["#", "Degree Program", "Target HEI", "Mode of Study", "Scholarship/Grant", "Timeline"])}
           <h3 style="font-size:12px;color:#1a4d2e;margin:14px 0 8px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #d8d4c8;padding-bottom:4px">III. Pro-ACT</h3>
@@ -1419,7 +1418,6 @@
             row.currentLevel = cells[2]?.value;
             row.requiredLevel = cells[3]?.value;
             row.leadInterventions = cells[4]?.value;
-            row.resourceSupport = cells[5]?.value;
             row.targetTimeline = cells[6]?.value;
           } else if (type === "agap") {
             row.priority = cells[0]?.value;
