@@ -1133,7 +1133,6 @@
                   <th>Degree Program</th>
                   <th>Target HEI</th>
                   <th style="width: 120px">Mode of Study</th>
-                  <th>Source of Funding</th>
                   <th>Target Scholarship Grant</th>
                   <th style="width: 120px">Target Timeline</th>
                   <th style="width: 40px"></th>
@@ -1175,7 +1174,6 @@
                   <th>Training / Workshop Title</th>
                   <th>Target Competency / Skill</th>
                   <th style="width: 130px">Mode of Activity</th>
-                  <th>Source of Funding</th>
                   <th>Trainer / Provider</th>
                   <th style="width: 120px">Target Timeline</th>
                   <th style="width: 40px"></th>
@@ -1261,9 +1259,9 @@
           <h3 style="font-size:12px;color:#1a4d2e;margin:14px 0 8px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #d8d4c8;padding-bottom:4px">I. Competency-Based LeaD</h3>
           ${tableHTML(p.competencyRows, ["priority", "targetCompetency", "currentLevel", "requiredLevel", "leadInterventions", "resourceSupport", "targetTimeline"], ["#", "Target Competency", "Current Level", "Required Level", "LeaD Interventions", "Resource/Support", "Timeline"])}
           <h3 style="font-size:12px;color:#1a4d2e;margin:14px 0 8px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #d8d4c8;padding-bottom:4px">II. AGAP</h3>
-          ${tableHTML(p.agapRows, ["priority", "degreeProgram", "targetHEI", "modeOfStudy", "sourceOfFunding", "scholarshipGrant", "targetTimeline"], ["#", "Degree Program", "Target HEI", "Mode of Study", "Source of Funding", "Scholarship/Grant", "Timeline"])}
+          ${tableHTML(p.agapRows, ["priority", "degreeProgram", "targetHEI", "modeOfStudy", "sourceOfFunding", "scholarshipGrant", "targetTimeline"], ["#", "Degree Program", "Target HEI", "Mode of Study", "Scholarship/Grant", "Timeline"])}
           <h3 style="font-size:12px;color:#1a4d2e;margin:14px 0 8px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #d8d4c8;padding-bottom:4px">III. Pro-ACT</h3>
-          ${tableHTML(p.proactRows, ["priority", "trainingTitle", "targetSkill", "modeOfActivity", "sourceOfFunding", "trainerProvider", "targetTimeline"], ["#", "Training Title", "Target Skill", "Mode of Activity", "Source of Funding", "Trainer/Provider", "Timeline"])}
+          ${tableHTML(p.proactRows, ["priority", "trainingTitle", "targetSkill", "modeOfActivity", "sourceOfFunding", "trainerProvider", "targetTimeline"], ["#", "Training Title", "Target Skill", "Mode of Activity", "Trainer/Provider", "Timeline"])}
           <div style="margin-top:28px;padding-top:10px;border-top:1px solid #d8d4c8;font-size:9px;color:#aaa">
             Submitted via CarSU HRMS IDP Tool &nbsp;·&nbsp; ${dateNow} &nbsp;·&nbsp; Ref: ${esc(refId)}
           </div>
